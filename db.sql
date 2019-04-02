@@ -1,6 +1,6 @@
 set names utf8; 
 create database joeoj;
-use joeoj;
+use hgoj_bak;
 
 CREATE TABLE  `compileinfo` (
   `solution_id` int(11) NOT NULL DEFAULT 0,
@@ -234,7 +234,7 @@ delimiter //
 drop trigger if exists simfilter//
 create trigger simfilter
 before insert on sim
-for each row
+for each rows
 begin
  declare new_user_id varchar(64);
  declare old_user_id varchar(64);
