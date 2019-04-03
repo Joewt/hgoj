@@ -25,4 +25,5 @@ func initSession() {
 
 func initStatic() {
 	beego.SetStaticPath("/","static")
+	//beego.SetStaticPath("/problem", "static")
 }
