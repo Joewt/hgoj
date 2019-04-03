@@ -8,54 +8,15 @@
 
     <title>HGOJ | index</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 
 </head>
+        {{template "common/header.html"}}
 
-<body class="top-navigation">
 
-<div id="wrapper">
-    <div id="page-wrapper" class="gray-bg">
-        <div class="row border-bottom white-bg">
-            <nav class="navbar navbar-static-top" role="navigation">
-                <div class="navbar-header">
-                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-                        <i class="fa fa-reorder"></i>
-                    </button>
-                    <a href="#" class="navbar-brand">HGOJ</a>
-                </div>
-                <div class="navbar-collapse collapse" id="navbar">
-                    <ul class="nav navbar-nav">
-                        <li class="active">
-                            <a aria-expanded="false" role="button" href="index">湖南工学院在线判题系统</a>
-                        </li>
-                        <li class="nav nav-pills">
-                            <a aria-expanded="false" role="button" href="faqs" class="dropdown-toggle" >常见问题</a>
-                        </li>
-                        <li class="nav nav-pills">
-                            <a aria-expanded="false" role="button" href="problemset" class="dropdown-toggle" >题目</a>
-                        </li>
-                        <li class="dropdown">
-                            <a aria-expanded="false" role="button" href="status" class="dropdown-toggle" > 状态</a>
-                        </li>
-                        <li class="dropdown">
-                            <a aria-expanded="false" role="button" href="contest" class="dropdown-toggle" > 竞赛 </a>
-                        </li>
-
-                    </ul>
-                    <ul class="nav navbar-top-links navbar-right">
-                        <li>
-                            <a href="login.html">
-                                <i class="fa fa-sign-out"></i> Log out
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
         <div class="wrapper wrapper-content">
             <div class="container">
                 <div class="row">
@@ -258,18 +219,7 @@
             </div>
 
         </div>
-        <div class="footer">
-            <div class="pull-right">
-                10GB of <strong>250GB</strong> Free.
-            </div>
-            <div>
-                <strong>Copyright</strong> Example Company &copy; 2014-2015
-            </div>
-        </div>
-
-    </div>
-</div>
-
+{{template "common/footer.html"}}
 
 
 <!-- Mainly scripts -->
