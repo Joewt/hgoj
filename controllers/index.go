@@ -1,30 +1,37 @@
 package controllers
 
+import "github.com/astaxie/beego/logs"
+
 type IndexController struct {
 	BaseController
 }
 
 
-// @router / [get]
+// @router /index [get]
 func (this *IndexController) Index() {
-
+	logs.Info("xxxx")
 	this.TplName = "index.html"
 }
 
-// @router /about [get]
-func (this *IndexController) IndexAbout() {
-	this.TplName = "about.html"
+// @router /faqs [get]
+func (this *IndexController) IndexFaqs() {
+	this.TplName = "faqs.html"
 }
 
 
-// @router /message [get]
-func (this *IndexController) IndexMessage() {
-	this.TplName = "message.html"
+// @router /problemset [get]
+func (this *IndexController) IndexProblemset() {
+	this.TplName = "problem.html"
 }
 
-// @router /comment [get]
-func (this *IndexController) IndexComment() {
-	this.TplName = "comment.html"
+// @router /status [get]
+func (this *IndexController) IndexStatus() {
+	this.TplName = "status.html"
+}
+
+// @router /contest [get]
+func (this *IndexController) IndexContest() {
+	this.TplName = "contest.html"
 }
 
 // @router /login [get]
@@ -40,6 +47,11 @@ func (this *IndexController) IndexReg() {
 // @router /admin [get]
 func (this *IndexController) IndexAdmin() {
 	this.TplName = "admin/index.html"
+}
+
+// @router /skin-config.html [get]
+func (this *IndexController) IndexSkinConfig() {
+	this.TplName = "admin/skin-conf.html"
 }
 
 //// @router /create [get]
