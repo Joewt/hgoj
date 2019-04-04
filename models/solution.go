@@ -26,3 +26,15 @@ type Solution struct {
 	LintError			uint			`orm:"default(0)"`
 	Judger				string			`orm:"type(char);size(16);default(LOCAL)"`
 }
+
+
+func QueryAllSolution() ([]*Solution, error) {
+	var data []*Solution
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	_, err := qs.All(&data)
+	if err != nil {
+		return nil,err
+	}
+	return data, nil
+}

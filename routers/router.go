@@ -9,5 +9,6 @@ func init() {
 	beego.Include(&controllers.IndexController{})
 	beego.Include(&controllers.UserController{})
 	beego.Include(&controllers.ProblemController{})
+	beego.Include(&controllers.CeinfoController{})
 
 }

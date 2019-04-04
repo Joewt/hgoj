@@ -1,6 +1,9 @@
 package controllers
 
-import "github.com/astaxie/beego/logs"
+import (
+	"github.com/astaxie/beego/logs"
+	"github.com/yinrenxin/hgoj/models"
+)
 
 type IndexController struct {
 	BaseController
@@ -21,11 +24,25 @@ func (this *IndexController) IndexFaqs() {
 
 // @router /problemset [get]
 func (this *IndexController) IndexProblemset() {
+
+	pros,num,err := models.QueryAllProblem()
+	if err != nil {
+		logs.Error(err)
+	}
+
+	logs.Info("pros:---",pros,num)
+
+	this.Data["problems"] = pros
 	this.TplName = "problem.html"
 }
 
 // @router /status [get]
 func (this *IndexController) IndexStatus() {
+	data, err := models.QueryAllSolution()
+	if err != nil {
+		logs.Error(err)
+	}
+	this.Data["data"] = data
 	this.TplName = "status.html"
 }
 
