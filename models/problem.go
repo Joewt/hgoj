@@ -26,3 +26,24 @@ type Problem struct {
 	Submit			int32		`orm:"null;default(0)"`
 	Solved			int32		`orm:"null;default(0)"`
 }
+
+
+func QueryAllProblem() ( []*Problem, int64, error){
+	var pro []*Problem
+	problem := new(Problem)
+	qs := DB.QueryTable(problem)
+	num, err := qs.All(&pro)
+	if err != nil {
+		return nil,num,err
+	}
+	return pro,num, nil
+}
+
+func QueryProblemById(id int32) (Problem, error) {
+	pro := Problem{ProblemId:id}
+	err := DB.Read(&pro,"ProblemId")
+	if err != nil {
+		return Problem{}, err
+	}
+	return pro, nil
+}

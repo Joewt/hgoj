@@ -65,27 +65,15 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        {{range .problems}}
                                         <tr>
-                                            <td>1000</td>
-                                            <td><a href="problem/id=1000">汽水瓶</a></td>
-                                            <td>hnit</td>
-                                            <td>100</td>
-                                            <td>50</td>
+                                            <td>{{.ProblemId}}</td>
+                                            <td><a href="problem/{{.ProblemId}}">{{.Title}}</a></td>
+                                            <td>{{.Source}}</td>
+                                            <td>{{.Accepted}}</td>
+                                            <td>{{.Submit}}</td>
                                         </tr>
-                                        <tr>
-                                            <td>1001</td>
-                                            <td>数字整除</td>
-                                            <td>hnit</td>
-                                            <td>100</td>
-                                            <td>50</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1002</td>
-                                            <td>Joe</td>
-                                            <td>乔伟通</td>
-                                            <td>100</td>
-                                            <td>50</td>
-                                        </tr>
+                                        {{end}}
                                         </tbody>
                                     </table>
                                 </div>
