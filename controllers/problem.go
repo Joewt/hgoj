@@ -3,6 +3,9 @@ package controllers
 import (
 	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/syserror"
+	"io/ioutil"
+	"os"
+	"strconv"
 
 	//"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
@@ -43,28 +46,28 @@ func (this *ProblemController) ProblemAdd() {
 // @router /problem/add [post]
 func (this *ProblemController) ProblemAddPost() {
 	title := this.GetMushString("title", "标题不能为空")
-	logs.Info(title)
 	memory := this.GetMushString("memory", "限制内存不能为空")
-	logs.Info(memory)
-	//time := this.GetMushString("time", "限制时间不能为空")
-	//desc := this.GetMushString("desc", "描述不能为空")
-	//input := this.GetMushString("input", "input不能为空")
-	//output := this.GetMushString("output", "output不能为空")
-	//sampleinput := this.GetMushString("sampleinput", "sampleinput不能为空")
-	//sampleoutput := this.GetMushString("sampleoutput", "sampleoutput不能为空")
-	//testinput := this.GetMushString("testinput", "testinput不能为空")
-	//testoutput := this.GetMushString("testoutput", "testoutput不能为空")
-	//
-	//
-	//
-	//
-	//
-	//logs.Info(title,memory,time,desc,input,output,sampleinput,sampleoutput,testinput,testoutput)
-	////
-	//_, ok := models.QueryByKeyArt(key)
-	//if ok == true {
-	//	this.Abort500(syserror.New("已经有该文章了，请勿重复添加",nil))
-	//}
+	time := this.GetMushString("time", "限制时间不能为空")
+	desc := this.GetMushString("desc", "描述不能为空")
+	input := this.GetMushString("input", "input不能为空")
+	output := this.GetMushString("output", "output不能为空")
+	sampleinput := this.GetMushString("sampleinput", "sampleinput不能为空")
+	sampleoutput := this.GetMushString("sampleoutput", "sampleoutput不能为空")
+	testinput := this.GetMushString("testinput", "testinput不能为空")
+	testoutput := this.GetMushString("testoutput", "testoutput不能为空")
+
+	pid, err := models.AddProblem(title,time,memory,desc,input,output,sampleinput,sampleoutput)
+	if err != nil {
+		this.JsonErr("更新失败", 1001, "/problem/add")
+	}
+	ok := mkdata(pid, "test.in", testinput,OJ_DATA)
+	if !ok {
+		this.JsonErr("syserror", syserror.FILE_WRITE_ERR,"/problem/add")
+	}
+	ok = mkdata(pid, "test.out", testoutput, OJ_DATA)
+	if !ok {
+		this.JsonErr("syserror", syserror.FILE_WRITE_ERR,"/problem/add")
+	}
 	//summary, err := getSummary(content)
 	//if err != nil {
 	//	summary = ""
@@ -74,6 +77,23 @@ func (this *ProblemController) ProblemAddPost() {
 	//if err != nil {
 	//	this.Abort500(syserror.New("系统错误",err))
 	//}
-	this.Abort500(syserror.New("系统错误",nil))
+	this.JsonOK("添加题目成功", "/admin")
 	//this.JsonOK("添加文章成功","/")
+}
+
+func mkdata(pid int64, filename string, input string, oj_data string) bool {
+	baseDir := oj_data+"/"+strconv.Itoa(int(pid))
+	err := os.MkdirAll(baseDir, 0777)
+	if err != nil {
+		logs.Error("目录创建失败",err)
+		return false
+	}
+	name := baseDir+"/"+filename
+	logs.Info(name)
+	data := []byte(input)
+	if ioutil.WriteFile(name,data,0644) != nil {
+		logs.Error("文件写入失败,文件名",name)
+		return false
+	}
+	return true
 }

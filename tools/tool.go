@@ -10,3 +10,4 @@ func StringToInt32(s string) (int32, error) {
 	}
 	return id64, nil
 }
+

@@ -2,6 +2,7 @@ package models
 
 import (
 	_ "github.com/astaxie/beego/orm"
+	"strconv"
 	"time"
 )
 
@@ -27,6 +28,11 @@ type Problem struct {
 	Solved			int32		`orm:"null;default(0)"`
 }
 
+func stringToint32(str string) int32 {
+	d,_ := strconv.Atoi(str)
+	return int32(d)
+}
+
 
 func QueryAllProblem() ( []*Problem, int64, error){
 	var pro []*Problem
@@ -46,4 +52,24 @@ func QueryProblemById(id int32) (Problem, error) {
 		return Problem{}, err
 	}
 	return pro, nil
+}
+
+func AddProblem(data ...string) (int64,error) {
+	var pro Problem
+	pro.Title = data[0]
+	pro.TimeLimit = stringToint32(data[1])
+	pro.MemoryLimit = stringToint32(data[2])
+	pro.Description = data[3]
+	pro.Input = data[4]
+	pro.Output = data[5]
+	pro.SampleInput = data[6]
+	pro.SampleOutput = data[7]
+	pro.InDate = time.Now()
+	pro.Defunct = "Y"
+
+	pid, err := DB.Insert(&pro)
+	if err != nil {
+		return pid, err
+	}
+	return pid, nil
 }

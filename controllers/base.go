@@ -21,6 +21,8 @@ type BaseController struct {
 	IsAdmin bool
 }
 
+const OJ_DATA = "./judge/data"
+
 type MAP_H = map[string]interface{}
 
 const SESSION_USER_KEY = "JOE"
