@@ -7,7 +7,6 @@ import (
 
 
 type SourceCode struct {
-	Id					int32
-	SolutionId			int32			`orm:"null"`
+	SolutionId			int32			`orm:"pk"`
 	Source				string			`orm:"type(text)"`
 }

@@ -7,7 +7,6 @@ import (
 
 
 type Runtimeinfo struct {
-	Id					int32
-	SolutionId			int32			`orm:"default(0)"`
+	SolutionId			int32			`orm:"pk"`
 	Error				string			`orm:"type(text);null"`
 }

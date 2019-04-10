@@ -7,7 +7,6 @@ import (
 
 
 type Custominput struct {
-	Id					int32
-	SolutionId			int32			`orm:"null;default(0)"`
+	SolutionId			int32			`orm:"pk"`
 	InputText			string			`orm:"type(text);null"`
 }

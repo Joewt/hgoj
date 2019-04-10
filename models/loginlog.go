@@ -8,8 +8,7 @@ import (
 
 
 type LoginLog struct {
-	Id			int32
-	UserId		int32		`orm:"null"`
+	UserId		int32		`orm:"pk"`
 	Password 	string 		`orm:"size(32);null"`
 	IP			string  	`orm:"size(46);null"`
 	Time		time.Time	`orm:"auto_now_add;type(date);null"`

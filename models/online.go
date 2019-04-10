@@ -7,8 +7,7 @@ import (
 
 
 type Online struct {
-	Id					int32
-	Hash				string			`orm:"size(32)"`
+	Hash				string			`orm:"pk"`
 	Ip					string  		`orm:"size(46);"`
 	Ua					string			`orm:""`
 	Refer				string			`orm:"null"`

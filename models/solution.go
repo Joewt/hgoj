@@ -75,11 +75,8 @@ func AddSolution(pid string, source string, uid string, codeLen int)(int64, erro
 	SoluCode.Source = source
 
 	scid, err := DB.Insert(&SoluCode)
-	if err != nil {
-		return scid, err
-	}
 
-	if sid == 0 || scid == 0 {
+	if sid == 0 || scid != 0 {
 		err = DB.Rollback()
 		return sid, err
 	} else {
