@@ -32,9 +32,42 @@ func QueryAllSolution() ([]*Solution, error) {
 	var data []*Solution
 	Solutions := new(Solution)
 	qs := DB.QueryTable(Solutions)
-	_, err := qs.All(&data)
+	_, err := qs.OrderBy("-solution_id").All(&data)
 	if err != nil {
 		return nil,err
 	}
 	return data, nil
+}
+
+
+
+func AddSolution(pid string, source string, uid string, codeLen int)(int64, error){
+	var Solu Solution
+	var SoluCode SourceCode
+	err := DB.Begin()
+	Solu.ProblemId = stringToint32(pid)
+	Solu.UserId = stringToint32(uid)
+	Solu.InDate = time.Now()
+	Solu.Language = 1
+	Solu.Ip = "127.0.0.1"
+	Solu.CodeLength = int32(codeLen)
+	Solu.Result = 1
+
+	sid, err := DB.Insert(&Solu)
+
+	SoluCode.SolutionId = int32(sid)
+	SoluCode.Source = source
+
+	scid, err := DB.Insert(&SoluCode)
+	if err != nil {
+		return scid, err
+	}
+
+	if sid == 0 || scid == 0 {
+		err = DB.Rollback()
+		return sid, err
+	} else {
+		err = DB.Commit()
+		return sid, err
+	}
 }

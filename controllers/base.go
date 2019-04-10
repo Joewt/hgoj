@@ -64,6 +64,19 @@ func (this *BaseController) GetMushString(key, msg string) string {
 	return k
 }
 
+
+
+/**
+	过滤代码
+ */
+func (this *BaseController) FilterSource(key, msg string) (string, int) {
+	k := this.GetString(key)
+	if len(k) == 0 {
+		this.JsonErr("代码不能为空", syserror.SOURCE_NOT_NULL, "/problem")
+	}
+	return k, len(k)
+}
+
 func (this *BaseController) MustLogin() {
 	if !this.IsLogin {
 		this.Abort500(syserror.NoUserError{})

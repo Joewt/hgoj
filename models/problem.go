@@ -38,7 +38,7 @@ func QueryAllProblem() ( []*Problem, int64, error){
 	var pro []*Problem
 	problem := new(Problem)
 	qs := DB.QueryTable(problem)
-	num, err := qs.All(&pro)
+	num, err := qs.OrderBy("-problem_id").All(&pro)
 	if err != nil {
 		return nil,num,err
 	}

@@ -68,17 +68,8 @@ func (this *ProblemController) ProblemAddPost() {
 	if !ok {
 		this.JsonErr("syserror", syserror.FILE_WRITE_ERR,"/problem/add")
 	}
-	//summary, err := getSummary(content)
-	//if err != nil {
-	//	summary = ""
-	//}
-	//u, ok := this.GetSession(SESSION_USER_KEY).(models.User)
-	//err = models.InsertArticle(key, title, content,u.Id, summary)
-	//if err != nil {
-	//	this.Abort500(syserror.New("系统错误",err))
-	//}
+
 	this.JsonOK("添加题目成功", "/admin")
-	//this.JsonOK("添加文章成功","/")
 }
 
 func mkdata(pid int64, filename string, input string, oj_data string) bool {
