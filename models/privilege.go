@@ -7,8 +7,7 @@ import (
 
 
 type Privilege struct {
-	Id				int32
-	UserId			int32		`orm:"null"`
+	UserId			int32		`orm:"pk"`
 	RightStr		string		`orm:"type(char);size(30);null"`
 	Defunct			string		`orm:"type(char);size(1);default(N)"`
 }

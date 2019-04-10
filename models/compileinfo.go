@@ -7,7 +7,6 @@ import (
 
 
 type CompileInfo struct {
-	Id			int32
-	SolutionId 	int32 	`orm:"null"`
+	SolutionId 	int32	`orm:"pk"`
 	Error  		string 	`orm:"type(text);null"`
 }
