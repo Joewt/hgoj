@@ -96,7 +96,7 @@ func (this *BaseController) JsonOK(msg, action string) {
 	this.Data["json"] = MAP_H{
 		"code":   0,
 		"msg":    msg,
-		"action": "/",
+		"action": action,
 	}
 	this.ServeJSON()
 }

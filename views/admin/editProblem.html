@@ -1,0 +1,140 @@
+
+
+{{template "admin/menu.html"}}
+
+<div class="row  border-bottom white-bg dashboard-header">
+
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>编辑问题</h5>
+            </div>
+            <form class="ibox-content">
+                <div class="form-horizontal" id="form-data">
+                    <input type="hidden" name="proid" value="{{.PRO.ProblemId}}">
+                    <div class="form-group"><label class="col-sm-2 control-label">Title</label>
+                        <div class="col-sm-10"><input type="text" class="form-control data-pro" name="title" value="{{.PRO.Title}}"></div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Time limit</label>
+                        <div class="col-sm-10"><input type="text" class="form-control data-pro" value="1" name="time">
+                        </div>
+                    </div>
+
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Memory limit</label>
+
+                        <div class="col-sm-10"><input type="text" class="form-control data-pro" name="memory" value="128"></div>
+                    </div>
+
+
+                    <div class="hr-line-dashed"></div>
+
+
+                    <div class="form-group"><label class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-10"><textarea class="editor data-pro" placeholder="" autofocus name="desc">{{.PRO.Description}}</textarea></div>
+                    </div>
+
+
+                    <div class="form-group"><label class="col-sm-2 control-label">Input</label>
+                        <div class="col-sm-10"><textarea class="editor data-pro" placeholder="" autofocus name="input">{{.PRO.Input}}</textarea></div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-2 control-label">Output</label>
+                        <div class="col-sm-10"><textarea class="editor data-pro" placeholder="" autofocus name="output">{{.PRO.Output}}</textarea></div>
+                    </div>
+
+
+                    <div class="form-group"><label class="col-sm-2 control-label">Sample Input</label>
+                        <div class="col-sm-10"><textarea class="data-pro" placeholder="" rows="10" cols="60" name="sampleinput">{{.PRO.SampleInput}}</textarea></div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-2 control-label">Sample Output</label>
+                        <div class="col-sm-10"><textarea class="data-pro" placeholder=""  rows="10" cols="60" name="sampleoutput">{{.PRO.SampleOutput}}</textarea></div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-2 control-label">Test Input</label>
+                        <div class="col-sm-10"><textarea class="data-pro" placeholder=""  rows="10" cols="60" name="testinput"></textarea></div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-2 control-label">Test Output</label>
+                        <div class="col-sm-10"><textarea class="data-pro" placeholder=""  rows="10" cols="60" name="testoutput"></textarea></div>
+                    </div>
+
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-primary" type="button" id="submitpro">更新</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="footer">
+    <div class="pull-right">
+        10GB of <strong>250GB</strong> Free.
+    </div>
+    <div>
+        <strong>Copyright</strong> Example Company &copy; 2014-2015
+    </div>
+</div>
+
+</div>
+
+
+</div>
+
+<!-- Mainly scripts -->
+<script src="/js/jquery-2.1.1.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/module.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/hotkeys.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/uploader.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/simditor.js"></script>
+<script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        // var editor = new Simditor({
+        //     textarea: $('.editor')
+        //     //optional options
+        // });
+
+
+        $('#submitpro').on('click', function(){
+            var _this = $(this);
+            var _form = _this.parents('form');
+            $.post("/problem/update", _form.serialize(),function(res){
+                // alert(_form.serialise());
+                if(res.code){
+                    layer.msg(res.msg);
+                }
+
+                if(res.code === 0) {
+                    window.location.href=res.action;
+                }
+            }, 'json');
+
+
+        });
+    });
+
+
+
+</script>
+
+
+
+
+</body>
+</html>

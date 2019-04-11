@@ -1,0 +1,123 @@
+
+
+{{template "admin/menu.html"}}
+
+<div class="row  border-bottom white-bg dashboard-header">
+
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>问题列表</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+
+                            <th>题目编号</th>
+                            <th>标题 </th>
+                            <th>AC数 </th>
+                            <th>时间 </th>
+                            <th>状态 </th>
+                            <th>删除</th>
+                            <th>编辑</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {{range .PROS}}
+                                <tr>
+                                    <td>{{.ProblemId}}</td>
+                                    <td><a href="/problem/{{.ProblemId}}">{{.Title}}</a></td>
+
+                                    <td>{{.Accepted}}</td>
+
+                                    <td>{{.InDate}}</td>
+
+                                    <td>{{.Defunct}}</td>
+                                    <td><button type="button" class="btn btn-sm btn-danger del" data-proid="{{.ProblemId}}">del</button></td>
+                                    <td><button type="button" class="btn btn-sm btn-info edit" data-proid="{{.ProblemId}}">edit</button></td>
+                                </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="footer">
+    <div class="pull-right">
+        10GB of <strong>250GB</strong> Free.
+    </div>
+    <div>
+        <strong>Copyright</strong> Example Company &copy; 2014-2015
+    </div>
+</div>
+
+</div>
+
+
+</div>
+
+<!-- Mainly scripts -->
+<script src="/js/jquery-2.1.1.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/module.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/hotkeys.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/uploader.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/simditor.js"></script>
+<script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        // var editor = new Simditor({
+        //     textarea: $('.editor')
+        //     //optional options
+        // });
+
+
+        //del
+        $('.del').on('click', function(){
+            var _this = $(this);
+            var proid = _this.attr('data-proid');
+            var data = {
+                proid: proid
+            };
+            $.post("/problem/del", data,function(res){
+                // alert(_form.serialise());
+                if(res.code){
+                    layer.msg(res.msg);
+                }
+
+                if(res.code === 0) {
+                    // layer.msg(res.msg);
+                    alert(res.msg);
+                    window.location.href="/problem/list";
+                }
+            }, 'json');
+        });
+
+        //del
+        $('.edit').on('click', function(){
+            var _this = $(this);
+            var proid = _this.attr('data-proid');
+            window.location.href="/problem/edit/"+proid;
+        });
+    });
+
+
+
+</script>
+
+
+
+
+</body>
+</html>
