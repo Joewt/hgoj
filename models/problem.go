@@ -1,7 +1,9 @@
 package models
 
 import (
+	"github.com/astaxie/beego/logs"
 	_ "github.com/astaxie/beego/orm"
+	"github.com/yinrenxin/hgoj/syserror"
 	"strconv"
 	"time"
 )
@@ -72,4 +74,32 @@ func AddProblem(data ...string) (int64,error) {
 		return pid, err
 	}
 	return pid, nil
+}
+
+func UpdateProblemById(id int32, data []string) (bool,error) {
+	pro := Problem{ProblemId:id}
+	if DB.Read(&pro) == nil {
+		pro.Title = data[0]
+		pro.TimeLimit = stringToint32(data[1])
+		pro.MemoryLimit = stringToint32(data[2])
+		pro.Description = data[3]
+		pro.Input = data[4]
+		pro.Output = data[5]
+		pro.SampleInput = data[6]
+		pro.SampleOutput = data[7]
+		pro.InDate = time.Now()
+		if num, err := DB.Update(&pro); err == nil {
+			logs.Info(num)
+			return true, err
+		}
+	}
+	return false, syserror.UpdateProErr()
+}
+
+func DelProblemById(id int32) (bool) {
+	if num, err := DB.Delete(&Problem{ProblemId: id}); err == nil {
+		logs.Info(num)
+		return true
+	}
+	return false
 }

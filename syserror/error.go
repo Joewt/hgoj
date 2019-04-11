@@ -17,3 +17,7 @@ func New(msg string, reason error) Error {
 func NoArt() Error {
 	return NoArtError{}
 }
+
+func UpdateProErr() Error {
+	return ProErr{}
+}

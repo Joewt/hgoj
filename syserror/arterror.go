@@ -17,3 +17,20 @@ func (this NoArtError) Error() string{
 func (this NoArtError)ReasonError() error {
 	return this.reason
 }
+
+type ProErr struct {
+	UnKnowError
+}
+
+
+func (this ProErr) Code() int {
+	return 1004
+}
+
+func (this ProErr) Error() string {
+	return "问题数据保存失败"
+}
+
+func (this ProErr) ReasonError() error {
+	return this.reason
+}
