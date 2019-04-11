@@ -4,11 +4,13 @@ import (
 	"encoding/gob"
 	"github.com/astaxie/beego"
 	"github.com/yinrenxin/hgoj/models"
+	//"strconv"
 	_ "github.com/yinrenxin/hgoj/models"
 	_ "github.com/yinrenxin/hgoj/routers"
 )
 
 func main() {
+	initTemplate()
 	initSession()
 	initStatic()
 	beego.Run()
@@ -26,4 +28,11 @@ func initSession() {
 func initStatic() {
 	beego.SetStaticPath("/","static")
 	//beego.SetStaticPath("/problem", "static")
+}
+
+func initTemplate() {
+	_ = beego.AddFuncMap("get_res", func(result int16) (string) {
+		//res, _ := strconv.Atoi(result)
+		return models.JUDGERES[int(result)]
+	})
 }

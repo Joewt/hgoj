@@ -17,7 +17,7 @@ func (this *SolutionController) Submit() {
 
 	logs.Info(proId, source)
 	sid, err := models.AddSolution(proId, source, uid, code_length)
-	logs.Info("solutionid ：", sid)
+	logs.Info("solutionid ：", sid, "err:", err)
 	if err != nil {
 		this.JsonErr("保存代码错误", 1006, "problem")
 	}

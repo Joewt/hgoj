@@ -6,21 +6,21 @@ import (
 )
 
 
-//var JUDGERES = map[int]string{
-//	1: "答案错误",
-//	2: "编译中",
-//	3: "运行并评判",
-//	4: "正确",
-//	5: "格式错误",
-//	6: "答案错误",
-//	7: "时间超限",
-//	8: "内存超限",
-//	9: "输出超限",
-//	10: "运行错误",
-//	11: "编译错误",
-//	12: "编译成功",
-//	13: "运行完成",
-//}
+var JUDGERES = map[int]string{
+	1: "答案错误",
+	2: "编译中",
+	3: "运行并评判",
+	4: "正确",
+	5: "格式错误",
+	6: "答案错误",
+	7: "时间超限",
+	8: "内存超限",
+	9: "输出超限",
+	10: "运行错误",
+	11: "编译错误",
+	12: "编译成功",
+	13: "运行完成",
+}
 
 
 type Solution struct {
@@ -44,15 +44,15 @@ type Solution struct {
 }
 
 
-func QueryAllSolution() ([]*Solution, error) {
+func QueryAllSolution() ([]*Solution, map[int]string, error) {
 	var data []*Solution
 	Solutions := new(Solution)
 	qs := DB.QueryTable(Solutions)
 	_, err := qs.OrderBy("-solution_id").All(&data)
 	if err != nil {
-		return nil,err
+		return nil,JUDGERES,err
 	}
-	return data, nil
+	return data, JUDGERES,nil
 }
 
 
