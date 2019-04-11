@@ -29,22 +29,22 @@
         <p>创建账号.</p>
         <form class="m-t">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="用户名(学号)" required="">
+                <input type="text" class="form-control" placeholder="用户名(学号)" required="" name="username">
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="昵称" required="">
+                <input type="text" class="form-control" placeholder="昵称" required="" name="nick">
             </div>
             <div class="form-group">
-                <input type="email" class="form-control" placeholder="邮箱" required="">
+                <input type="email" class="form-control" placeholder="邮箱" required="" name="email">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" placeholder="密码" required="">
+                <input type="password" class="form-control" placeholder="密码" required="" name="pwd">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" placeholder="重复密码" required="">
+                <input type="password" class="form-control" placeholder="重复密码" required="" name="pwd2">
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="学校" required="">
+                <input type="text" class="form-control" placeholder="学校" required="" name="school">
             </div>
             <div class="form-group">
                 <div class="checkbox i-checks"><label> <input type="checkbox"><i></i> HGOJ协议 </label></div>
@@ -52,7 +52,7 @@
             <button type="button" class="btn btn-primary block full-width m-b" id="register">注册</button>
 
             <p class="text-muted text-center"><small>已经有一个账号了?</small></p>
-            <a class="btn btn-sm btn-white btn-block" href="login">登录</a>
+            <a class="btn btn-sm btn-white btn-block" href="/login">登录</a>
         </form>
         <p class="m-t"> <small>HGOJ Design By Joe&copy; 2019</small> </p>
     </div>
@@ -80,7 +80,8 @@
                 }
 
                 if(res.code === 0) {
-                    window.location.href="/admin";
+                    alert(res.msg)
+                    window.location.href="/index";
                 }
             }, 'json');
         });

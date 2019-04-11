@@ -1,7 +1,9 @@
 package models
 
 import (
+	"github.com/astaxie/beego/logs"
 	_ "github.com/astaxie/beego/orm"
+	"github.com/yinrenxin/hgoj/tools"
 	"time"
 )
 
@@ -22,4 +24,86 @@ type Users struct {
 	RegTime  	time.Time 	`orm:"auto_now_add;type(datetime);null"`
 	Nick    	string 		`orm:"size(20)"`
 	School 		string 		`orm:"size(20)"`
+	Role        int32		`orm:"default(0);null"`
+}
+
+
+
+//func QueryUserByEmailAndPwd(email, pwd string) (uint,error) {
+//	user := User{Email: email}
+//	err := DB.Read(&user,"Email")
+//	if err != nil{
+//		err = syserror.New("没有该账号",nil)
+//		return 247, err
+//	}
+//	if user.Pwd != common.MD5(pwd) {
+//		err = syserror.New("密码错误", nil)
+//		return 247, err
+//	}
+//	return user.Id, nil
+//}
+
+//func QueryUserByUname() (user Users, err error){
+//	user = Users{UserId: id}
+//	err = DB.Read(&user, "Id")
+//	if err != nil {
+//		logs.Warn(err)
+//	}
+//	return user, nil
+//}
+
+
+func FindUserByEmail(email string) bool {
+	user := Users{Email: email}
+	err := DB.Read(&user, "Email")
+	if err != nil {
+		return true
+	}
+	return false
+}
+
+func FindUserByUname(uname string) bool {
+	user := Users{UserName: uname}
+	err := DB.Read(&user, "UserName")
+	if err != nil {
+		return true
+	}
+	return false
+}
+
+
+func SaveUser(username,nick, email,pwd,school,ip string) (int32, error) {
+	cnt, err := DB.QueryTable("users").Count()
+	if cnt == 0 {
+		user := new(Users)
+		user.UserName = username
+		user.Password = tools.MD5(pwd)
+		user.Email = email
+		user.Nick = nick
+		user.Role = 1
+		user.School = school
+		user.Ip = ip
+		id, err := DB.Insert(user)
+		if err != nil {
+			return int32(id), err
+		}
+		logs.Info("新注册一个管理员账户: ", id)
+		return int32(id), nil
+	}
+	user := new(Users)
+	user.UserName = username
+	user.Password = tools.MD5(pwd)
+	user.Email = email
+	user.Nick = nick
+	user.Role = 0
+	user.School = school
+	user.Ip = ip
+	id, err := DB.Insert(user)
+	if err != nil {
+		return int32(id), err
+	}
+	logs.Info("新注册一个普通用户: ", id)
+	return int32(id), nil
+
+
 }

@@ -59,7 +59,7 @@ func (this *BaseController) GetMushString(key, msg string) string {
 	k := this.GetString(key)
 	if len(k) == 0 {
 		//this.Abort500(errors.New(msg))
-		this.JsonErr(key+"不能为空", syserror.KEY_NOT_NULL, "/problem/add")
+		this.JsonErr(msg, syserror.KEY_NOT_NULL, "")
 	}
 	return k
 }
