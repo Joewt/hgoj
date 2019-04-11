@@ -65,7 +65,7 @@ func (this *ProblemController) ProblemUpdate() {
 	//logs.Info(re.FindString(refer))
 	pro,err := models.QueryProblemById(id)
 	if err != nil {
-		this.JsonErr("问题未找到", 1007, "/problem/edit/"+proId)
+		this.JsonErr("问题未找到", syserror.PROBLEM_NOT_FOUND, "/problem/edit/"+proId)
 		logs.Error(pro,err)
 	}
 
@@ -82,7 +82,7 @@ func (this *ProblemController) ProblemUpdate() {
 	data := []string{title,memory,time,desc,input,output,sampleinput,sampleoutput}
 	ok, err := models.UpdateProblemById(id,data)
 	if !ok {
-		this.JsonErr("更新失败", 1009, "problem/edit/"+proId)
+		this.JsonErr("更新失败", syserror.UPDATE_PROBLEM_ERR, "problem/edit/"+proId)
 	}
 
 	pid := int64(id)
@@ -113,7 +113,7 @@ func (this *ProblemController) ProblemDel() {
 	id := int32(temp)
 	ok := models.DelProblemById(id)
 	if !ok {
-		this.JsonErr("删除失败", 1111, "/problem/list")
+		this.JsonErr("删除失败", syserror.DEL_PROBLEM_ERR, "/problem/list")
 	}
 	this.JsonOK("删除成功", "/problem/list")
 }
@@ -145,7 +145,7 @@ func (this *ProblemController) ProblemAddPost() {
 
 	pid, err := models.AddProblem(title,time,memory,desc,input,output,sampleinput,sampleoutput)
 	if err != nil {
-		this.JsonErr("更新失败", 1001, "/problem/add")
+		this.JsonErr("更新失败", syserror.ADD_PROBLEM_ERR, "/problem/add")
 	}
 	ok := mkdata(pid, "test.in", testinput,OJ_DATA)
 	if !ok {
