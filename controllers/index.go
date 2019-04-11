@@ -38,11 +38,18 @@ func (this *IndexController) IndexProblemset() {
 
 // @router /status [get]
 func (this *IndexController) IndexStatus() {
-	data, err := models.QueryAllSolution()
+	data,RESULT,err := models.QueryAllSolution()
 	if err != nil {
 		logs.Error(err)
 	}
 	this.Data["data"] = data
+	this.Data["RES"] = RESULT
+	this.Data["m"] = map[string]interface{} {
+		"a": 1,
+		"1": map[string]float64{
+			"c": 4,
+		},
+	}
 	this.TplName = "status.html"
 }
 
