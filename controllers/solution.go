@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
+	"github.com/yinrenxin/hgoj/syserror"
 )
 
 type SolutionController struct {
@@ -19,7 +20,7 @@ func (this *SolutionController) Submit() {
 	sid, err := models.AddSolution(proId, source, uid, code_length)
 	logs.Info("solutionid ：", sid, "err:", err)
 	if err != nil {
-		this.JsonErr("保存代码错误", 1006, "problem")
+		this.JsonErr("保存代码错误", syserror.SAVE_CODE_ERR, "problem")
 	}
 	this.JsonOK("提交成功","/status")
 }
