@@ -16,7 +16,7 @@
 
 </head>
 
-{{template "common/header.html"}}
+{{template "common/header.html" .}}
         <div class="wrapper wrapper-content">
             <div class="container" id="problem">
                 <div class="row">
@@ -67,14 +67,16 @@
                     <div class="col-lg-12">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>提交你的代码</h5>
+                                <h5>提交你的代码{{if .islogin}}{{else}}(<a href="/login">请先登录</a>){{end}}</h5>
                             </div>
+                            {{if .islogin}}
                             <div class="ibox-content no-padding">
                                 <textarea id="editor" placeholder="提交你的代码" name="source" cols="100" rows="10"></textarea>
                             </div>
                             <div>
                                 <button type="button" id="submitpage" class="btn btn-w-m btn-success">提交代码</button>
                             </div>
+                            {{end}}
                         </div>
 
                     </div>

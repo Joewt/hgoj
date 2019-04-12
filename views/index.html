@@ -14,7 +14,7 @@
     <link href="/css/style.css" rel="stylesheet">
 
 </head>
-        {{template "common/header.html"}}
+        {{template "common/header.html" .}}
 
 
         <div class="wrapper wrapper-content">
@@ -199,13 +199,14 @@
                                             <td><span class="pie">0.5/1.0</span></td>
                                         </tr>
                                         <tr>
-                                            <td>3</td>
+                                            <td>{{.testt}}</td>
                                             <td>Joe</td>
                                             <td>乔伟通</td>
                                             <td>100</td>
                                             <td>50</td>
                                             <td><span class="pie">0.5/1.0</span></td>
                                         </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
