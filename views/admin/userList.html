@@ -15,30 +15,25 @@
                         <thead>
                         <tr>
 
-                            <th>题目编号</th>
-                            <th>标题 </th>
-                            <th>AC数 </th>
-                            <th>时间 </th>
-                            <th>状态 </th>
-                            <th>删除</th>
-                            <th>编辑</th>
+                            <th>#</th>
+                            <th>用户 </th>
+                            <th>昵称 </th>
+                            <th>提交 </th>
+                            <th>正确 </th>
+                            <th>正确率 </th>
                         </tr>
                         </thead>
                         <tbody>
-                            {{range .PROS}}
-                                <tr>
-                                    <td>{{.ProblemId}}</td>
-                                    <td><a href="/problem/{{.ProblemId}}">{{.Title}}</a></td>
-
-                                    <td>{{.Accepted}}</td>
-
-                                    <td>{{.InDate}}</td>
-
-                                    <td>{{.Defunct}}</td>
-                                    <td><button type="button" class="btn btn-sm btn-danger del" data-proid="{{.ProblemId}}">del</button></td>
-                                    <td><button type="button" class="btn btn-sm btn-info edit" data-proid="{{.ProblemId}}">edit</button></td>
-                                </tr>
-                            {{end}}
+                        {{range .user}}
+                            <tr>
+                                <td>{{.UserId}}</td>
+                                <td><a href="/profile/{{.UserId}}">{{.UserName}}</a></td>
+                                <td>{{.Nick}}</td>
+                                <td>{{.Submit}}</td>
+                                <td>{{.Solved}}</td>
+                                <td><span class="pie">{{.Solved}}/{{.Submit}}</span></td>
+                            </tr>
+                        {{end}}
                         </tbody>
                     </table>
                 </div>

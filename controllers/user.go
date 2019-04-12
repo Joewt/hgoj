@@ -94,3 +94,17 @@ func (this *UserController) Logout() {
 	this.DelSession(SESSION_USER_KEY)
 	this.Redirect("/index", 302)
 }
+
+
+// @router /user/list [get]
+func (this *UserController) UserList() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
+	user,_, err := models.QueryAllUser()
+	if err != nil {
+		this.JsonErr("未知错误", 4000, "/index")
+	}
+	this.Data["user"] = user
+	this.TplName = "admin/userList.html"
+}
