@@ -28,7 +28,7 @@ type MAP_H = map[string]interface{}
 const SESSION_USER_KEY = "JOE"
 
 func (this *BaseController) Prepare() {
-	this.Data["Path"] = this.Ctx.Request.RequestURI
+	path := this.Ctx.Request.RequestURI
 	u, ok := this.GetSession(SESSION_USER_KEY).(models.Users)
 	//logs.Info("登录id：",u.UserId, "登录邮箱：",u.Email)
 	this.IsLogin = false
@@ -42,8 +42,10 @@ func (this *BaseController) Prepare() {
 		this.Data["User"] = this.User
 	}
 	//logs.Info("是否登录", this.IsLogin)
+	this.Data["Path"] = path
 	this.Data["islogin"] = this.IsLogin
 	this.Data["isadmin"] = this.IsAdmin
+	this.Data["menu"] = path
 }
 
 func (this *BaseController) Abort500(err error) {
