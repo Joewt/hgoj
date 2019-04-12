@@ -182,31 +182,16 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Joe</td>
-                                            <td>乔伟通</td>
-                                            <td>100</td>
-                                            <td>50</td>
-                                            <td><span class="pie">0.5/1.0</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Joe</td>
-                                            <td>乔伟通</td>
-                                            <td>100</td>
-                                            <td>50</td>
-                                            <td><span class="pie">0.5/1.0</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{.testt}}</td>
-                                            <td>Joe</td>
-                                            <td>乔伟通</td>
-                                            <td>100</td>
-                                            <td>50</td>
-                                            <td><span class="pie">0.5/1.0</span></td>
-                                        </tr>
-
+                                        {{range .user}}
+                                            <tr>
+                                                <td>{{.UserId}}</td>
+                                                <td><a href="/profile/{{.UserId}}">{{.UserName}}</a></td>
+                                                <td>{{.Nick}}</td>
+                                                <td>{{.Submit}}</td>
+                                                <td>{{.Solved}}</td>
+                                                <td><span class="pie">{{.Solved}}/{{.Submit}}</span></td>
+                                            </tr>
+                                        {{end}}
                                         </tbody>
                                     </table>
                                 </div>
