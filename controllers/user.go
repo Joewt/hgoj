@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"github.com/astaxie/beego/logs"
+	"github.com/yinrenxin/hgoj/syserror"
+
 	//"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
 	"github.com/yinrenxin/hgoj/models"
@@ -20,13 +22,16 @@ func (this *UserController) Profile() {
 
 // @router /user/reg [post]
 func (this *UserController) UserReg() {
+	logs.Info("是否登录:",this.IsLogin)
+	if this.IsLogin {
+		this.Abort("500")
+	}
 	username := this.GetMushString("username", "用户名不能为空")
 	nick := this.GetMushString("nick", "昵称不能为空")
 	email := this.GetMushString("email","邮箱不能为空")
 	pwd   := this.GetMushString("pwd", "密码不能为空")
 	pwd1  := this.GetMushString("pwd2", "确认密码不能为空")
 	school := this.GetMushString("school", "学校不能为空")
-	logs.Info(nick, school)
 	//获取客户端ip
 	ip := this.Ctx.Request.RemoteAddr
 
@@ -41,12 +46,14 @@ func (this *UserController) UserReg() {
 	if models.FindUserByEmail(email) == false || models.FindUserByUname(username) == false {
 		this.JsonErr("已经有该用户了",1101, "/reg")
 	}
-
+	//panic("xx")
+	logs.Info("到这里不会执行了")
 	//保存用户信息
 	uid, err := models.SaveUser(username, nick, email, pwd, school, ip)
 	if err != nil {
 		this.JsonErr("注册失败", 112, "/reg")
 	}
+
 	//
 	user, _ := models.QueryUserById(uid)
 	//
@@ -75,4 +82,15 @@ func (this *UserController) Login() {
 	this.SetSession(SESSION_USER_KEY,user)
 
 	this.JsonOK("登录成功","/")
+}
+
+
+// @router /logout [get]
+func (this *UserController) Logout() {
+	this.MustLogin()
+	if !this.IsLogin {
+		this.Abort500(syserror.NoUserError{})
+	}
+	this.DelSession(SESSION_USER_KEY)
+	this.Redirect("/index", 302)
 }

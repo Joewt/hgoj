@@ -17,6 +17,7 @@ func (this *IndexController) Index() {
 		logs.Error("未登陆")
 	}
 	logs.Error("用户",u)
+	this.Data["islogin"] = this.IsLogin
 	this.TplName = "index.html"
 }
 
@@ -64,16 +65,25 @@ func (this *IndexController) IndexContest() {
 
 // @router /login [get]
 func (this *IndexController) IndexUser() {
+	if this.IsLogin {
+		this.Abort("401")
+	}
 	this.TplName = "login.html"
 }
 
 // @router /reg [get]
 func (this *IndexController) IndexReg() {
+	if this.IsLogin {
+		this.Redirect("/index", 302)
+	}
 	this.TplName = "reg.html"
 }
 
 // @router /admin [get]
 func (this *IndexController) IndexAdmin() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
 	this.TplName = "admin/index.html"
 }
 

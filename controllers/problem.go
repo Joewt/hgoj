@@ -38,6 +38,9 @@ func (this *ProblemController) Problem() {
 
 // @router /problem/edit/:id [get]
 func (this *ProblemController) ProblemEdit() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
 	id := this.Ctx.Input.Param(":id")
 	ids , err := tools.StringToInt32(id)
 	if err != nil {
@@ -57,6 +60,9 @@ func (this *ProblemController) ProblemEdit() {
 
 // @router /problem/update [post]
 func (this *ProblemController) ProblemUpdate() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
 	proId := this.GetString("proid")
 	temp ,err := strconv.Atoi(proId)
 	id := int32(temp)
@@ -101,12 +107,18 @@ func (this *ProblemController) ProblemUpdate() {
 
 // @router /problem/add [get]
 func (this *ProblemController) ProblemAdd() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
 	this.TplName = "admin/addProblem.html"
 }
 
 
 // @router /problem/del [post]
 func (this *ProblemController) ProblemDel() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
 	proId := this.GetString("proid")
 	logs.Info("要删除的proId：",proId)
 	temp, _ := strconv.Atoi(proId)
@@ -120,6 +132,9 @@ func (this *ProblemController) ProblemDel() {
 
 // @router /problem/list [get]
 func (this *ProblemController) ProblemList() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
 	pros,_,err := models.QueryAllProblem()
 	if err != nil {
 		logs.Error(err)

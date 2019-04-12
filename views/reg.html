@@ -77,10 +77,11 @@
                 // alert(_form.serialise());
                 if(res.code){
                     layer.msg(res.msg);
+                    // alert(res.msg);
                 }
 
                 if(res.code === 0) {
-                    alert(res.msg)
+                    alert(res.msg);
                     window.location.href="/index";
                 }
             }, 'json');

@@ -3,8 +3,6 @@ package controllers
 import (
 	//"errors"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
-
 	//"github.com/yinrenxin/joeblog/syserror"
 
 	//uuid "github.com/satori/go.uuid"
@@ -32,7 +30,7 @@ const SESSION_USER_KEY = "JOE"
 func (this *BaseController) Prepare() {
 	this.Data["Path"] = this.Ctx.Request.RequestURI
 	u, ok := this.GetSession(SESSION_USER_KEY).(models.Users)
-	logs.Info("登录id：",u.UserId, "登录邮箱：",u.Email)
+	//logs.Info("登录id：",u.UserId, "登录邮箱：",u.Email)
 	this.IsLogin = false
 	this.IsAdmin = false
 	if ok {
@@ -43,7 +41,7 @@ func (this *BaseController) Prepare() {
 		}
 		this.Data["User"] = this.User
 	}
-	logs.Info("是否登录", this.IsLogin)
+	//logs.Info("是否登录", this.IsLogin)
 	this.Data["islogin"] = this.IsLogin
 	this.Data["isadmin"] = this.IsAdmin
 }
@@ -93,6 +91,7 @@ func (this *BaseController) JsonErr(msg string, code int32, action string) {
 		"action": action,
 	}
 	this.ServeJSON()
+	this.Abort("500")
 }
 
 func (this *BaseController) JsonOK(msg, action string) {
