@@ -16,8 +16,12 @@ func (this *IndexController) Index() {
 	if !ok {
 		logs.Error("未登陆")
 	}
+	user,_, err := models.QueryAllUser()
+	if err != nil {
+		this.JsonErr("未知错误", 4000, "/index")
+	}
 	logs.Error("用户",u)
-	this.Data["islogin"] = this.IsLogin
+	this.Data["user"] = user
 	this.TplName = "index.html"
 }
 
