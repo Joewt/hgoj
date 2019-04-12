@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/astaxie/beego/logs"
 	_ "github.com/astaxie/beego/orm"
+	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
 	"time"
 )
@@ -104,6 +105,33 @@ func SaveUser(username,nick, email,pwd,school,ip string) (int32, error) {
 	}
 	logs.Info("新注册一个普通用户: ", id)
 	return int32(id), nil
+}
 
 
+func QueryUserById(id int32) (Users,error) {
+	user := Users{UserId: id}
+	err := DB.Read(&user, "UserId")
+	if err != nil {
+		logs.Warn(err)
+	}
+	return user, nil
+}
+
+
+func QueryUserByUEAndPwd(ue, pwd string) (int32, error) {
+	user := Users{Email: ue}
+	err := DB.Read(&user,"Email")
+	if err != nil{
+		user = Users{UserName:ue}
+		err = DB.Read(&user, "UserName")
+		if err != nil {
+			err = syserror.New("没有该账号",nil)
+			return 0, err
+		}
+	}
+	if user.Password != tools.MD5(pwd) {
+		err = syserror.New("密码错误", nil)
+		return 0, err
+	}
+	return user.UserId, nil
 }

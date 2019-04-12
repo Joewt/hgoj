@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego/logs"
+	//"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
 	"github.com/yinrenxin/hgoj/models"
 	"strings"
@@ -41,16 +42,37 @@ func (this *UserController) UserReg() {
 		this.JsonErr("已经有该用户了",1101, "/reg")
 	}
 
-
 	//保存用户信息
 	uid, err := models.SaveUser(username, nick, email, pwd, school, ip)
 	if err != nil {
 		this.JsonErr("注册失败", 112, "/reg")
 	}
 	//
-	//user, _ := models.QueryUserById(id)
+	user, _ := models.QueryUserById(uid)
 	//
-	this.SetSession(SESSION_USER_KEY,uid)
+	this.SetSession(SESSION_USER_KEY,user)
 
 	this.JsonOK("注册成功", "/index")
+}
+
+
+// @router /login [post]
+func (this *UserController) Login() {
+	ue := this.GetMushString("ue", "用户名或邮箱不能为空")
+	pwd   := this.GetMushString("pwd", "密码不能为空")
+	id, err := models.QueryUserByUEAndPwd(ue, pwd)
+
+	if err != nil {
+		//this.Abort500(syserror.New("登录失败",err))
+		this.JsonErr(err.Error(), 2000, "/login")
+	}
+
+	user, _ := models.QueryUserById(id)
+	if err != nil {
+		logs.Warn(err)
+	}
+
+	this.SetSession(SESSION_USER_KEY,user)
+
+	this.JsonOK("登录成功","/")
 }

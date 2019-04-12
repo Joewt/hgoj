@@ -12,7 +12,11 @@ type IndexController struct {
 
 // @router /index [get]
 func (this *IndexController) Index() {
-	logs.Info("xxxx")
+	u, ok := this.GetSession(SESSION_USER_KEY).(models.Users)
+	if !ok {
+		logs.Error("未登陆")
+	}
+	logs.Error("用户",u)
 	this.TplName = "index.html"
 }
 

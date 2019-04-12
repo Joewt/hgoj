@@ -3,6 +3,8 @@ package controllers
 import (
 	//"errors"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+
 	//"github.com/yinrenxin/joeblog/syserror"
 
 	//uuid "github.com/satori/go.uuid"
@@ -27,23 +29,24 @@ type MAP_H = map[string]interface{}
 
 const SESSION_USER_KEY = "JOE"
 
-//func (this *BaseController) Prepare() {
-//	this.Data["Path"] = this.Ctx.Request.RequestURI
-//	u, ok := this.GetSession(SESSION_USER_KEY).(models.Users)
-//	// logs.Info("登录id：",u.Id, "登录邮箱：",u.Email)
-//	this.IsLogin = false
-//	this.IsAdmin = false
-//	if ok {
-//		this.User = u
-//		this.IsLogin = true
-//		if u.Role == 0 {
-//			this.IsAdmin = true
-//		}
-//		this.Data["User"] = this.User
-//	}
-//	this.Data["islogin"] = this.IsLogin
-//	this.Data["isadmin"] = this.IsAdmin
-//}
+func (this *BaseController) Prepare() {
+	this.Data["Path"] = this.Ctx.Request.RequestURI
+	u, ok := this.GetSession(SESSION_USER_KEY).(models.Users)
+	logs.Info("登录id：",u.UserId, "登录邮箱：",u.Email)
+	this.IsLogin = false
+	this.IsAdmin = false
+	if ok {
+		this.User = u
+		this.IsLogin = true
+		if u.Role == 1 {
+			this.IsAdmin = true
+		}
+		this.Data["User"] = this.User
+	}
+	logs.Info("是否登录", this.IsLogin)
+	this.Data["islogin"] = this.IsLogin
+	this.Data["isadmin"] = this.IsAdmin
+}
 
 func (this *BaseController) Abort500(err error) {
 	this.Data["error"] = err

@@ -32,9 +32,15 @@
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <a href="/login">
-                                <i class="fa fa-sign-out"></i> Login
+                            {{if .islogin}}
+                            <a href="/profile">
+                                <i class="fa fa-sign-out"></i> 个人资料
                             </a>
+                            {{else}}
+                                <a href="/login">
+                                    <i class="fa fa-sign-out"></i> login
+                                </a>
+                            {{end}}
                         </li>
                     </ul>
                 </div>
