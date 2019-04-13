@@ -12,12 +12,15 @@ type SolutionController struct {
 
 // @router /submit [post]
 func (this *SolutionController) Submit() {
+	if !this.IsLogin {
+		this.Abort("500")
+	}
 	source, code_length := this.FilterSource("source", "代码不能为空")
 	proId := this.GetString("proid")
-	uid := "1"
-
+	lang := this.GetString("language")
+	uid := this.User.UserId
 	logs.Info(proId, source)
-	sid, err := models.AddSolution(proId, source, uid, code_length)
+	sid, err := models.AddSolution(proId, source, uid, code_length, lang)
 	logs.Info("solutionid ：", sid, "err:", err)
 	if err != nil {
 		this.JsonErr("保存代码错误", syserror.SAVE_CODE_ERR, "problem")

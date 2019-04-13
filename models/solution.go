@@ -57,14 +57,14 @@ func QueryAllSolution() ([]*Solution, map[int]string, error) {
 
 
 
-func AddSolution(pid string, source string, uid string, codeLen int)(int64, error){
+func AddSolution(pid string, source string, uid int32, codeLen int, lang string)(int64, error){
 	var Solu Solution
 	var SoluCode SourceCode
 	err := DB.Begin()
 	Solu.ProblemId = stringToint32(pid)
-	Solu.UserId = stringToint32(uid)
+	Solu.UserId = uid
 	Solu.InDate = time.Now()
-	Solu.Language = 1
+	Solu.Language = uint(stringToint32(lang))
 	Solu.Ip = "127.0.0.1"
 	Solu.CodeLength = int32(codeLen)
 	Solu.Result = 1

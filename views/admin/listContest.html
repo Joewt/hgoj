@@ -1,0 +1,192 @@
+
+
+{{template "admin/menu.html" .}}
+
+<div class="row  border-bottom white-bg dashboard-header">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInUp">
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>竞赛列表</h5>
+                        <div class="ibox-tools">
+                            <a href="/contest/add" class="btn btn-primary btn-xs">创建一个新比赛</a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row m-b-sm m-t-sm">
+                            <div class="col-md-1">
+                                <button type="button" id="loading-example-btn" class="btn btn-white btn-sm" ><i class="fa fa-refresh"></i> Refresh</button>
+                            </div>
+                            <div class="col-md-11">
+                                <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
+                            </div>
+                        </div>
+
+                        <div class="project-list">
+
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr>
+                                    <td class="project-status">
+                                        <span class="label label-primary">进行中</span>
+                                    </td>
+                                    <td class="project-title">
+                                        <a href="project_detail.html">湖南工学院第xx次程序设计大赛</a>
+                                        <br/>
+                                        <small>创建于 14.08.2014</small>
+                                    </td>
+                                    <td class="project-completion">
+                                        <small>比赛进度: 48%</small>
+                                        <div class="progress progress-mini">
+                                            <div style="width: 48%;" class="progress-bar"></div>
+                                        </div>
+                                    </td>
+                                    <td class="project-completion">
+{{/*                                        <small>AC数 19</small>*/}}
+                                    </td>
+                                    <td class="project-actions">
+                                        <a href="#" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
+                                        <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="project-status">
+                                        <span class="label label-default">结束</span>
+                                    </td>
+                                    <td class="project-title">
+                                        <a href="project_detail.html">湖南工学院第xx次程序设计大赛</a>
+                                        <br/>
+                                        <small>创建于 10.08.2014</small>
+                                    </td>
+                                    <td class="project-completion">
+                                        <small>比赛进度: 100%</small>
+                                        <div class="progress progress-mini">
+                                            <div style="width: 100%;" class="progress-bar"></div>
+                                        </div>
+                                    </td>
+                                    <td class="project-people">
+
+                                    </td>
+                                    <td class="project-actions">
+                                        <a href="#" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
+                                        <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td class="project-status">
+                                        <span class="label label-primary">进行中</span>
+                                    </td>
+                                    <td class="project-title">
+                                        <a href="project_detail.html">湖南工学院第xxx次程序设计大赛</a>
+                                        <br/>
+                                        <small>创建于 14.08.2014</small>
+                                    </td>
+                                    <td class="project-completion">
+                                        <small>比赛进度: 48%</small>
+                                        <div class="progress progress-mini">
+                                            <div style="width: 48%;" class="progress-bar"></div>
+                                        </div>
+                                    </td>
+                                    <td class="project-people">
+
+                                    </td>
+                                    <td class="project-actions">
+                                        <a href="#" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
+                                        <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+<div class="footer">
+    <div class="pull-right">
+        10GB of <strong>250GB</strong> Free.
+    </div>
+    <div>
+        <strong>Copyright</strong> Example Company &copy; 2014-2015
+    </div>
+</div>
+
+</div>
+
+
+</div>
+
+<!-- Mainly scripts -->
+<script src="/js/jquery-2.1.1.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/module.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/hotkeys.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/uploader.js"></script>
+<script type="text/javascript" src="/js/plugins/simditor/simditor.js"></script>
+<script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        // var editor = new Simditor({
+        //     textarea: $('.editor')
+        //     //optional options
+        // });
+
+
+        //del
+        $('.del').on('click', function(){
+            var _this = $(this);
+            var proid = _this.attr('data-proid');
+            var data = {
+                proid: proid
+            };
+            $.post("/problem/del", data,function(res){
+                // alert(_form.serialise());
+                if(res.code){
+                    layer.msg(res.msg);
+                }
+
+                if(res.code === 0) {
+                    // layer.msg(res.msg);
+                    alert(res.msg);
+                    window.location.href="/problem/list";
+                }
+            }, 'json');
+        });
+
+        //del
+        $('.edit').on('click', function(){
+            var _this = $(this);
+            var proid = _this.attr('data-proid');
+            window.location.href="/problem/edit/"+proid;
+        });
+    });
+
+
+
+</script>
+
+
+
+
+</body>
+</html>
