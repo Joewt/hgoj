@@ -7,10 +7,73 @@ import (
 
 func init() {
 
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"],
+        beego.ControllerComments{
+            Method: "BlogAddGet",
+            Router: `/article/add`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"],
+        beego.ControllerComments{
+            Method: "ContestAdd",
+            Router: `/article/add`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"],
+        beego.ControllerComments{
+            Method: "BlogIndex",
+            Router: `/article/index`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"],
+        beego.ControllerComments{
+            Method: "ContestList",
+            Router: `/article/list`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:CeinfoController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:CeinfoController"],
         beego.ControllerComments{
             Method: "Ceinfo",
             Router: `/ceinfo/:k`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"],
+        beego.ControllerComments{
+            Method: "ContestAddGet",
+            Router: `/contest/add`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"],
+        beego.ControllerComments{
+            Method: "ContestAdd",
+            Router: `/contest/add`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"],
+        beego.ControllerComments{
+            Method: "ContestList",
+            Router: `/contest/list`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
