@@ -1,0 +1,58 @@
+
+<body class="top-navigation">
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <a href="#" class="navbar-brand">HGOJ</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a aria-expanded="false" role="button" href="/index">湖南工学院在线判题系统</a>
+                        </li>
+                        <li class="nav nav-pills {{menu_eq .menu "/faqs" }}">
+                            <a aria-expanded="false" role="button" href="/faqs" class="dropdown-toggle" >常见问题</a>
+                        </li>
+                        <li class="nav nav-pills {{menu_eq .menu "/problemset" }}">
+                            <a aria-expanded="false" role="button" href="/problemset/cid/" class="dropdown-toggle" >题目</a>
+                        </li>
+                        <li class="dropdown {{menu_eq .menu "/status" }}">
+                            <a aria-expanded="false" role="button" href="/contest/status/cid/" class="dropdown-toggle" > 状态</a>
+                        </li>
+                        <li class="dropdown {{menu_eq .menu "/contest" }}">
+                            <a aria-expanded="false" role="button" href="/contestrank/cid/" class="dropdown-toggle" > 排名 </a>
+                        </li>
+
+                    </ul>
+                    <ul class="nav navbar-top-links navbar-right">
+
+
+                        {{if .islogin}}
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{.User.Nick}} <span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="/profile/1">个人中心</a></li>
+                                {{if .isadmin}}
+                                <li><a href="/admin">后台管理</a></li>
+                                {{end}}
+                                <li><a href="/logout"><i class="fa fa-sign-out"></i> logout</a></li>
+                            </ul>
+                        </li>
+                        {{else}}
+                        <li>
+                            <a href="/login">
+                                <i class="fa fa-sign-in"></i> login
+                            </a>
+                        </li>
+                        {{end}}
+
+                    </ul>
+                </div>
+            </nav>
+        </div>

@@ -7,7 +7,8 @@ import (
 
 
 type ContestProblem struct {
-	ProblemId		int32		`orm:"pk"`
+	Id				int32
+	ProblemId		int32		`orm:"default(0)"`
 	ContestId		int32		`orm:"null"`
 	Title			string		`orm:"size(200)"`
 	Num				int32		`orm:"default(0)"`
