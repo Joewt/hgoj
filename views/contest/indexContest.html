@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HGOJ | index</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+
+</head>
+
+{{template "contest/common/header.html" .}}
+
+
+
+
+
+
+
+
+
+<div class="wrapper wrapper-content">
+    <div class="container">
+
+
+
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="m-b-md">
+                        {{if .isadmin}}
+                        <a href="#" class="btn btn-white btn-xs pull-right">编辑比赛</a>
+                        {{end}}
+                        <h2>湖南工学院第xx次程序设计大赛</h2>
+                    </div>
+                    <dl class="dl-horizontal">
+                        <dt>状态:</dt> <dd><span class="label label-primary">进行中</span></dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5">
+                    <dl class="dl-horizontal">
+
+                        <dt>组织:</dt> <dd>Alex Smith</dd>
+                        <dt>提交数:</dt> <dd>  0</dd>
+                        <dt>Ac数:</dt> <dd>10</dd>
+                    </dl>
+                </div>
+                <div class="col-lg-7" id="cluster_info">
+                    <dl class="dl-horizontal" >
+
+                        <dt>比赛时间:</dt> <dd> 	2019.5.1 8:00 </dd>
+                        <dt>结束时间:</dt> <dd> 	2019.5.1 14:00 </dd>
+                        <dt>当前时间:</dt> <dd id="time_now">  2019.5.1 12.00 </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <dl class="dl-horizontal">
+                        <dt>进度:</dt>
+                        <dd>
+                            <div class="progress progress-striped active m-b-sm">
+                                <div style="width: 60%;" class="progress-bar"></div>
+                            </div>
+                            <small>Project completed in <strong>60%</strong>. Remaining close the project, sign a contract and invoice.</small>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+
+
+
+        <div class="ibox-content">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+
+                        <th>题目编号</th>
+                        <th>标题 </th>
+                        <th>正确 </th>
+                        <th>提交 </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1060</td>
+                        <td>pro0101</td>
+                        <td>10</td>
+                        <td>100</td>
+                    </tr>
+
+
+                    <tr>
+                        <td>1060</td>
+                        <td>pro0101</td>
+                        <td>10</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>1060</td>
+                        <td>pro0101</td>
+                        <td>10</td>
+                        <td>100</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        </div>
+
+
+</div>
+{{template "contest/common/footer.html"}}
+
+
+
+<!-- Mainly scripts -->
+<script src="/js/jquery-2.1.1.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+    function mytime() {
+
+        var a = new Date();
+
+        var b = a.toLocaleTimeString();
+
+        var c = a.toLocaleDateString();
+
+        document.getElementById("time_now").innerHTML = c + "&nbsp" + b;
+
+    }
+
+    setInterval(function () { mytime() }, 1000);
+</script>
+
+</body>
+
+</html>
