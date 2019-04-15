@@ -65,3 +65,28 @@ func ContestAdd(title, desc,proIds,role,limituser string,startTime, endTime time
 	err = DB.Commit()
 	return int32(cid), nil
 }
+
+
+func QueryAllContest()([]*Contest,int64, error) {
+	var con []*Contest
+	contest := new(Contest)
+	qs := DB.QueryTable(contest)
+	num, err := qs.OrderBy("-contest_id").All(&con)
+	if err != nil {
+		return nil,num,err
+	}
+	return con,num, nil
+}
+
+
+func QueryContestByConId(cid int32) (Contest, error) {
+	con := Contest{ContestId:cid}
+
+	err := DB.Read(&con,"ContestId")
+
+	if err != nil {
+		return Contest{}, err
+	}
+
+	return con, nil
+}

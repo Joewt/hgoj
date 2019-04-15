@@ -19,12 +19,6 @@
 
 
 
-
-
-
-
-
-
 <div class="wrapper wrapper-content">
     <div class="container">
 
@@ -38,10 +32,14 @@
                         {{if .isadmin}}
                         <a href="#" class="btn btn-white btn-xs pull-right">编辑比赛</a>
                         {{end}}
-                        <h2>湖南工学院第xx次程序设计大赛</h2>
+                        <h2>{{.con.Title}}</h2>
                     </div>
                     <dl class="dl-horizontal">
+                        {{if eq .con.Defunct "Y"}}
                         <dt>状态:</dt> <dd><span class="label label-primary">进行中</span></dd>
+                        {{else}}
+                        <dt>状态:</dt> <dd><span class="label label-default">已结束</span></dd>
+                        {{end}}
                     </dl>
                 </div>
             </div>
@@ -49,7 +47,7 @@
                 <div class="col-lg-5">
                     <dl class="dl-horizontal">
 
-                        <dt>组织:</dt> <dd>Alex Smith</dd>
+                        <dt>组织:</dt> <dd>Admin</dd>
                         <dt>提交数:</dt> <dd>  0</dd>
                         <dt>Ac数:</dt> <dd>10</dd>
                     </dl>
@@ -57,8 +55,8 @@
                 <div class="col-lg-7" id="cluster_info">
                     <dl class="dl-horizontal" >
 
-                        <dt>比赛时间:</dt> <dd> 	2019.5.1 8:00 </dd>
-                        <dt>结束时间:</dt> <dd> 	2019.5.1 14:00 </dd>
+                        <dt>比赛时间:</dt> <dd> 	{{.con.StartTime}} </dd>
+                        <dt>结束时间:</dt> <dd> 	{{.con.EndTime}} </dd>
                         <dt>当前时间:</dt> <dd id="time_now">  2019.5.1 12.00 </dd>
                     </dl>
                 </div>
@@ -69,9 +67,8 @@
                         <dt>进度:</dt>
                         <dd>
                             <div class="progress progress-striped active m-b-sm">
-                                <div style="width: 60%;" class="progress-bar"></div>
+                                <div style="width: {{.percent}}%;" class="progress-bar"></div>
                             </div>
-                            <small>Project completed in <strong>60%</strong>. Remaining close the project, sign a contract and invoice.</small>
                         </dd>
                     </dl>
                 </div>
@@ -82,6 +79,7 @@
 
         <div class="ibox-content">
             <div class="table-responsive">
+                {{if .visible}}
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -93,28 +91,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1060</td>
-                        <td>pro0101</td>
-                        <td>10</td>
-                        <td>100</td>
-                    </tr>
-
-
-                    <tr>
-                        <td>1060</td>
-                        <td>pro0101</td>
-                        <td>10</td>
-                        <td>100</td>
-                    </tr>
-                    <tr>
-                        <td>1060</td>
-                        <td>pro0101</td>
-                        <td>10</td>
-                        <td>100</td>
-                    </tr>
+                    {{range .pro}}
+                        <tr>
+                            <td><a href="/contest/problem/{{.ProblemId}}/5">{{.ProblemId}}</a></td>
+                            <td><a href="/contest/problem/{{.ProblemId}}/5">{{.Title}}</a></td>
+                            <td>{{.Accepted}}</td>
+                            <td>{{.Submit}}</td>
+                        </tr>
+                    {{end}}
                     </tbody>
                 </table>
+                {{else}}
+                    <h1>比赛未开始</h1>
+                {{end}}
             </div>
 
         </div>
