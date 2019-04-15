@@ -74,27 +74,15 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>1060</td>
-                                            <td><a href="/contest/cid/3">2015年湖南省第十一届大学生计算机程序设计竞赛原题</a></td>
-                                            <td>进行中@2018-08-18 11:00:00</td>
-                                            <td>公开</td>
-                                            <td>admin</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1060</td>
-                                            <td>2015年湖南省第十一届大学生计算机程序设计竞赛原题</td>
-                                            <td>已结束@2018-08-18 11:00:00</td>
-                                            <td>公开</td>
-                                            <td>admin</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1060</td>
-                                            <td>2015年湖南省第十一届大学生计算机程序设计竞赛原题</td>
-                                            <td>已结束@2018-08-18 11:00:00</td>
-                                            <td>公开</td>
-                                            <td>admin</td>
-                                        </tr>
+                                        {{range .con}}
+                                            <tr>
+                                                <td>{{.ContestId}}</td>
+                                                <td><a href="/contest/cid/{{.ContestId}}">{{.Title}}</a></td>
+                                                <td>{{if eq .Defunct "Y"}}进行中{{else}}已结束{{end}}@{{.EndTime}}</td>
+                                                <td>{{if .Private}}私有{{else}}公开{{end}}</td>
+                                                <td>admin</td>
+                                            </tr>
+                                        {{end}}
                                         </tbody>
                                     </table>
                                 </div>

@@ -15,3 +15,23 @@ type ContestProblem struct {
 	CAccepted		int32		`orm:"default(0)"`
 	CSubmit			int32		`orm:"default(0)"`
 }
+
+
+
+func QueryProblemByCid(cid int32)([]Problem, error) {
+	qs := DB.QueryTable("contest_problem")
+	var c []*ContestProblem
+	qs.Filter("contest_id", cid).All(&c)
+	var proIds  []int32
+	var p []Problem
+	for _, v := range c {
+		proIds = append(proIds,v.ProblemId)
+		pro := Problem{ProblemId:v.ProblemId}
+		err := DB.Read(&pro,"ProblemId")
+		if err != nil {
+			return []Problem{}, err
+		}
+		p = append(p, pro)
+	}
+	return p, nil
+}

@@ -3,12 +3,15 @@ package controllers
 import (
 	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
+	"github.com/yinrenxin/hgoj/tools"
 	"strconv"
+	"strings"
 	"time"
 )
 
 type ContestController struct {
 	BaseController
+	Visible bool
 }
 
 
@@ -45,15 +48,50 @@ func (this *ContestController) ContestAddPost() {
 }
 
 
-// @router /contest/cid/:cid [get]
+// @router /contest/cid/:id [get]
 func (this *ContestController) ContestCid() {
-	cid := this.Ctx.Input.Param("cid")
-	logs.Info("cid: ",cid)
+	//cid := this.Ctx.Input.Param("id")
+	this.Visible = true
+	req :=  this.Ctx.Request.RequestURI
+	temp := strings.Split(req,"/")
+	cid, _ := tools.StringToInt32(temp[len(temp)-1])
+
+	con, err := models.QueryContestByConId(cid)
+	if err != nil {
+		this.Abort("500")
+	}
+
+	//根据cid查找problem
+	pro, err := models.QueryProblemByCid(con.ContestId)
+
+	if err != nil {
+		this.Visible = false
+	}
+
+	//进度条处理
+	startTime := con.StartTime
+	endTime := con.EndTime
+	totalTime := endTime.Sub(startTime).Minutes()
+	t := time.Now().Sub(startTime).Minutes()
+	percentage := (t/totalTime)*100
+	if t > totalTime {
+		percentage = 100
+	}
+	if t < 0 {
+		this.Visible = false
+		percentage = 0
+	}
+	logs.Info("题目是否可见",this.Visible)
+	this.Data["con"] = con
+	this.Data["percent"] = percentage
+	this.Data["pro"] = pro
+	this.Data["visible"] = this.Visible
 	this.TplName = "contest/indexContest.html"
 }
 
 
 // @router /contest/list [get]
 func (this *ContestController) ContestList() {
+
 	this.TplName = "admin/listContest.html"
 }

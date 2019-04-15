@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/astaxie/beego/logs"
 	_ "github.com/astaxie/beego/orm"
 	"time"
 )
@@ -57,7 +58,7 @@ func QueryAllSolution() ([]*Solution, map[int]string, error) {
 
 
 
-func AddSolution(pid string, source string, uid int32, codeLen int, lang string)(int64, error){
+func AddSolution(pid string, source string, uid int32, codeLen int, lang string, conid int32)(int64, error){
 	var Solu Solution
 	var SoluCode SourceCode
 	err := DB.Begin()
@@ -68,6 +69,10 @@ func AddSolution(pid string, source string, uid int32, codeLen int, lang string)
 	Solu.Ip = "127.0.0.1"
 	Solu.CodeLength = int32(codeLen)
 	Solu.Result = 1
+	logs.Info("conid",conid)
+	if conid != -1 {
+		Solu.ContestId = conid
+	}
 
 	sid, err := DB.Insert(&Solu)
 

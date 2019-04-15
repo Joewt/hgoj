@@ -53,17 +53,14 @@ func (this *IndexController) IndexStatus() {
 	}
 	this.Data["data"] = data
 	this.Data["RES"] = RESULT
-	this.Data["m"] = map[string]interface{} {
-		"a": 1,
-		"1": map[string]float64{
-			"c": 4,
-		},
-	}
 	this.TplName = "status.html"
 }
 
 // @router /contest [get]
 func (this *IndexController) IndexContest() {
+	con, _, _ := models.QueryAllContest()
+
+	this.Data["con"] = con
 	this.TplName = "contest.html"
 }
 
