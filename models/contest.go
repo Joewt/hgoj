@@ -90,3 +90,21 @@ func QueryContestByConId(cid int32) (Contest, error) {
 
 	return con, nil
 }
+
+
+func QueryACNumContestByCid(cid int32) (int32,int32) {
+	var acNum  []*ContestProblem
+	var ac,sub int32
+	contestproblem := new(ContestProblem)
+	num, err := DB.QueryTable(contestproblem).Filter("contest_id",cid).All(&acNum)
+	if err != nil {
+		logs.Info(err)
+	}
+
+	logs.Info(num)
+	for _, v := range acNum {
+		ac += v.CAccepted
+		sub += v.CSubmit
+	}
+	return ac, sub
+}

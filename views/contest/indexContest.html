@@ -48,8 +48,8 @@
                     <dl class="dl-horizontal">
 
                         <dt>组织:</dt> <dd>Admin</dd>
-                        <dt>提交数:</dt> <dd>  0</dd>
-                        <dt>Ac数:</dt> <dd>10</dd>
+                        <dt>提交数:</dt> <dd>{{.submit}}</dd>
+                        <dt>Ac数:</dt> <dd>{{.accepted}}</dd>
                     </dl>
                 </div>
                 <div class="col-lg-7" id="cluster_info">
@@ -91,10 +91,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{range .pro}}
+                    {{range .problem}}
                         <tr>
-                            <td><a href="/contest/problem/{{.ProblemId}}/5">{{.ProblemId}}</a></td>
-                            <td><a href="/contest/problem/{{.ProblemId}}/5">{{.Title}}</a></td>
+                            <td><a href="/contest/problem/{{.ProblemId}}/{{.Cid}}">{{.ProblemId}}</a></td>
+                            <td><a href="/contest/problem/{{.ProblemId}}/{{.Cid}}">{{.Title}}</a></td>
                             <td>{{.Accepted}}</td>
                             <td>{{.Submit}}</td>
                         </tr>
