@@ -91,10 +91,8 @@ user3
 <script src="/js/jquery-2.1.1.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/plugins/datapicker/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="/js/plugins/simditor/module.js"></script>
-<script type="text/javascript" src="/js/plugins/simditor/hotkeys.js"></script>
-<script type="text/javascript" src="/js/plugins/simditor/uploader.js"></script>
-<script type="text/javascript" src="/js/plugins/simditor/simditor.js"></script>
+<script type="text/javascript" src="/js/plugins/bootstrap-markdown/bootstrap-markdown.js"></script>
+<script type="text/javascript" src="/js/plugins/bootstrap-markdown/markdown.js"></script>
 <script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
 
 
@@ -103,10 +101,8 @@ user3
         $('.datepicker').datepicker({
             startDate: '-3d'
         });
-        // var editor = new Simditor({
-        //     textarea: $('.editor')
-        //     //optional options
-        // });
+
+        $(".editor").markdown({autofocus:false,savable:false});
 
 
         $('#submitpro').on('click', function(){

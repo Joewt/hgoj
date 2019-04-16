@@ -8,7 +8,8 @@ import (
 
 
 var JUDGERES = map[int]string{
-	1: "答案错误",
+	0: "判题中",
+	1: "等待重判",
 	2: "编译中",
 	3: "运行并评判",
 	4: "正确",
@@ -25,6 +26,7 @@ var JUDGERES = map[int]string{
 
 
 var JUDGERESCLSAA = map[int]string{
+	0: "warning",
 	1: "danger",
 	2: "warning",
 	3: "info",
@@ -97,7 +99,7 @@ func AddSolution(pid string, source string, uid int32, codeLen int, lang string,
 	Solu.Language = uint(stringToint32(lang))
 	Solu.Ip = "127.0.0.1"
 	Solu.CodeLength = int32(codeLen)
-	Solu.Result = 1
+	Solu.Result = 0
 	logs.Info("conid",conid)
 	if conid != -1 {
 		Solu.ContestId = conid
