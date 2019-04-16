@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego/logs"
 	"github.com/shirou/gopsutil/mem"
 	"github.com/yinrenxin/hgoj/models"
+	"github.com/yinrenxin/hgoj/syserror"
 )
 
 type IndexController struct {
@@ -11,9 +12,15 @@ type IndexController struct {
 }
 
 
+// @router [get]
+func (this *IndexController) Indexs() {
+	this.TplName = "index.html"
+}
+
+
 // @router /index [get]
 func (this *IndexController) Index() {
-	u, ok := this.GetSession(SESSION_USER_KEY).(models.Users)
+	_, ok := this.GetSession(SESSION_USER_KEY).(models.Users)
 	if !ok {
 		logs.Error("未登陆")
 	}
@@ -21,7 +28,6 @@ func (this *IndexController) Index() {
 	if err != nil {
 		this.JsonErr("未知错误", 4000, "/index")
 	}
-	logs.Error("用户",u)
 	this.Data["user"] = user
 	this.TplName = "index.html"
 }
@@ -84,7 +90,7 @@ func (this *IndexController) IndexReg() {
 // @router /admin [get]
 func (this *IndexController) IndexAdmin() {
 	if !this.IsAdmin {
-		this.Abort("401")
+		this.Abort401(syserror.UnKnowError{})
 	}
 	v, _ := mem.VirtualMemory()
 	this.Data["memused"] = (v.Total/(1024*1024)) - (v.Free/(1024*1024))
