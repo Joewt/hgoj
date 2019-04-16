@@ -88,6 +88,15 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"],
+        beego.ControllerComments{
+            Method: "ContestStatus",
+            Router: `/contest/status/cid/:cid`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"],
         beego.ControllerComments{
             Method: "IndexAdmin",

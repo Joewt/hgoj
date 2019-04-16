@@ -4,6 +4,8 @@ import (
 	"encoding/gob"
 	"github.com/astaxie/beego"
 	"github.com/yinrenxin/hgoj/models"
+	"time"
+
 	//"strconv"
 	_ "github.com/yinrenxin/hgoj/models"
 	_ "github.com/yinrenxin/hgoj/routers"
@@ -41,5 +43,32 @@ func initTemplate() {
 		} else {
 			return ""
 		}
+	})
+	_ = beego.AddFuncMap("cal_rate", func(a,b time.Time)(float64){
+		startTime := a
+		endTime := b
+		totalTime := endTime.Sub(startTime).Minutes()
+		t := time.Now().Sub(startTime).Minutes()
+		percentage := (t/totalTime)*100
+		if t > totalTime {
+			percentage = 100
+		}
+
+		if t < 0 {
+			percentage = 0
+		}
+		return percentage
+	})
+
+
+	_ = beego.AddFuncMap("is_finish", func(a,b time.Time)(bool){
+		startTime := a
+		endTime := b
+		totalTime := endTime.Sub(startTime).Minutes()
+		t := time.Now().Sub(startTime).Minutes()
+		if t > totalTime {
+			return true
+		}
+		return false
 	})
 }
