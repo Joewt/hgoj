@@ -24,6 +24,23 @@ var JUDGERES = map[int]string{
 }
 
 
+var JUDGERESCLSAA = map[int]string{
+	1: "danger",
+	2: "warning",
+	3: "info",
+	4: "success",
+	5: "warning",
+	6: "danger",
+	7: "warning",
+	8: "warning",
+	9: "warning",
+	10: "danger",
+	11: "danger",
+	12: "info",
+	13: "success",
+}
+
+
 type Solution struct {
 	SolutionId			int32			`orm:"auto"`
 	ProblemId			int32			`orm:"default(0)"`
