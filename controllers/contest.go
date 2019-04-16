@@ -16,6 +16,16 @@ type ContestController struct {
 }
 
 
+type Pro struct {
+	ProblemId		int32
+	Title			string
+	Accepted		int32
+	Submit			int32
+	Solved			int32
+	Cid 			int32
+}
+
+
 
 // @router /contest/add [get]
 func (this *ContestController) ContestAddGet() {
@@ -65,11 +75,21 @@ func (this *ContestController) ContestCid() {
 	}
 
 	//根据cid查找problem
-	pro, err := models.QueryProblemByCid(con.ContestId)
+	pros, err := models.QueryProblemByCid(con.ContestId)
 
 	if err != nil {
 		this.Visible = false
 	}
+
+
+	var pro []Pro
+
+	for _, v := range pros{
+		pro = append(pro, Pro{ProblemId:v.ProblemId,Title:v.Title,Accepted:v.Accepted,Submit:v.Submit,Solved:v.Solved,Cid:cid})
+	}
+
+	//根据cid查找 ac数
+	ac, sub := models.QueryACNumContestByCid(cid)
 
 	//进度条处理
 	startTime := con.StartTime
@@ -84,12 +104,13 @@ func (this *ContestController) ContestCid() {
 		this.Visible = false
 		percentage = 0
 	}
-	logs.Info("题目是否可见",this.Visible)
 	this.Data["conid"] = cid
 	this.Data["con"] = con
 	this.Data["percent"] = percentage
-	this.Data["pro"] = pro
+	this.Data["problem"] = pro
 	this.Data["visible"] = this.Visible
+	this.Data["accepted"] = ac
+	this.Data["submit"] = sub
 	this.TplName = "contest/indexContest.html"
 }
 
