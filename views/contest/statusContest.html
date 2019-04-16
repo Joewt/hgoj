@@ -45,31 +45,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>5000</td>
-                        <td>Joe</td>
-                        <td>1000</td>
-                        <button type="button" class="btn btn-w-m btn-default">Default</button>
-                        <button type="button" class="btn btn-w-m btn-primary">Primary</button>
-                        <button type="button" class="btn btn-w-m btn-success">Success</button>
-                        <button type="button" class="btn btn-w-m btn-info">Info</button>
-                        <button type="button" class="btn btn-w-m btn-warning">Warning</button>
-                        <button type="button" class="btn btn-w-m btn-danger">Danger</button>
-                        <button type="button" class="btn btn-w-m btn-link">Link</button>
-                        <td><a href="/ceinfo/10"><button type="button" class="btn btn-w-m btn-danger">答案错误</button></a></td>
-                        <td>1045</td>
-                        <th>0</th>
-                        <th>C++</th>
-                        <th>567B</th>
-                        <th>2019-05-01 00:00:00</th>
-                        <th>admin</th>
-                    </tr>
                     {{range .data}}
                         <tr>
                             <td>{{.SolutionId}}</td>
                             <td><a href="/profile/{{.UserId}}">{{.UserId}}</a></td>
                             <td><a href="/problem/{{.ProblemId}}">{{.ProblemId}}</a></td>
-                            <td><button type="button" class="btn btn-w-m btn-success">{{get_res .Result}}</button></td>
+                            <td><button type="button" class="btn btn-w-m btn-{{get_res_class .Result}}">{{get_res .Result}}</button></td>
                             <td>{{.Memory}}</td>
                             <td>{{.Time}}</td>
                             <td>{{.Language}}</td>

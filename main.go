@@ -37,6 +37,13 @@ func initTemplate() {
 		//res, _ := strconv.Atoi(result)
 		return models.JUDGERES[int(result)]
 	})
+
+
+	_ = beego.AddFuncMap("get_res_class", func(result int16)(string){
+
+		return models.JUDGERESCLSAA[int(result)]
+	})
+
 	_ = beego.AddFuncMap("menu_eq", func(a,b string)(string){
 		if a == b {
 			return "active"
