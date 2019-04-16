@@ -58,6 +58,12 @@ func (this *BaseController) Abort401(err error) {
 	this.Abort("401")
 }
 
+
+func (this *BaseController) Abort404(err error) {
+	this.Data["error"] = err
+	this.Abort("404")
+}
+
 func (this *BaseController) GetMushString(key, msg string) string {
 	k := this.GetString(key)
 	if len(k) == 0 {

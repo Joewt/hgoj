@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
+	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
 	"strconv"
 	"strings"
@@ -50,6 +51,9 @@ func (this *ContestController) ContestAddPost() {
 
 // @router /contest/cid/:id [get]
 func (this *ContestController) ContestCid() {
+	if !this.IsLogin {
+		this.Abort401(syserror.UnKnowError{})
+	}
 	this.Visible = true
 	req :=  this.Ctx.Request.RequestURI
 	temp := strings.Split(req,"/")
@@ -96,12 +100,12 @@ func (this *ProblemController) ProblemContest() {
 	cid := this.Ctx.Input.Param(":cid")
 	ids , err := tools.StringToInt32(id)
 	if err != nil {
-		this.Abort("401")
+		this.Abort401(err)
 		logs.Error(err)
 	}
 	pro,err := models.QueryProblemById(ids)
 	if err != nil {
-		this.Abort("401")
+		this.Abort401(err)
 		logs.Error(err)
 	}
 
@@ -114,7 +118,7 @@ func (this *ProblemController) ProblemContest() {
 		}
 	}
 	if !f {
-		this.Abort("401")
+		this.Abort404(syserror.UnKnowError{})
 	}
 
 	this.Data["conid"] = cid
@@ -125,6 +129,9 @@ func (this *ProblemController) ProblemContest() {
 
 // @router /contest/list [get]
 func (this *ContestController) ContestList() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
 	con,num, err := models.QueryAllContest()
 	if err != nil {
 		logs.Error(err)
@@ -146,4 +153,11 @@ func (this *ContestController) ContestStatus() {
 	this.Data["data"] = data
 	this.Data["RES"] = RESULT
 	this.TplName = "contest/statusContest.html"
+}
+
+
+// @router /contestrank/cid/:cid [get]
+func (this *ContestController) ContestRank() {
+
+	this.TplName = "contest/contestrank.html"
 }
