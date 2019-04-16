@@ -57,8 +57,20 @@ func QueryAllSolution() ([]*Solution, map[int]string, error) {
 }
 
 
+func QueryAllSolutionByCid(cid int32)  ([]*Solution, map[int]string, error) {
+	var data []*Solution
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	_, err := qs.Filter("contest_id",cid).OrderBy("-solution_id").All(&data)
+	if err != nil {
+		return nil,JUDGERES,err
+	}
+	return data, JUDGERES,nil
+}
 
-func AddSolution(pid string, source string, uid int32, codeLen int, lang string, conid int32)(int64, error){
+
+
+func AddSolution(pid string, source string, uid int32, codeLen int, lang string, conid int32, ip string)(int64, error){
 	var Solu Solution
 	var SoluCode SourceCode
 	err := DB.Begin()
@@ -73,6 +85,7 @@ func AddSolution(pid string, source string, uid int32, codeLen int, lang string,
 	if conid != -1 {
 		Solu.ContestId = conid
 	}
+	Solu.Ip = ip
 
 	sid, err := DB.Insert(&Solu)
 

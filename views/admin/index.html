@@ -6,75 +6,16 @@
 
             <div class="col-sm-3">
                 <h2>欢迎来到HGOJ</h2>
-                <small>You have 42 messages and 6 notifications.</small>
-                <ul class="list-group clear-list m-t">
-                    <li class="list-group-item fist-item">
-                                <span class="pull-right">
-                                    09:00 pm
-                                </span>
-                        <span class="label label-success">1</span> Please contact me
-                    </li>
-                    <li class="list-group-item">
-                                <span class="pull-right">
-                                    10:16 am
-                                </span>
-                        <span class="label label-info">2</span> Sign a contract
-                    </li>
-                    <li class="list-group-item">
-                                <span class="pull-right">
-                                    08:22 pm
-                                </span>
-                        <span class="label label-primary">3</span> Open new shop
-                    </li>
-                    <li class="list-group-item">
-                                <span class="pull-right">
-                                    11:06 pm
-                                </span>
-                        <span class="label label-default">4</span> Call back to Sylvia
-                    </li>
-                    <li class="list-group-item">
-                                <span class="pull-right">
-                                    12:00 am
-                                </span>
-                        <span class="label label-primary">5</span> Write a letter to Sandra
-                    </li>
-                </ul>
             </div>
-            <div class="col-sm-6">
-                <div class="flot-chart dashboard-chart">
-                    <div class="flot-chart-content" id="flot-dashboard-chart"></div>
-                </div>
-                <div class="row text-left">
-                    <div class="col-xs-4">
-                        <div class=" m-l-md">
-                            <span class="h4 font-bold m-t block">$ 406,100</span>
-                            <small class="text-muted m-b block">Sales marketing report</small>
-                        </div>
-                    </div>
-                    <div class="col-xs-4">
-                        <span class="h4 font-bold m-t block">$ 150,401</span>
-                        <small class="text-muted m-b block">Annual sales revenue</small>
-                    </div>
-                    <div class="col-xs-4">
-                        <span class="h4 font-bold m-t block">$ 16,822</span>
-                        <small class="text-muted m-b block">Half-year revenue margin</small>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-sm-3">
+            <div class="col-sm-10">
                 <div class="statistic-box">
                     <h4>
                         服务器运行情况
                     </h4>
                     <div class="row text-center">
                         <div class="col-lg-6">
-                            <canvas id="polarChart" width="80" height="80"></canvas>
+                            <canvas id="memChart" width="100" height="100"></canvas>
                             <h5 >内存</h5>
-                        </div>
-                        <div class="col-lg-6">
-                            <canvas id="doughnutChart" width="78" height="78"></canvas>
-                            <h5 >CPU</h5>
                         </div>
                     </div>
                     <div class="m-t">
@@ -93,19 +34,7 @@
 
 
 
-        <div class="footer">
-            <div class="pull-right">
-                10GB of <strong>250GB</strong> Free.
-            </div>
-            <div>
-                <strong>Copyright</strong> Example Company &copy; 2014-2015
-            </div>
-        </div>
-
-    </div>
-
-
-</div>
+{{template "common/footer.html"}}
 
 <!-- Mainly scripts -->
 <script src="js/jquery-2.1.1.js"></script>
@@ -205,28 +134,22 @@
             }
         );
 
-        var doughnutData = [
+        var memData = [
             {
-                value: 300,
+                value: {{.memused}},
                 color: "#a3e1d4",
                 highlight: "#1ab394",
-                label: "App"
+                label: "used"
             },
             {
-                value: 50,
+                value: {{.memfree}},
                 color: "#dedede",
                 highlight: "#1ab394",
-                label: "Software"
+                label: "free"
             },
-            {
-                value: 100,
-                color: "#A4CEE8",
-                highlight: "#1ab394",
-                label: "Laptop"
-            }
         ];
 
-        var doughnutOptions = {
+        var memOptions = {
             segmentShowStroke: true,
             segmentStrokeColor: "#fff",
             segmentStrokeWidth: 2,
@@ -237,47 +160,10 @@
             animateScale: false
         };
 
-        var ctx = document.getElementById("doughnutChart").getContext("2d");
-        var DoughnutChart = new Chart(ctx).Doughnut(doughnutData, doughnutOptions);
+        var ctx = document.getElementById("memChart").getContext("2d");
+        var MemChart = new Chart(ctx).Doughnut(memData, memOptions);
 
-        var polarData = [
-            {
-                value: 300,
-                color: "#a3e1d4",
-                highlight: "#1ab394",
-                label: "App"
-            },
-            {
-                value: 140,
-                color: "#dedede",
-                highlight: "#1ab394",
-                label: "Software"
-            },
-            {
-                value: 200,
-                color: "#A4CEE8",
-                highlight: "#1ab394",
-                label: "Laptop"
-            }
-        ];
 
-        var polarOptions = {
-            scaleShowLabelBackdrop: true,
-            scaleBackdropColor: "rgba(255,255,255,0.75)",
-            scaleBeginAtZero: true,
-            scaleBackdropPaddingY: 1,
-            scaleBackdropPaddingX: 1,
-            scaleShowLine: true,
-            segmentShowStroke: true,
-            segmentStrokeColor: "#fff",
-            segmentStrokeWidth: 2,
-            animationSteps: 100,
-            animationEasing: "easeOutBounce",
-            animateRotate: true,
-            animateScale: false
-        };
-        var ctx = document.getElementById("polarChart").getContext("2d");
-        var Polarchart = new Chart(ctx).PolarArea(polarData, polarOptions);
 
     });
 </script>

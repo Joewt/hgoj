@@ -36,39 +36,6 @@ func (this *ProblemController) Problem() {
 }
 
 
-// @router /contest/problem/:id/:cid [get]
-func (this *ProblemController) ProblemContest() {
-	id := this.Ctx.Input.Param(":id")
-	cid := this.Ctx.Input.Param(":cid")
-	ids , err := tools.StringToInt32(id)
-	if err != nil {
-		this.Abort("401")
-		logs.Error(err)
-	}
-	pro,err := models.QueryProblemById(ids)
-	if err != nil {
-		this.Abort("401")
-		logs.Error(err)
-	}
-
-	c, _ := tools.StringToInt32(cid)
-	pros, _ := models.QueryProblemByCid(c)
-	f := false
-	for _, v := range pros {
-		if v.ProblemId == ids {
-			f = true
-		}
-	}
-	if !f {
-		this.Abort("401")
-	}
-
-	this.Data["conid"] = cid
-	this.Data["problem"] = pro
-	this.TplName = "contest/proContest.html"
-}
-
-
 // @router /problem/edit/:id [get]
 func (this *ProblemController) ProblemEdit() {
 	if !this.IsAdmin {

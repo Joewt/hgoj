@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
@@ -20,9 +19,10 @@ func (this *SolutionController) Submit() {
 	proId := this.GetString("proid")
 	lang := this.GetString("language")
 	conId, _ := tools.StringToInt32(this.GetString("conid"))
-	logs.Info("conid:",conId)
+	req := this.Ctx.Request
+	addr := req.RemoteAddr
 	uid := this.User.UserId
-	_, err := models.AddSolution(proId, source, uid, code_length, lang, conId)
+	_, err := models.AddSolution(proId, source, uid, code_length, lang, conId, addr)
 	if err != nil {
 		this.JsonErr("保存代码错误", syserror.SAVE_CODE_ERR, "problem")
 	}

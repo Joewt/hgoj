@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HGOJ | index</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+
+</head>
+
+{{template "contest/common/header.html" .}}
+
+
+
+<div class="wrapper wrapper-content">
+    <div class="container">
+
+
+
+
+
+        <div class="ibox-content">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+
+                        <th>运行编号</th>
+                        <th>用户 </th>
+                        <th>问题 </th>
+                        <th>结果 </th>
+                        <th>内存 </th>
+                        <th>耗时</th>
+                        <th>语言</th>
+                        <th>代码长度</th>
+                        <th>提交时间</th>
+                        <th>判题机</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>5000</td>
+                        <td>Joe</td>
+                        <td>1000</td>
+                        <button type="button" class="btn btn-w-m btn-default">Default</button>
+                        <button type="button" class="btn btn-w-m btn-primary">Primary</button>
+                        <button type="button" class="btn btn-w-m btn-success">Success</button>
+                        <button type="button" class="btn btn-w-m btn-info">Info</button>
+                        <button type="button" class="btn btn-w-m btn-warning">Warning</button>
+                        <button type="button" class="btn btn-w-m btn-danger">Danger</button>
+                        <button type="button" class="btn btn-w-m btn-link">Link</button>
+                        <td><a href="/ceinfo/10"><button type="button" class="btn btn-w-m btn-danger">答案错误</button></a></td>
+                        <td>1045</td>
+                        <th>0</th>
+                        <th>C++</th>
+                        <th>567B</th>
+                        <th>2019-05-01 00:00:00</th>
+                        <th>admin</th>
+                    </tr>
+                    {{range .data}}
+                        <tr>
+                            <td>{{.SolutionId}}</td>
+                            <td><a href="/profile/{{.UserId}}">{{.UserId}}</a></td>
+                            <td><a href="/problem/{{.ProblemId}}">{{.ProblemId}}</a></td>
+                            <td><button type="button" class="btn btn-w-m btn-success">{{get_res .Result}}</button></td>
+                            <td>{{.Memory}}</td>
+                            <td>{{.Time}}</td>
+                            <td>{{.Language}}</td>
+                            <td>{{.CodeLength}}</td>
+                            <td>{{.Judgetime}}</td>
+                            <td>{{.Judger}}</td>
+                        </tr>
+                    {{end}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+{{template "contest/common/footer.html"}}
+
+
+
+<!-- Mainly scripts -->
+<script src="/js/jquery-2.1.1.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+    function mytime() {
+
+        var a = new Date();
+
+        var b = a.toLocaleTimeString();
+
+        var c = a.toLocaleDateString();
+
+        document.getElementById("time_now").innerHTML = c + "&nbsp" + b;
+
+    }
+
+    setInterval(function () { mytime() }, 1000);
+</script>
+
+</body>
+
+</html>

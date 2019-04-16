@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego/logs"
+	"github.com/shirou/gopsutil/mem"
 	"github.com/yinrenxin/hgoj/models"
 )
 
@@ -85,6 +86,9 @@ func (this *IndexController) IndexAdmin() {
 	if !this.IsAdmin {
 		this.Abort("401")
 	}
+	v, _ := mem.VirtualMemory()
+	this.Data["memused"] = (v.Total/(1024*1024)) - (v.Free/(1024*1024))
+	this.Data["memfree"] = v.Free/(1024*1024)
 	this.TplName = "admin/index.html"
 }
 
