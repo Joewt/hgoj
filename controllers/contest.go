@@ -179,6 +179,7 @@ func (this *ContestController) ContestStatus() {
 
 // @router /contestrank/cid/:cid [get]
 func (this *ContestController) ContestRank() {
-
+	cid := this.Ctx.Input.Param(":cid")
+	this.Data["conid"] = cid
 	this.TplName = "contest/contestrank.html"
 }
