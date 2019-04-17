@@ -2,9 +2,12 @@ package tools
 
 import (
 	"crypto/md5"
+	"encoding/hex"
+	"github.com/yinrenxin/hgoj/setting"
 	"io"
-	"strconv"
 	"regexp"
+	"strconv"
+	"strings"
 )
 
 func StringToInt32(s string) (int32, error) {
@@ -36,3 +39,17 @@ func MD5(s string)string {
 	return x
 }
 
+
+
+func HashEmail(email string) string {
+	email = strings.ToLower(strings.TrimSpace(email))
+	h := md5.New()
+	h.Write([]byte(email))
+	return hex.EncodeToString(h.Sum(nil))
+}
+func AvatarLink(email string) (url string) {
+
+	url = setting.GRAVATARSOURCE + HashEmail(email) + "?d=identicon&s=500"
+
+	return url
+}
