@@ -4,9 +4,9 @@ import (
 	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/syserror"
 
+	"github.com/yinrenxin/hgoj/models"
 	//"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
-	"github.com/yinrenxin/hgoj/models"
 	"strings"
 )
 
@@ -16,6 +16,15 @@ type UserController struct {
 
 // @router /profile/:uid [get]
 func (this *UserController) Profile() {
+	id := this.Ctx.Input.Param(":uid")
+	uid, _ := tools.StringToInt32(id)
+	if !this.IsAdmin {
+		if uid != this.User.UserId {
+			this.Abort("401")
+		}
+	}
+	avatarUrl := tools.AvatarLink(this.User.Email)
+	this.Data["avatar"] = avatarUrl
 	this.TplName = "profile.html"
 }
 
