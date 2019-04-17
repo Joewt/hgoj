@@ -34,16 +34,13 @@
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="/img/profile_small.jpg" />
+                            <img alt="image" class="img-circle" src="{{.AvatarURL}}" />
                              </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{.User.Nick}}</strong>
                              </span> <span class="text-muted text-xs block">个人中心 <b class="caret"></b></span> </span> </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="/profile">Profile</a></li>
-                            <li><a href="contacts.html">Contacts</a></li>
-                            <li><a href="mailbox.html">Mailbox</a></li>
-                            <li class="divider"></li>
+                            <li><a href="/profile/{{.User.UserId}}">个人资料</a></li>
                             <li><a href="/logout">Logout</a></li>
                         </ul>
                     </div>

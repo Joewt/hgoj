@@ -20,6 +20,11 @@ func StringToInt32(s string) (int32, error) {
 }
 
 
+func IntToString(s int) (string) {
+	return strconv.Itoa(s)
+}
+
+
 
 func CheckEmail(email string) (b bool) {
 	if m, _ := regexp.MatchString("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+", email); !m {
@@ -47,9 +52,9 @@ func HashEmail(email string) string {
 	h.Write([]byte(email))
 	return hex.EncodeToString(h.Sum(nil))
 }
-func AvatarLink(email string) (url string) {
-
-	url = setting.GRAVATARSOURCE + HashEmail(email) + "?d=identicon&s=500"
+func AvatarLink(email string, size int) (url string) {
+	s := IntToString(size)
+	url = setting.GRAVATARSOURCE + HashEmail(email) + "?d=identicon&s="+s
 
 	return url
 }

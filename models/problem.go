@@ -47,6 +47,34 @@ func QueryAllProblem() ( []*Problem, int64, error){
 	return pro,num, nil
 }
 
+
+func QueryUserProblem(uid int32) ([]*Problem, int64, error) {
+	var data []*Solution
+	Solutions := new(Solution)
+	qss := DB.QueryTable(Solutions)
+	_, err := qss.Filter("user_id",uid).Filter("result",4).Limit(10).OrderBy("-solution_id").All(&data,"problem_id","time","in_date","memory","language")
+	if err != nil {
+		return nil,0,err
+	}
+
+	var proIds []int32
+	for _, v := range data {
+		proIds = append(proIds, v.ProblemId)
+	}
+
+	var pro []*Problem
+	if proIds == nil{
+		return pro,0,nil
+	}
+	problem := new(Problem)
+	qs := DB.QueryTable(problem)
+	num, err := qs.Filter("problem_id__in", proIds).OrderBy("-problem_id").All(&pro)
+	if err != nil {
+		return nil,num,err
+	}
+	return pro,num, nil
+}
+
 func QueryProblemById(id int32) (Problem, error) {
 	pro := Problem{ProblemId:id}
 	err := DB.Read(&pro,"ProblemId")

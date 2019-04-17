@@ -3,6 +3,8 @@ package controllers
 import (
 	//"errors"
 	"github.com/astaxie/beego"
+	"github.com/yinrenxin/hgoj/tools"
+
 	//"github.com/yinrenxin/joeblog/syserror"
 
 	//uuid "github.com/satori/go.uuid"
@@ -19,6 +21,7 @@ type BaseController struct {
 	User    models.Users
 	IsLogin bool
 	IsAdmin bool
+	AvatarURL string
 }
 
 const OJ_DATA = "./judge/data"
@@ -39,6 +42,8 @@ func (this *BaseController) Prepare() {
 		if u.Role == 1 {
 			this.IsAdmin = true
 		}
+		this.AvatarURL = tools.AvatarLink(u.Email,45)
+		this.Data["AvatarURL"] = this.AvatarURL
 		this.Data["User"] = this.User
 	}
 	//logs.Info("是否登录", this.IsLogin)

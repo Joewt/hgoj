@@ -23,8 +23,29 @@ func (this *UserController) Profile() {
 			this.Abort("401")
 		}
 	}
-	avatarUrl := tools.AvatarLink(this.User.Email)
+
+	data,RESULT,err := models.QueryUserSolution(uid)
+	if err != nil {
+		logs.Error(err)
+	}
+
+	pros,_,err := models.QueryUserProblem(uid)
+	if err != nil {
+		logs.Error(err)
+	}
+
+	ac,sub,err := models.QueryACSubSolution(uid)
+	if err != nil {
+		ac = 0
+		sub = 0
+	}
+	this.Data["problems"] = pros
+	this.Data["data"] = data
+	this.Data["RES"] = RESULT
+	avatarUrl := tools.AvatarLink(this.User.Email,500)
 	this.Data["avatar"] = avatarUrl
+	this.Data["acnum"] = ac
+	this.Data["subnum"] = sub
 	this.TplName = "profile.html"
 }
 
