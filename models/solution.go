@@ -76,6 +76,35 @@ func QueryAllSolution() ([]*Solution, map[int]string, error) {
 }
 
 
+func QueryUserSolution(uid int32) ([]*Solution, map[int]string, error){
+	var data []*Solution
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	_, err := qs.Filter("user_id",uid).Limit(10).OrderBy("-solution_id").All(&data)
+	if err != nil {
+		return nil,JUDGERES,err
+	}
+	return data, JUDGERES,nil
+}
+
+
+func QueryACSubSolution(uid int32) (int64,int64, error) {
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	sub, err := qs.Filter("user_id", uid).Count()
+	if err != nil {
+		return 0,0,err
+	}
+
+	ac, err := qs.Filter("user_id", uid).Filter("result",4).Count()
+
+	if err != nil {
+		return 0,0,err
+	}
+	return ac, sub, nil
+}
+
+
 func QueryAllSolutionByCid(cid int32)  ([]*Solution, map[int]string, error) {
 	var data []*Solution
 	Solutions := new(Solution)
