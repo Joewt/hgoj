@@ -154,13 +154,42 @@ func (this *UserController) UserList() {
 
 // @router /profile/update [get]
 func (this *UserController) UserUpdateGet() {
+	if !this.IsLogin {
+		this.Abort("401")
+	}
 	this.TplName = "profileUpdate.html"
 }
 
 
 // @router /profile/update [post]
 func (this *UserController) UserUpdatePost() {
+	if !this.IsLogin {
+		this.Abort("500")
+	}
+	//username := this.GetMushString("username", "用户名不能为空")
+	nick := this.GetMushString("nick", "昵称不能为空")
+	//email := this.GetMushString("email","邮箱不能为空")
+	oldpwd   := this.GetMushString("oldpwd", "旧密码不能为空")
+	newpwd  := this.GetMushString("newpwd", "新密码不能为空")
+	//school := this.GetMushString("school", "学校不能为空")
 
 
-	this.JsonErr("error", 8000, "/profile")
+	//if username != this.User.UserName {
+	//	this.JsonErr("用户名不同", 9002, "")
+	//}
+
+	if oldpwd == newpwd {
+		this.JsonErr("两次密码不能一样", 9000, "")
+	}
+
+	if tools.MD5(oldpwd) != this.User.Password {
+		this.JsonErr("密码错误", 9001, "")
+	}
+
+	ok , err := models.UpdateUserInfo(this.User.UserId,nick,newpwd)
+	if !ok {
+		this.JsonErr(err.Error(), 9004, "")
+	}
+	this.DelSession(SESSION_USER_KEY)
+	this.JsonOK("更新成功", "/login")
 }
