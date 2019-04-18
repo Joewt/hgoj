@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 	"github.com/astaxie/beego"
 	"github.com/yinrenxin/hgoj/models"
+	"github.com/astaxie/beego/logs"
 	"time"
 
 	//"strconv"
@@ -15,7 +16,13 @@ func main() {
 	initTemplate()
 	initSession()
 	initStatic()
+	initLogs()
 	beego.Run()
+}
+
+
+func initLogs() {
+	logs.SetLogger(logs.AdapterFile,`{"filename":"logs/app.log","level":7,"maxlines":0,"maxsize":0,"daily":true,"maxdays":10,"color":true}`)
 }
 
 func initSession() {

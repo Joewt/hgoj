@@ -16,3 +16,5 @@ ProjectResource/static_full/*
 conf/app.conf
 .idea/*
 ProjectResource/ace-master/*
+logs/*
+judge/*

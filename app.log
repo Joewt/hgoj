@@ -1,0 +1,12 @@
+2019/04/18 17:31:00.202 [I] [asm_amd64.s:1337]  http server Running on http://:8086
+2019/04/18 17:31:02.187 [D] [server.go:2774]  |      127.0.0.1|[97;42m 200 [0m|   4.813156ms|   match|[97;44m GET     [0m /contestrank/cid/5   r:/contestrank/cid/:cid
+2019/04/18 17:31:03.584 [I] [contest.go:92]  2
+2019/04/18 17:31:03.590 [D] [server.go:2774]  |      127.0.0.1|[97;42m 200 [0m|   39.99574ms|   match|[97;44m GET     [0m /contest/cid/5   r:/contest/cid/:id
+2019/04/18 17:31:04.084 [D] [server.go:2774]  |      127.0.0.1|[97;42m 200 [0m|   5.922284ms|   match|[97;44m GET     [0m /contest   r:/contest
+2019/04/18 17:31:05.413 [I] [value.go:447]  pros:--- [0xc0003f6000 0xc0003f60e0 0xc0003f61c0 0xc0003f62a0 0xc0003f6380 0xc0003f6460 0xc0003f6540 0xc0003f6620 0xc0003f6700 0xc0003f67e0] 10
+2019/04/18 17:31:05.417 [D] [server.go:2774]  |      127.0.0.1|[97;42m 200 [0m|  12.035348ms|   match|[97;44m GET     [0m /problemset   r:/problemset
+2019/04/18 17:31:06.609 [D] [server.go:2774]  |      127.0.0.1|[97;42m 200 [0m|  18.422723ms|   match|[97;44m GET     [0m /status   r:/status
+2019/04/18 17:31:07.870 [D] [server.go:2774]  |      127.0.0.1|[97;42m 200 [0m|   4.302725ms|   match|[97;44m GET     [0m /faqs   r:/faqs
+2019/04/18 17:31:08.488 [I] [value.go:447]  pros:--- [0xc000464000 0xc0004640e0 0xc0004641c0 0xc0004642a0 0xc000464380 0xc000464460 0xc000464540 0xc000464620 0xc000464700 0xc0004647e0] 10
+2019/04/18 17:31:08.492 [D] [server.go:2774]  |      127.0.0.1|[97;42m 200 [0m|   7.481913ms|   match|[97;44m GET     [0m /problemset   r:/problemset
+2019/04/18 17:31:09.431 [D] [server.go:2774]  |      127.0.0.1|[97;42m 200 [0m|   9.787424ms|   match|[97;44m GET     [0m /problem/1016   r:/problem/:id
