@@ -98,16 +98,9 @@ func (this *IndexController) IndexAdmin() {
 	this.TplName = "admin/index.html"
 }
 
-// @router /skin-config.html [get]
-func (this *IndexController) IndexSkinConfig() {
-	this.TplName = "admin/skin-conf.html"
-}
 
-//// @router /create [get]
-//func (this *IndexController) IndexCreate() {
-//	if this.IsAdmin == false {
-//		this.Abort401(syserror.New("权限不足",nil))
-//	}
-//	this.Data["key"] = this.UUID()
-//	this.TplName = "editor.html"
+//
+//// @router /skin-config.html [get]
+//func (this *IndexController) IndexSkinConfig() {
+//	this.TplName = "admin/skin-conf.html"
 //}

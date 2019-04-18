@@ -64,6 +64,16 @@ type Solution struct {
 }
 
 
+func QuerySolutionBySid(sid int32) (Solution, error) {
+	Solu := Solution{SolutionId:sid}
+	err := DB.Read(&Solu)
+	if err != nil {
+		return Solution{}, err
+	}
+	return Solu, nil
+}
+
+
 func QueryAllSolution() ([]*Solution, map[int]string, error) {
 	var data []*Solution
 	Solutions := new(Solution)
@@ -102,6 +112,20 @@ func QueryACSubSolution(uid int32) (int64,int64, error) {
 		return 0,0,err
 	}
 	return ac, sub, nil
+}
+
+
+func QueryResultUserSolution(uid int32) (map[int]int64, error) {
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+
+	data := make(map[int]int64)
+	for k, _ := range JUDGERES {
+		num, _ := qs.Filter("user_id", uid).Filter("result", k).Count()
+		data[k] = num
+
+	}
+	return data, nil
 }
 
 

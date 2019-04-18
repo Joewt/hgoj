@@ -14,15 +14,21 @@ type UserController struct {
 	BaseController
 }
 
-// @router /profile/:uid [get]
+// @router /profile [get]
 func (this *UserController) Profile() {
-	id := this.Ctx.Input.Param(":uid")
-	uid, _ := tools.StringToInt32(id)
-	if !this.IsAdmin {
-		if uid != this.User.UserId {
-			this.Abort("401")
-		}
+	//id := this.Ctx.Input.Param(":uid")
+	//uid, _ := tools.StringToInt32(id)
+	//if !this.IsAdmin {
+	//	if uid != this.User.UserId {
+	//		this.Abort("401")
+	//	}
+	//}
+
+	if !this.IsLogin {
+		this.Abort("401")
 	}
+
+	uid := this.User.UserId
 
 	data,RESULT,err := models.QueryUserSolution(uid)
 	if err != nil {
@@ -39,6 +45,12 @@ func (this *UserController) Profile() {
 		ac = 0
 		sub = 0
 	}
+
+	ResData, err := models.QueryResultUserSolution(uid)
+	if err != nil {
+		logs.Error(err)
+	}
+	this.Data["resdata"] = ResData
 	this.Data["problems"] = pros
 	this.Data["data"] = data
 	this.Data["RES"] = RESULT
@@ -137,4 +149,18 @@ func (this *UserController) UserList() {
 	}
 	this.Data["user"] = user
 	this.TplName = "admin/userList.html"
+}
+
+
+// @router /profile/update [get]
+func (this *UserController) UserUpdateGet() {
+	this.TplName = "profileUpdate.html"
+}
+
+
+// @router /profile/update [post]
+func (this *UserController) UserUpdatePost() {
+
+
+	this.JsonErr("error", 8000, "/profile")
 }
