@@ -37,7 +37,8 @@
                         <li class="dropdown">
                             <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{.User.Nick}} <span class="caret"></span></a>
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="/profile/{{.User.UserId}}">个人中心</a></li>
+                                <li><a href="/profile">个人中心</a></li>
+                                <li><a href="/profile/update">修改资料</a></li>
                                 {{if .isadmin}}
                                 <li><a href="/admin">后台管理</a></li>
                                 {{end}}

@@ -10,6 +10,10 @@
 
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- c3 Charts -->
+    <link href="/css/plugins/c3/c3.min.css" rel="stylesheet">
+
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
 
@@ -159,8 +163,8 @@
 
                                                     <th>题目编号</th>
                                                     <th>标题 </th>
-{{/*                                                    <th>内存 </th>*/}}
-{{/*                                                    <th>耗时 </th>*/}}
+                                                    <th>内存 </th>
+                                                    <th>耗时 </th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -168,14 +172,52 @@
                                                     <tr>
                                                         <td>{{.ProblemId}}</td>
                                                         <td><a href="problem/{{.ProblemId}}">{{.Title}}</a></td>
-{{/*                                                        <td></td>*/}}
-{{/*                                                        <td></td>*/}}
+                                                        <td></td>
+                                                        <td></td>
                                                     </tr>
                                                 {{end}}
                                                 </tbody>
                                             </table>
                                         </div>
 
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>题目分析</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+
+                            <div>
+                                <div class="feed-activity-list">
+
+                                    <div class="wrapper wrapper-content animated fadeInRight">
+
+                                        <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div>
+                                                        <div id="pie"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
 
 
                                     </div>
@@ -196,22 +238,50 @@
 
 
 
+
 <!-- Mainly scripts -->
 <script src="/js/jquery-2.1.1.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-{{/*<script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>*/}}
+<script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+{{/*<script src="/js/slimscroll.js"></script>*/}}
 
 <!-- Custom and plugin javascript -->
 <script src="/js/inspinia.js"></script>
-{{/*<script src="/js/plugins/pace/pace.min.js"></script>*/}}
+<script src="/js/plugins/pace/pace.min.js"></script>
 
-<!-- Peity -->
-{{/*<script src="/js/plugins/peity/jquery.peity.min.js"></script>*/}}
+<!-- d3 and c3 charts -->
+<script src="/js/plugins/d3/d3.min.js"></script>
+<script src="/js/plugins/c3/c3.min.js"></script>
 
-<!-- Peity -->
-{{/*<script src="/js/demo/peity-demo.js"></script>*/}}
 
+
+
+<script>
+
+    $(document).ready(function () {
+        c3.generate({
+            bindto: '#pie',
+            data: {
+                columns: [
+                    ['正确', {{map_get .resdata 4}}],
+                    ['答案错误', {{map_get .resdata 6}}],
+                    ['格式错误', {{map_get .resdata 5}}],
+                    ['时间超限', {{map_get .resdata 7}}],
+                    ['内存超限', {{map_get .resdata 8}}],
+                    ['输出超限', {{map_get .resdata 9}}],
+                    ['运行错误', {{map_get .resdata 10}}],
+                    ['编译错误', {{map_get .resdata 11}}],
+                ],
+                // colors: {
+                //     data1: '#1ab394',
+                //     data2: '#BABABA'
+                // },
+                type: 'pie'
+            }
+        });
+    })
+</script>
 
 
 </body>
