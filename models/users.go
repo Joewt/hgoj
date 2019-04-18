@@ -147,3 +147,16 @@ func QueryAllUser() ([]*Users,int64, error) {
 	}
 	return u,num, nil
 }
+
+
+
+func UpdateUserInfo(uid int32,nick, pwd string) (bool, error) {
+	user := Users{UserId:uid}
+	user.Nick = nick
+	user.Password = tools.MD5(pwd)
+	_, err := DB.Update(&user, "nick", "password")
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}

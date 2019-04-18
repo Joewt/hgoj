@@ -20,9 +20,31 @@
 </head>
 
 {{template "common/header.html" .}}
-        <div class="wrapper wrapper-content">
+        <div class="middle-box text-center  animated fadeInDown">
+            <div>
+            <form class="m-b">
+                <div class="form-group">
+                    <input type="text" class="form-control"  required="" name="username" disabled value="{{.User.UserName}}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="昵称" required="" name="nick" value="{{.User.Nick}}">
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="邮箱" required="" disabled name="email" value="{{.User.Email}}">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="原密码" required="" name="oldpwd">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="新密码" required="" name="newpwd">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="学校" required="" name="school" disabled value="湖南工学院">
+                </div>
 
-
+                <button type="button" class="btn btn-primary block full-width m-b" id="profileupdate">更新</button>
+            </form>
+            </div>
         </div>
 
 
@@ -34,6 +56,7 @@
 <!-- Mainly scripts -->
 <script src="/js/jquery-2.1.1.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
 {{/*<script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>*/}}
 {{/*<script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>*/}}
 {{/*<script src="/js/slimscroll.js"></script>*/}}
@@ -53,6 +76,22 @@
 
     $(document).ready(function () {
 
+        $('#profileupdate').on('click', function(){
+            var _this = $(this);
+            var _form = _this.parents('form');
+            $.post("/profile/update", _form.serialize(),function(res){
+                // alert(_form.serialise());
+                if(res.code){
+                    layer.msg(res.msg);
+                    // alert(res.msg);
+                }
+
+                if(res.code === 0) {
+                    alert(res.msg);
+                    window.location.href="/index";
+                }
+            }, 'json');
+        });
     })
 </script>
 
