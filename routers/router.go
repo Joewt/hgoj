@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"github.com/yinrenxin/hgoj/controllers"
 	"github.com/astaxie/beego"
+	"github.com/yinrenxin/hgoj/controllers"
 )
 
 func init() {
