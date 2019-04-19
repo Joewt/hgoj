@@ -94,7 +94,6 @@ func initTemplate() {
 		s = s - h*60*60
 		m := s/60
 		s = s - m*60
-		logs.Info("hhhhhh:",h,m,s)
 		th := strconv.Itoa(h)
 		tm := strconv.Itoa(m)
 		ts := strconv.Itoa(s)
