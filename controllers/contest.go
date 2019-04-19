@@ -5,6 +5,7 @@ import (
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -26,6 +27,7 @@ type Pro struct {
 }
 
 type ContestRank struct {
+	Rank int
 	Nick string
 	AC int64
 	Total int64
@@ -37,6 +39,8 @@ type ContestProblem struct {
 	ProId int32
 
 }
+
+type CR []*ContestRank
 
 
 type CPProblem struct {
@@ -210,9 +214,9 @@ func (this *ContestController) ContestRank() {
 		proIds = append(proIds, ContestProblem{v.ProblemId})
 	}
 	uids, _ := models.QueryAllUserIdByCid(c)
-	var data []ContestRank
+	var data []*ContestRank
 
-	for _, v := range uids {
+	for k, v := range uids {
 		nick, ac, total := models.QueryACNickTotalByUid(v, c)
 		var CPData []CPProblem
 		for _, p := range proIds {
@@ -223,13 +227,30 @@ func (this *ContestController) ContestRank() {
 		for _, TT := range CPData {
 			TotalTime += TT.ACtime
 		}
-		data = append(data, ContestRank{nick,ac,total, TotalTime,CPData})
+		data = append(data, &ContestRank{k,nick,ac,total, TotalTime,CPData})
 	}
-
 	//对排名进行排序
-
+	sort.Sort(CR(data))
+	for k, v := range data {
+		v.Rank = k+1
+	}
 	this.Data["proids"] = proIds
 	this.Data["data"] = data
 	this.Data["conid"] = cid
+	this.Data["contest"] = contestInfo
 	this.TplName = "contest/contestrank.html"
+}
+
+
+func (I CR) Len() int {
+	return len(I)
+}
+func (I CR) Less(i, j int) bool {
+	if I[i].AC == I[j].AC {
+		return I[i].TotalTime < I[j].TotalTime
+	}
+	return I[i].AC > I[j].AC
+}
+func (I CR) Swap(i, j int) {
+	I[i], I[j] = I[j], I[i]
 }

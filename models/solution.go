@@ -161,8 +161,6 @@ func QueryJudgeTimeFromSolutionByUidCidPid(uid,pid,cid int32, startTime time.Tim
 	Solutions := new(Solution)
 	qs := DB.QueryTable(Solutions)
 	num, _ := qs.Filter("problem_id", pid).Filter("user_id", uid).Filter("contest_id", cid).All(&data)
-
-	//logs.Info("num:",num, "uid:",uid,"pid:",pid,"cid:",cid,"startTIme:",startTime)
 	var t  float64
 	var i int64
 	var flag bool
@@ -179,7 +177,6 @@ func QueryJudgeTimeFromSolutionByUidCidPid(uid,pid,cid int32, startTime time.Tim
 
 	total := t + float64(num-i)*20
 	ErrNum = num - i
-	//logs.Info(total,flag)
 	return pid,flag,total, ErrNum
 
 }
@@ -196,7 +193,6 @@ func QueryACNickTotalByUid(uid int32, cid int32) (string, int64,int64) {
 }
 
 
-
 func AddSolution(pid string, source string, uid int32, codeLen int, lang string, conid int32, ip string)(int64, error){
 	var Solu Solution
 	var SoluCode SourceCode
@@ -205,7 +201,6 @@ func AddSolution(pid string, source string, uid int32, codeLen int, lang string,
 	Solu.UserId = uid
 	Solu.InDate = time.Now()
 	Solu.Language = uint(stringToint32(lang))
-	Solu.Ip = "127.0.0.1"
 	Solu.CodeLength = int32(codeLen)
 	Solu.Result = 0
 	logs.Info("conid",conid)

@@ -75,6 +75,7 @@ func QueryUserProblem(uid int32) ([]*Problem, int64, error) {
 	return pro,num, nil
 }
 
+
 func QueryProblemById(id int32) (Problem, error) {
 	pro := Problem{ProblemId:id}
 	err := DB.Read(&pro,"ProblemId")
@@ -83,6 +84,7 @@ func QueryProblemById(id int32) (Problem, error) {
 	}
 	return pro, nil
 }
+
 
 func AddProblem(data ...string) (int64,error) {
 	var pro Problem
@@ -104,6 +106,7 @@ func AddProblem(data ...string) (int64,error) {
 	return pid, nil
 }
 
+
 func UpdateProblemById(id int32, data []string) (bool,error) {
 	pro := Problem{ProblemId:id}
 	if DB.Read(&pro) == nil {
@@ -123,6 +126,7 @@ func UpdateProblemById(id int32, data []string) (bool,error) {
 	}
 	return false, syserror.UpdateProErr()
 }
+
 
 func DelProblemById(id int32) (bool) {
 	if num, err := DB.Delete(&Problem{ProblemId: id}); err == nil {

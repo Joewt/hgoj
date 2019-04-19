@@ -25,13 +25,13 @@
 
 
         <div class="row">
+            <h1 class="col-lg-12">{{.contest.Title}}</h1>
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>排名</h5>
                     </div>
                     <div class="ibox-content">
-
                         <table class="table table-bordered">
                             <thead>
                             <tr>
@@ -47,7 +47,7 @@
                             <tbody>
                             {{range .data}}
                                 <tr>
-                                    <td>1</td>
+                                    <td>{{.Rank}}</td>
                                     <td>{{.Nick}}</td>
                                     <td>{{.AC}}/{{.Total}}</td>
                                     <td>{{ParseTime .TotalTime}}</td>
