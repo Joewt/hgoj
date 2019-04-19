@@ -12,9 +12,9 @@ type IndexController struct {
 }
 
 
-// @router [get]
+// @router  [get]
 func (this *IndexController) Indexs() {
-	this.TplName = "index.html"
+	this.TplName = "empty.html"
 }
 
 
