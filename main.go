@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/astaxie/beego/logs"
+	"strconv"
 	"time"
 
 	//"strconv"
@@ -84,5 +85,19 @@ func initTemplate() {
 			return true
 		}
 		return false
+	})
+
+
+	_ = beego.AddFuncMap("ParseTime", func(temp float64)(string){
+		s := int(temp)
+		h := s/(60*60)
+		s = s - h*60*60
+		m := s/60
+		s = s - m*60
+		logs.Info("hhhhhh:",h,m,s)
+		th := strconv.Itoa(h)
+		tm := strconv.Itoa(m)
+		ts := strconv.Itoa(s)
+		return th+":"+tm+":"+ts
 	})
 }

@@ -24,9 +24,57 @@
 
 
 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>排名</h5>
+                    </div>
+                    <div class="ibox-content">
 
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nick</th>
+                                <th>AC/Total</th>
+                                <th>TotalTime</th>
+                                {{range .proids}}
+                                <th>{{.ProId}}</th>
+                                {{end}}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{range .data}}
+                                <tr>
+                                    <td>1</td>
+                                    <td>{{.Nick}}</td>
+                                    <td>{{.AC}}/{{.Total}}</td>
+                                    <td>{{ParseTime .TotalTime}}</td>
+                                    {{range .CP}}
+                                        {{if .Flag}}
+                                            {{if .ErrNum}}
+                                            <td style="background-color: #dff0d8;color: #3c763d;">{{ParseTime .ACtime}}(-{{.ErrNum}})</td>
+                                            {{else}}
+                                                <td style="background-color: #3c9;color: #3c763d;">{{ParseTime .ACtime}}</td>
+                                            {{end}}
 
+                                            {{else if .ErrNum}}
+                                            <td style="background-color: #f2dede;color:#a94442;">(-{{.ErrNum}})</td>
+                                        {{else}}
+                                            <td></td>
+                                        {{end}}
+                                    {{end}}
+                                </tr>
+                            {{end}}
 
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 

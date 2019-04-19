@@ -141,6 +141,61 @@ func QueryAllSolutionByCid(cid int32)  ([]*Solution, map[int]string, error) {
 }
 
 
+func QueryAllUserIdByCid(cid int32) ([]int32, int64) {
+	var data []*Solution
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	num, _ := qs.Distinct().Filter("contest_id",cid).All(&data,"user_id")
+
+	var uid []int32
+	for _, v := range data {
+		uid = append(uid, v.UserId)
+	}
+
+	return uid, num
+}
+
+
+func QueryJudgeTimeFromSolutionByUidCidPid(uid,pid,cid int32, startTime time.Time)(int32,bool,float64,int64) {
+	var data []*Solution
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	num, _ := qs.Filter("problem_id", pid).Filter("user_id", uid).Filter("contest_id", cid).All(&data)
+
+	//logs.Info("num:",num, "uid:",uid,"pid:",pid,"cid:",cid,"startTIme:",startTime)
+	var t  float64
+	var i int64
+	var flag bool
+	var ErrNum int64
+	flag = false
+	for _, v := range data {
+		 i = 0
+		if v.Result == 4 {
+			i++
+			t = v.Judgetime.Sub(startTime).Seconds()
+			flag = true
+		}
+	}
+
+	total := t + float64(num-i)*20
+	ErrNum = num - i
+	//logs.Info(total,flag)
+	return pid,flag,total, ErrNum
+
+}
+
+
+func QueryACNickTotalByUid(uid int32, cid int32) (string, int64,int64) {
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	ac, _ := qs.Filter("user_id", uid).Filter("contest_id", cid).Filter("result", 4).Count()
+	user, _ := QueryUserById(uid)
+	nick := user.Nick
+	total, _ := qs.Filter("user_id", uid).Filter("contest_id", cid).Count()
+	return nick, ac, total
+}
+
+
 
 func AddSolution(pid string, source string, uid int32, codeLen int, lang string, conid int32, ip string)(int64, error){
 	var Solu Solution
