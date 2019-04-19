@@ -115,6 +115,22 @@ func QueryACSubSolution(uid int32) (int64,int64, error) {
 }
 
 
+func QueryACSUBFromSolutionBYPidCi(pid,cid int32) (int32,int32) {
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	sub, err := qs.Filter("problem_id", pid).Filter("contest_id",cid).Count()
+	if err != nil {
+		return 0,0
+	}
+	ac, err := qs.Filter("problem_id", pid).Filter("contest_id",cid).Filter("result", 4).Count()
+	if err != nil {
+		return 0,0
+	}
+
+	return int32(ac),int32(sub)
+}
+
+
 func QueryResultUserSolution(uid int32) (map[int]int64, error) {
 	Solutions := new(Solution)
 	qs := DB.QueryTable(Solutions)

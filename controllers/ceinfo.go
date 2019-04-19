@@ -41,3 +41,36 @@ func (this *CeinfoController) Ceinfo() {
 	this.Data["source"] = source
 	this.TplName = "ceinfo.html"
 }
+
+
+// @router /contest/ceinfo/:sid [get]
+func (this *CeinfoController) CeinfoContest() {
+	//todo 验证session
+	if !this.IsLogin {
+		this.Abort("401")
+	}
+
+	sid := this.Ctx.Input.Param(":sid")
+	id, _ := tools.StringToInt32(sid)
+	source := models.QuerySourceBySolutionId(id)
+
+
+	solution, _ := models.QuerySolutionBySid(id)
+
+	user, err := models.QueryUserById(solution.UserId)
+	if err != nil {
+		logs.Error(err)
+	}
+
+
+	if solution.UserId != this.User.UserId && !this.IsAdmin {
+		this.Abort("401")
+	}
+
+
+	this.Data["username"] = user.UserName
+	this.Data["solu"] = solution
+	this.Data["source"] = source
+	this.Data["conid"] = solution.ContestId
+	this.TplName = "contest/ceinfo.html"
+}

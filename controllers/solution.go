@@ -4,6 +4,7 @@ import (
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
+	"time"
 )
 
 type SolutionController struct {
@@ -22,6 +23,21 @@ func (this *SolutionController) Submit() {
 	req := this.Ctx.Request
 	addr := req.RemoteAddr
 	uid := this.User.UserId
+
+
+	if conId != 0 {
+		con, err := models.QueryContestByConId(conId)
+		if err != nil {
+			this.JsonErr("系统错误", 9120,"")
+		}
+		t := time.Now().Sub(con.EndTime).Seconds()
+		if t > 0 {
+			this.JsonErr("比赛已结束",9121,"")
+		}
+	}
+
+
+
 	_, err := models.AddSolution(proId, source, uid, code_length, lang, conId, addr)
 	if err != nil {
 		this.JsonErr("保存代码错误", syserror.SAVE_CODE_ERR, "problem")

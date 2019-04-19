@@ -108,7 +108,8 @@ func (this *ContestController) ContestCid() {
 	var pro []Pro
 
 	for _, v := range pros{
-		pro = append(pro, Pro{ProblemId:v.ProblemId,Title:v.Title,Accepted:v.Accepted,Submit:v.Submit,Solved:v.Solved,Cid:cid})
+		Pac,Psub := models.QueryACSUBFromSolutionBYPidCi(v.ProblemId,cid)
+		pro = append(pro, Pro{ProblemId:v.ProblemId,Title:v.Title,Accepted:Pac,Submit:Psub,Solved:v.Solved,Cid:cid})
 	}
 
 	//根据cid查找 ac数
