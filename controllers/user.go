@@ -193,3 +193,16 @@ func (this *UserController) UserUpdatePost() {
 	this.DelSession(SESSION_USER_KEY)
 	this.JsonOK("更新成功", "/login")
 }
+
+
+
+// @router /forgotpwd [get]
+func (this *UserController) UserForgotPwd() {
+	this.TplName = "forgotPassword.html"
+}
+
+
+// @router /forgotpwd/sendemail [post]
+func (this *UserController) SendEmailForgot() {
+	this.JsonErr("未知错误", 9010, "")
+}

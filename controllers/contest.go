@@ -25,7 +25,26 @@ type Pro struct {
 	Cid 			int32
 }
 
+type ContestRank struct {
+	Nick string
+	AC int64
+	Total int64
+	TotalTime float64
+	CP []CPProblem
+}
 
+type ContestProblem struct {
+	ProId int32
+
+}
+
+
+type CPProblem struct {
+	ProId int32
+	Flag bool
+	ACtime float64
+	ErrNum int64
+}
 
 // @router /contest/add [get]
 func (this *ContestController) ContestAddGet() {
@@ -180,6 +199,37 @@ func (this *ContestController) ContestStatus() {
 // @router /contestrank/cid/:cid [get]
 func (this *ContestController) ContestRank() {
 	cid := this.Ctx.Input.Param(":cid")
+	c, _ := tools.StringToInt32(cid)
+	pros, _ := models.QueryProblemByCid(c)
+
+	contestInfo,_ := models.QueryContestByConId(c)
+
+	var proIds []ContestProblem
+	for _, v := range pros {
+		//logs.Info(k,v.ProblemId)
+		proIds = append(proIds, ContestProblem{v.ProblemId})
+	}
+	uids, _ := models.QueryAllUserIdByCid(c)
+	var data []ContestRank
+
+	for _, v := range uids {
+		nick, ac, total := models.QueryACNickTotalByUid(v, c)
+		var CPData []CPProblem
+		for _, p := range proIds {
+			qpid,flag,actime,ErrNum := models.QueryJudgeTimeFromSolutionByUidCidPid(v,p.ProId,c,contestInfo.StartTime)
+				CPData = append(CPData, CPProblem{qpid, flag, actime, ErrNum})
+		}
+		var TotalTime float64
+		for _, TT := range CPData {
+			TotalTime += TT.ACtime
+		}
+		data = append(data, ContestRank{nick,ac,total, TotalTime,CPData})
+	}
+
+	//对排名进行排序
+
+	this.Data["proids"] = proIds
+	this.Data["data"] = data
 	this.Data["conid"] = cid
 	this.TplName = "contest/contestrank.html"
 }
