@@ -55,6 +55,28 @@ func (this *ContestController) ContestAddGet() {
 	if !this.IsAdmin {
 		this.Abort("401")
 	}
+	month := map[string]int{
+		"January": 1,
+		"February": 2,
+		"March": 3,
+		"April": 4,
+		"May": 5,
+		"June": 6,
+		"July": 7,
+		"August": 8,
+		"September": 9,
+		"October": 10,
+		"November": 11,
+		"December": 12,
+	}
+	tnow := time.Now()
+	y := tnow.Year()
+	m := tnow.Month().String()
+	d := tnow.Day()
+	this.Data["year"] = y
+	this.Data["month"] = month[m]
+	this.Data["day"] = d
+	logs.Info(y,m,d)
 	this.TplName = "admin/addContest.html"
 }
 
@@ -66,12 +88,20 @@ func (this *ContestController) ContestAddPost() {
 	proIds := this.GetMushString("proIds", "题目编号不能为空")
 	role := this.GetMushString("role", "权限不能为空")
 	limituser := this.GetString("limituser")
-
+	startTimeDate := this.GetMushString("starttime[0]","开始时间不能为空")
+	startTimeH := this.GetMushString("starttime[1]","开始时间不能为空")
+	startTimeM := this.GetMushString("starttime[2]","开始时间不能为空")
+	startTimeSlice := strings.Split(startTimeDate,"-")
+	endTimeDate := this.GetMushString("endtime[0]","结束时间不能为空")
+	endTimeH := this.GetMushString("endtime[1]","结束时间不能为空")
+	endTimeM := this.GetMushString("endtime[2]","结束时间不能为空")
+	endTimeSlice := strings.Split(endTimeDate,"-")
 	now := time.Time{}
-	startTime := time.Date(2019,1,1,9,00,0,0,now.Location())
-	endTime := time.Date(2019,1,1,14,00,0,0,now.Location())
-
-
+	startTime := time.Date(tools.StringToInt(startTimeSlice[0]),tools.StringToMonth(startTimeSlice[1]),tools.StringToInt(startTimeSlice[2]),tools.StringToInt(startTimeH),tools.StringToInt(startTimeM),0,0,now.Location())
+	endTime := time.Date(tools.StringToInt(endTimeSlice[0]),tools.StringToMonth(endTimeSlice[1]),tools.StringToInt(endTimeSlice[2]),tools.StringToInt(endTimeH),tools.StringToInt(endTimeM),0,0,now.Location())
+	if endTime.Sub(startTime).Seconds() < 0 {
+		this.JsonErr("时间错误",6010,"")
+	}
 	cid, err := models.ContestAdd(title, desc, proIds, role, limituser, startTime,endTime)
 
 	if err != nil {

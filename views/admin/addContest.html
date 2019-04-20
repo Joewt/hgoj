@@ -17,7 +17,7 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group"><label class="col-sm-2 control-label">竞赛开始时间</label>
                         <div class="col-sm-10">
-                            日期:<input class="datepicker" data-date-format="yyyy年mm月dd日" value="2019年11月11日" name="starttime[0]">
+                            日期:<input class="datepicker" data-date-format="yyyy-mm-dd" value="{{.year}}-{{.month}}-{{.day}}" name="starttime[0]">
                             时:<input type="number" value="9" name="starttime[1]">
                             分:<input type="number" value="00" name="starttime[2]">
                         </div>
@@ -28,7 +28,7 @@
                     <div class="form-group"><label class="col-sm-2 control-label">竞赛结束时间</label>
 
                         <div class="col-sm-10">
-                            日期:<input class="datepicker" data-date-format="yyyy年mm月dd日"  value="2019年11月11日" name="endtime[0]">
+                            日期:<input class="datepicker" data-date-format="yyyy-mm-dd"  value="{{.year}}-{{.month}}-{{.day}}" name="endtime[0]">
                             时:<input type="number" value="14" name="endtime[1]">
                             分:<input type="number" value="00" name="endtime[2]">
                         </div>
