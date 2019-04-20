@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func StringToInt32(s string) (int32, error) {
@@ -17,6 +18,27 @@ func StringToInt32(s string) (int32, error) {
 		return -1, err
 	}
 	return id64, nil
+}
+
+
+func StringToInt(s string) (int) {
+	id , err := strconv.ParseInt(s,10,32)
+	id64 := int(id)
+	if err != nil {
+		return -1
+	}
+	return id64
+}
+
+
+
+func StringToMonth(s string) (time.Month) {
+	id , err := strconv.ParseInt(s,10,32)
+	id64 := time.Month(id)
+	if err != nil {
+		return -1
+	}
+	return id64
 }
 
 

@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
-
 	//"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/tools"
