@@ -123,6 +123,9 @@ func (this *BaseController) JsonOKH(msg string, data MAP_H) {
 	this.ServeJSON()
 }
 
+
+
+
 //func (this *BaseController) UUID() string {
 //	u, err := uuid.NewV4()
 //	if err != nil {
