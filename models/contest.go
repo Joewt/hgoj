@@ -79,6 +79,19 @@ func QueryAllContest()([]*Contest,int64, error) {
 }
 
 
+func QueryPageContest(start , pageSize int) ([]*Contest,int64,int64, error) {
+	var con []*Contest
+	contest := new(Contest)
+	qs := DB.QueryTable(contest)
+	totalNum, err := qs.Count()
+	num, err := qs.OrderBy("-contest_id").Limit(pageSize, start).All(&con)
+	if err != nil {
+		return nil,num,totalNum,err
+	}
+	return con,num,totalNum, nil
+}
+
+
 func QueryContestByConId(cid int32) (Contest, error) {
 	con := Contest{ContestId:cid}
 

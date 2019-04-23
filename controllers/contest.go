@@ -112,6 +112,36 @@ func (this *ContestController) ContestAddPost() {
 }
 
 
+// @router /contest/:page [get]
+func (this *ContestController) ContestPage() {
+	page := this.Ctx.Input.Param(":page")
+	pageNo, _ := tools.StringToInt32(page)
+	pageNo = pageNo - 1
+	start := int(pageNo)*pageContestSize
+	con,_,totalNum,_ := models.QueryPageContest(start,pageContestSize)
+	isPage := true
+	if int(totalNum) < pageContestSize {
+		isPage = false
+	}
+
+	pagePrev := pageNo
+	pageNext := pageNo + 2
+	temp := int(totalNum) / pageContestSize
+	if int(pageNo) == temp {
+		pageNext = pageNo + 1
+	}
+	if pageNo == 0 {
+		pagePrev = pageNo + 1
+	}
+
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
+	this.Data["con"] = con
+	this.TplName = "contest.html"
+}
+
+
 // @router /contest/cid/:id [get]
 func (this *ContestController) ContestCid() {
 	if !this.IsLogin {
