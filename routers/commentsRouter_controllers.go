@@ -279,6 +279,15 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:SolutionController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:SolutionController"],
         beego.ControllerComments{
+            Method: "StatusPage",
+            Router: `/status/:page`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:SolutionController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:SolutionController"],
+        beego.ControllerComments{
             Method: "Submit",
             Router: `/submit`,
             AllowHTTPMethods: []string{"post"},

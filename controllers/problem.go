@@ -16,7 +16,7 @@ type ProblemController struct {
 }
 
 
-var pageSize int = 30
+var pageSize int = 20
 
 
 type Problems struct {
@@ -30,6 +30,7 @@ type Problems struct {
 func (this *ProblemController) ProblemSetPage(){
 	page := this.Ctx.Input.Param(":page")
 	pageNo, _ := tools.StringToInt32(page)
+	pageNo = pageNo - 1
 	start := int(pageNo)*pageSize
 	pros,_,totalNum, err := models.QueryPageProblem(start, pageSize)
 	if err != nil {
@@ -41,20 +42,20 @@ func (this *ProblemController) ProblemSetPage(){
 	}
 	temp := int(totalNum) / pageSize
 	var t  []int
-	for i := 1; i < temp;i ++ {
-		t = append(t, i)
+	for i := 0; i <= temp;i ++ {
+		t = append(t, i+1)
 	}
 	proData := new(Problems)
 	proData.pageRange = t
 	proData.num = totalNum
 	pageRange := t
-	pagePrev := pageNo - 1
-	pageNext := pageNo + 1
-	if int(pageNext) == temp {
-		pageNext = pageNo
+	pagePrev := pageNo
+	pageNext := pageNo + 2
+	if int(pageNo) == temp {
+		pageNext = pageNo + 1
 	}
-	if pagePrev == 0 {
-		pagePrev = pageNo
+	if pageNo == 0 {
+		pagePrev = pageNo + 1
 	}
 	this.Data["pageData"] = proData
 	this.Data["pageRange"] = pageRange
