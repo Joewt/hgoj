@@ -119,20 +119,8 @@ func (this *ContestController) ContestPage() {
 	pageNo = pageNo - 1
 	start := int(pageNo)*pageContestSize
 	con,_,totalNum,_ := models.QueryPageContest(start,pageContestSize)
-	isPage := true
-	if int(totalNum) < pageContestSize {
-		isPage = false
-	}
 
-	pagePrev := pageNo
-	pageNext := pageNo + 2
-	temp := int(totalNum) / pageContestSize
-	if int(pageNo) == temp {
-		pageNext = pageNo + 1
-	}
-	if pageNo == 0 {
-		pagePrev = pageNo + 1
-	}
+	isPage, pagePrev,pageNext := PageCal(totalNum,pageNo,pageContestSize)
 
 	this.Data["isPage"] = isPage
 	this.Data["pagePrev"] = pagePrev
@@ -147,6 +135,7 @@ func (this *ContestController) ContestCid() {
 	if !this.IsLogin {
 		this.Abort401(syserror.UnKnowError{})
 	}
+
 	this.Visible = true
 	req :=  this.Ctx.Request.RequestURI
 	temp := strings.Split(req,"/")
@@ -250,10 +239,47 @@ func (this *ContestController) ContestList() {
 func (this *ContestController) ContestStatus() {
 	cid := this.Ctx.Input.Param(":cid")
 	id, _ := tools.StringToInt32(cid)
-	data,RESULT,err := models.QueryAllSolutionByCid(id)
+	pageNo := 0
+	start := int(pageNo)*pageStatusSize
+	data,RESULT,_,totalNum,err := models.QueryPageSolutionByCid(id,start,pageStatusSize)
 	if err != nil {
 		logs.Error(err)
 	}
+
+	isPage := true
+	if int(totalNum) < pageStatusSize {
+		isPage = false
+	}
+	pagePrev := 1
+	pageNext := 2
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
+	this.Data["conid"] = cid
+	this.Data["data"] = data
+	this.Data["RES"] = RESULT
+	this.TplName = "contest/statusContest.html"
+}
+
+
+// @router /contest/status/cid/:cid/:page [get]
+func (this *ContestController) ContestStatusPage() {
+	cid := this.Ctx.Input.Param(":cid")
+	page := this.Ctx.Input.Param(":page")
+	pageNo, _ := tools.StringToInt32(page)
+	pageNo = pageNo - 1
+	start := int(pageNo)*pageStatusSize
+	id, _ := tools.StringToInt32(cid)
+	data,RESULT,_,totalNum,err := models.QueryPageSolutionByCid(id,start,pageStatusSize)
+	if err != nil {
+		logs.Error(err)
+	}
+
+	isPage, pagePrev,pageNext := PageCal(totalNum,pageNo,pageStatusSize)
+
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
 	this.Data["conid"] = cid
 	this.Data["data"] = data
 	this.Data["RES"] = RESULT

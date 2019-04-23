@@ -38,8 +38,6 @@ func (this *SolutionController) Submit() {
 		}
 	}
 
-
-
 	_, err := models.AddSolution(proId, source, uid, code_length, lang, conId, ip)
 	if err != nil {
 		this.JsonErr("保存代码错误", syserror.SAVE_CODE_ERR, "problem")
@@ -58,20 +56,7 @@ func (this *SolutionController) StatusPage() {
 	if err != nil {
 		logs.Error(err)
 	}
-	isPage := true
-	if int(totalNum) < pageSize {
-		isPage = false
-	}
-
-	pagePrev := pageNo
-	pageNext := pageNo + 2
-	temp := int(totalNum) / pageSize
-	if int(pageNo) == temp {
-		pageNext = pageNo + 1
-	}
-	if pageNo == 0 {
-		pagePrev = pageNo + 1
-	}
+	isPage, pagePrev, pageNext := PageCal(totalNum,pageNo,pageSize)
 
 	this.Data["data"] = data
 	this.Data["isPage"] = isPage

@@ -170,6 +170,19 @@ func QueryAllSolutionByCid(cid int32)  ([]*Solution, map[int]string, error) {
 }
 
 
+func QueryPageSolutionByCid(cid int32,start , pageSize int)  ([]*Solution, map[int]string, int64,int64,error) {
+	var data []*Solution
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	totalNum, _ := qs.Filter("contest_id",cid).Count()
+	num, err := qs.Filter("contest_id",cid).OrderBy("-solution_id").Limit(pageSize, start).All(&data)
+	if err != nil {
+		return nil,JUDGERES,num,totalNum,err
+	}
+	return data, JUDGERES,num,totalNum,nil
+}
+
+
 func QueryAllUserIdByCid(cid int32) ([]int32, int64) {
 	var data []*Solution
 	Solutions := new(Solution)
