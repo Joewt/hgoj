@@ -48,6 +48,19 @@ func QueryAllProblem() ( []*Problem, int64, error){
 }
 
 
+func QueryPageProblem(start ,pageSize int) ([]*Problem, int64,int64, error) {
+	var pro []*Problem
+	problem := new(Problem)
+	qs := DB.QueryTable(problem)
+	totalNum, _ := qs.Count()
+	num, err := qs.OrderBy("-problem_id").Limit(pageSize, start).All(&pro)
+	if err != nil {
+		return nil,num,totalNum,err
+	}
+	return pro,num,totalNum, nil
+}
+
+
 func QueryUserProblem(uid int32) ([]*Problem, int64, error) {
 	var data []*Solution
 	Solutions := new(Solution)

@@ -41,14 +41,39 @@ func (this *IndexController) IndexFaqs() {
 // @router /problemset [get]
 func (this *IndexController) IndexProblemset() {
 
-	pros,num,err := models.QueryAllProblem()
+	//_,num,err := models.QueryAllProblem()
+	//if err != nil {
+	//	logs.Error(err)
+	//}
+	pageNo := 0
+	start := pageNo*pageSize
+	pros,_,totalNum, err := models.QueryPageProblem(start, pageSize)
 	if err != nil {
 		logs.Error(err)
 	}
+	isPage := true
+	if int(totalNum) < pageSize {
+		isPage = false
+	}
+	temp := int(totalNum) / pageSize
+	var t  []int
+	for i := 1; i < temp;i ++ {
+		t = append(t, i)
+	}
+	proData := new(Problems)
+	proData.pageRange = t
+	proData.num = totalNum
+	pageRange := t
 
-	logs.Info("pros:---",pros,num)
+	pagePrev := pageNo
+	pageNext := pageNo + 1
 
+	this.Data["pageData"] = proData
+	this.Data["pageRange"] = pageRange
+	this.Data["isPage"] = isPage
 	this.Data["problems"] = pros
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
 	this.TplName = "problem.html"
 }
 

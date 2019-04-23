@@ -22,6 +22,7 @@ func (this *SolutionController) Submit() {
 	conId, _ := tools.StringToInt32(this.GetString("conid"))
 	req := this.Ctx.Request
 	addr := req.RemoteAddr
+	ip := tools.SplitIP(addr)
 	uid := this.User.UserId
 
 
@@ -38,7 +39,7 @@ func (this *SolutionController) Submit() {
 
 
 
-	_, err := models.AddSolution(proId, source, uid, code_length, lang, conId, addr)
+	_, err := models.AddSolution(proId, source, uid, code_length, lang, conId, ip)
 	if err != nil {
 		this.JsonErr("保存代码错误", syserror.SAVE_CODE_ERR, "problem")
 	}
