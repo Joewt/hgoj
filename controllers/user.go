@@ -76,6 +76,7 @@ func (this *UserController) UserReg() {
 	school := this.GetMushString("school", "学校不能为空")
 	//获取客户端ip
 	ip := this.Ctx.Request.RemoteAddr
+	Ip := tools.SplitIP(ip)
 
 	if tools.CheckEmail(email) == false {
 		this.JsonErr("邮箱格式错误", 1102, "/reg")
@@ -91,7 +92,7 @@ func (this *UserController) UserReg() {
 	//panic("xx")
 	logs.Info("到这里不会执行了")
 	//保存用户信息
-	uid, err := models.SaveUser(username, nick, email, pwd, school, ip)
+	uid, err := models.SaveUser(username, nick, email, pwd, school, Ip)
 	if err != nil {
 		this.JsonErr("注册失败", 112, "/reg")
 	}

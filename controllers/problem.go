@@ -16,6 +16,56 @@ type ProblemController struct {
 }
 
 
+var pageSize int = 30
+
+
+type Problems struct {
+	num int64
+	pageRange []int
+	pageNum int
+}
+
+
+// @router /problemset/:page [get]
+func (this *ProblemController) ProblemSetPage(){
+	page := this.Ctx.Input.Param(":page")
+	pageNo, _ := tools.StringToInt32(page)
+	start := int(pageNo)*pageSize
+	pros,_,totalNum, err := models.QueryPageProblem(start, pageSize)
+	if err != nil {
+		logs.Error(err)
+	}
+	isPage := true
+	if int(totalNum) < pageSize {
+		isPage = false
+	}
+	temp := int(totalNum) / pageSize
+	var t  []int
+	for i := 1; i < temp;i ++ {
+		t = append(t, i)
+	}
+	proData := new(Problems)
+	proData.pageRange = t
+	proData.num = totalNum
+	pageRange := t
+	pagePrev := pageNo - 1
+	pageNext := pageNo + 1
+	if int(pageNext) == temp {
+		pageNext = pageNo
+	}
+	if pagePrev == 0 {
+		pagePrev = pageNo
+	}
+	this.Data["pageData"] = proData
+	this.Data["pageRange"] = pageRange
+	this.Data["isPage"] = isPage
+	this.Data["problems"] = pros
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
+	this.TplName = "problem.html"
+}
+
+
 // @router /problem/:id [get]
 func (this *ProblemController) Problem() {
 	id := this.Ctx.Input.Param(":id")

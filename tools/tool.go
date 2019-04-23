@@ -48,6 +48,13 @@ func IntToString(s int) (string) {
 
 
 
+func SplitIP(ip string) (string) {
+	temp := strings.Split(ip, ":")
+
+	return temp[0]
+}
+
+
 func CheckEmail(email string) (b bool) {
 	if m, _ := regexp.MatchString("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+", email); !m {
 		return false
