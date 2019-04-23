@@ -13,7 +13,7 @@ type IndexController struct {
 
 
 var (
-	pageSize int = 2
+	pageSize int = 50
 	//pageProSize int = 100
 	pageStatusSize int = 40
 	pageContestSize int = 20

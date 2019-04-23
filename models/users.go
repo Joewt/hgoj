@@ -149,6 +149,19 @@ func QueryAllUser() ([]*Users,int64, error) {
 }
 
 
+func QueryPageUser(start , pageSize int) ([]*Users,int64, int64,error) {
+	var u []*Users
+	user := new(Users)
+	qs := DB.QueryTable(user)
+	totalNum, _ := qs.Count()
+	num, err := qs.OrderBy("-user_id").Limit(pageSize,start).All(&u)
+	if err != nil {
+		return nil,num,totalNum,err
+	}
+	return u,num, totalNum, nil
+}
+
+
 
 func UpdateUserInfo(uid int32,nick, pwd string) (bool, error) {
 	user := Users{UserId:uid}
