@@ -2,9 +2,8 @@ package controllers
 
 import (
 	"github.com/astaxie/beego/logs"
-	"github.com/yinrenxin/hgoj/syserror"
-
 	"github.com/yinrenxin/hgoj/models"
+	"github.com/yinrenxin/hgoj/syserror"
 	//"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
 	"strings"
@@ -144,10 +143,54 @@ func (this *UserController) UserList() {
 	if !this.IsAdmin {
 		this.Abort("401")
 	}
-	user,_, err := models.QueryAllUser()
+	pageNo := 0
+	start := int(pageNo)*pageSize
+	user,_,totalNum, err := models.QueryPageUser(start,pageSize)
 	if err != nil {
 		this.JsonErr("未知错误", 4000, "/index")
 	}
+	isPage := true
+	if int(totalNum) < pageSize {
+		isPage = false
+	}
+	temp := int(totalNum) / pageSize
+	var t  []int
+	for i := 0; i <= temp;i ++ {
+		t = append(t, i+1)
+	}
+	pageRange := t
+
+	pagePrev := pageNo + 1
+	pageNext := pageNo + 2
+
+	this.Data["pageRange"] = pageRange
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
+	this.Data["user"] = user
+	this.TplName = "admin/userList.html"
+}
+
+
+// @router /user/list/:page [get]
+func (this *UserController) UserListPage() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
+	page := this.Ctx.Input.Param(":page")
+	pageNo, _ := tools.StringToInt32(page)
+	pageNo = pageNo - 1
+	start := int(pageNo)*pageSize
+	user,_,totalNum, err := models.QueryPageUser(start,pageSize)
+	if err != nil {
+		this.JsonErr("未知错误", 4000, "/index")
+	}
+	isPage,pageRange,pagePrev,pageNext := PageRangeCal(totalNum,pageNo,pageSize)
+
+	this.Data["pageRange"] = pageRange
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
 	this.Data["user"] = user
 	this.TplName = "admin/userList.html"
 }
