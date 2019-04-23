@@ -63,6 +63,15 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"],
         beego.ControllerComments{
+            Method: "ContestPage",
+            Router: `/contest/:page`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"],
+        beego.ControllerComments{
             Method: "ContestAddGet",
             Router: `/contest/add`,
             AllowHTTPMethods: []string{"get"},

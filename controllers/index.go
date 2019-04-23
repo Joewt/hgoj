@@ -12,6 +12,13 @@ type IndexController struct {
 }
 
 
+var (
+	pageSize int = 20
+	//pageProSize int = 100
+	//pageStatusSize int = 40
+	pageContestSize int = 20
+)
+
 // @router  [get]
 func (this *IndexController) Indexs() {
 	this.TplName = "empty.html"
@@ -101,8 +108,18 @@ func (this *IndexController) IndexStatus() {
 
 // @router /contest [get]
 func (this *IndexController) IndexContest() {
-	con, _, _ := models.QueryAllContest()
-
+	pageNo := 0
+	start := int(pageNo)*pageContestSize
+	con, _, totalNum,_ := models.QueryPageContest(start,pageContestSize)
+	isPage := true
+	if int(totalNum) < pageContestSize {
+		isPage = false
+	}
+	pagePrev := 1
+	pageNext := 2
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
 	this.Data["con"] = con
 	this.TplName = "contest.html"
 }

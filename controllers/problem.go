@@ -16,7 +16,6 @@ type ProblemController struct {
 }
 
 
-var pageSize int = 20
 
 
 type Problems struct {
