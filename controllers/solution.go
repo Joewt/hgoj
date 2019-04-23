@@ -58,10 +58,10 @@ func (this *SolutionController) StatusPage() {
 	}
 	isPage, pagePrev, pageNext := PageCal(totalNum,pageNo,pageSize)
 
-	this.Data["data"] = data
 	this.Data["isPage"] = isPage
 	this.Data["pagePrev"] = pagePrev
 	this.Data["pageNext"] = pageNext
+	this.Data["data"] = data
 	this.Data["RES"] = RESULT
 	this.TplName = "status.html"
 }

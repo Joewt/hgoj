@@ -13,7 +13,7 @@ type IndexController struct {
 
 
 var (
-	pageSize int = 20
+	pageSize int = 2
 	//pageProSize int = 100
 	pageStatusSize int = 40
 	pageContestSize int = 20
@@ -58,6 +58,7 @@ func (this *IndexController) IndexProblemset() {
 	if err != nil {
 		logs.Error(err)
 	}
+
 	isPage := true
 	if int(totalNum) < pageSize {
 		isPage = false

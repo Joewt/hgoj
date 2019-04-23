@@ -56,6 +56,8 @@ func (this *ProblemController) ProblemSetPage(){
 	if pageNo == 0 {
 		pagePrev = pageNo + 1
 	}
+
+
 	this.Data["pageData"] = proData
 	this.Data["pageRange"] = pageRange
 	this.Data["isPage"] = isPage
@@ -184,11 +186,56 @@ func (this *ProblemController) ProblemList() {
 	if !this.IsAdmin {
 		this.Abort("401")
 	}
-	pros,_,err := models.QueryAllProblem()
+	pageNo := 0
+	start := pageNo*pageSize
+	pros,_,totalNum,err := models.QueryPageProblem(start,pageSize)
 	if err != nil {
 		logs.Error(err)
 	}
 
+	isPage := true
+	if int(totalNum) < pageSize {
+		isPage = false
+	}
+	temp := int(totalNum) / pageSize
+	var t  []int
+	for i := 0; i <= temp;i ++ {
+		t = append(t, i+1)
+	}
+	pageRange := t
+	pagePrev := pageNo + 1
+	pageNext := pageNo + 2
+
+
+	this.Data["pageRange"] = pageRange
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
+	this.Data["PROS"] = pros
+	this.TplName = "admin/listProblem.html"
+}
+
+
+// @router /problem/list/:page [get]
+func (this *ProblemController) ProblemListPage() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
+	page := this.Ctx.Input.Param(":page")
+	pageNo, _ := tools.StringToInt32(page)
+	pageNo = pageNo - 1
+	start := int(pageNo)*pageSize
+	pros,_,totalNum,err := models.QueryPageProblem(start,pageSize)
+	if err != nil {
+		logs.Error(err)
+	}
+
+	isPage,pageRange,pagePrev,pageNext := PageRangeCal(totalNum,pageNo,pageSize)
+
+	this.Data["pageRange"] = pageRange
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
 	this.Data["PROS"] = pros
 	this.TplName = "admin/listProblem.html"
 }
