@@ -226,14 +226,51 @@ func (this *ContestController) ContestList() {
 	if !this.IsAdmin {
 		this.Abort("401")
 	}
-	con,num, err := models.QueryAllContest()
+	pageNo := 0
+	start := int(pageNo)*pageSize
+	con,num, totalNum,err := models.QueryPageContest(start,pageSize)
 	if err != nil {
 		logs.Error(err)
 	}
+	isPage := true
+	if int(totalNum) < pageSize {
+		isPage = false
+	}
+	pagePrev := 1
+	pageNext := 2
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
 	this.Data["conNum"] = num
 	this.Data["con"] = con
 	this.TplName = "admin/listContest.html"
 }
+
+
+// @router /contest/list/:page [get]
+func (this *ContestController) ContestListPage() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
+	page := this.Ctx.Input.Param(":page")
+	pageNo, _ := tools.StringToInt32(page)
+	pageNo = pageNo - 1
+	start := int(pageNo)*pageSize
+	con,num, totalNum,err := models.QueryPageContest(start,pageSize)
+	if err != nil {
+		logs.Error(err)
+	}
+
+	isPage, pagePrev, pageNext := PageCal(totalNum,pageNo,pageSize)
+
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
+	this.Data["conNum"] = num
+	this.Data["con"] = con
+	this.TplName = "admin/listContest.html"
+}
+
 
 // @router /contest/status/cid/:cid [get]
 func (this *ContestController) ContestStatus() {
