@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
@@ -44,4 +45,38 @@ func (this *SolutionController) Submit() {
 		this.JsonErr("保存代码错误", syserror.SAVE_CODE_ERR, "problem")
 	}
 	this.JsonOK("提交成功","/status")
+}
+
+
+// @router /status/:page [get]
+func (this *SolutionController) StatusPage() {
+	page := this.Ctx.Input.Param(":page")
+	pageNo, _ := tools.StringToInt32(page)
+	pageNo = pageNo - 1
+	start := int(pageNo)*pageSize
+	data,RESULT,_,totalNum,err := models.QueryPageSolution(start,pageSize)
+	if err != nil {
+		logs.Error(err)
+	}
+	isPage := true
+	if int(totalNum) < pageSize {
+		isPage = false
+	}
+
+	pagePrev := pageNo
+	pageNext := pageNo + 2
+	temp := int(totalNum) / pageSize
+	if int(pageNo) == temp {
+		pageNext = pageNo + 1
+	}
+	if pageNo == 0 {
+		pagePrev = pageNo + 1
+	}
+
+	this.Data["data"] = data
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
+	this.Data["RES"] = RESULT
+	this.TplName = "status.html"
 }

@@ -86,6 +86,19 @@ func QueryAllSolution() ([]*Solution, map[int]string, error) {
 }
 
 
+func QueryPageSolution(start , pageSize int) ([]*Solution, map[int]string,int64,int64, error) {
+	var data []*Solution
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	totalNum, _ := qs.Count()
+	num, err := qs.OrderBy("-solution_id").Limit(pageSize, start).All(&data)
+	if err != nil {
+		return nil,JUDGERES,num,totalNum,err
+	}
+	return data, JUDGERES,num,totalNum,nil
+}
+
+
 func QueryUserSolution(uid int32) ([]*Solution, map[int]string, error){
 	var data []*Solution
 	Solutions := new(Solution)

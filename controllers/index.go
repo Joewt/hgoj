@@ -57,16 +57,16 @@ func (this *IndexController) IndexProblemset() {
 	}
 	temp := int(totalNum) / pageSize
 	var t  []int
-	for i := 1; i < temp;i ++ {
-		t = append(t, i)
+	for i := 0; i <= temp;i ++ {
+		t = append(t, i+1)
 	}
 	proData := new(Problems)
 	proData.pageRange = t
 	proData.num = totalNum
 	pageRange := t
 
-	pagePrev := pageNo
-	pageNext := pageNo + 1
+	pagePrev := pageNo + 1
+	pageNext := pageNo + 2
 
 	this.Data["pageData"] = proData
 	this.Data["pageRange"] = pageRange
@@ -79,11 +79,22 @@ func (this *IndexController) IndexProblemset() {
 
 // @router /status [get]
 func (this *IndexController) IndexStatus() {
-	data,RESULT,err := models.QueryAllSolution()
+	pageNo := 0
+	start := int(pageNo)*pageSize
+	data,RESULT,_,totalNum,err := models.QueryPageSolution(start,pageSize)
 	if err != nil {
 		logs.Error(err)
 	}
+	isPage := true
+	if int(totalNum) < pageSize {
+		isPage = false
+	}
+	pagePrev := 1
+	pageNext := 2
 	this.Data["data"] = data
+	this.Data["isPage"] = isPage
+	this.Data["pagePrev"] = pagePrev
+	this.Data["pageNext"] = pageNext
 	this.Data["RES"] = RESULT
 	this.TplName = "status.html"
 }
