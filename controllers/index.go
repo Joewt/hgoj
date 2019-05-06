@@ -36,7 +36,6 @@ func (this *IndexController) Index() {
 	}
 	nowTime := time.Now().Format("2006-01-02")
 	totalNum, acNum := models.QueryTotalNumAcNumSolution(nowTime)
-	logs.Info("totalnum : ---- ",totalNum,acNum)
 	this.Data["user"] = user
 	this.Data["totalNum"] = totalNum
 	this.Data["acNum"] = acNum
