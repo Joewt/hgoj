@@ -54,14 +54,14 @@
                                         <div class="col-md-4">
                                             <ul class="stat-list m-t-lg">
                                                 <li>
-                                                    <h2 class="no-margins">200</h2>
+                                                    <h2 class="no-margins">{{.acNum}}</h2>
                                                     <small>今日正确数</small>
 {{/*                                                    <div class="progress progress-mini">*/}}
 {{/*                                                        <div class="progress-bar" style="width: 48%;"></div>*/}}
 {{/*                                                    </div>*/}}
                                                 </li>
                                                 <li>
-                                                    <h2 class="no-margins ">400</h2>
+                                                    <h2 class="no-margins ">{{.totalNum}}</h2>
                                                     <small>今日提交数</small>
 {{/*                                                    <div class="progress progress-mini">*/}}
 {{/*                                                        <div class="progress-bar" style="width: 60%;"></div>*/}}
@@ -76,7 +76,7 @@
                                 <div class="m-t-md">
                                     <small class="pull-right">
                                         <i class="fa fa-clock-o"> </i>
-                                        Update on 16.07.2015
+                                        Update on {{.nowTime}}
                                     </small>
 
                                 </div>

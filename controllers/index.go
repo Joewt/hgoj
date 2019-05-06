@@ -5,17 +5,17 @@ import (
 	"github.com/shirou/gopsutil/mem"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
+	"time"
 )
 
 type IndexController struct {
 	BaseController
 }
 
-
 var (
 	pageSize int = 50
 	//pageProSize int = 100
-	pageStatusSize int = 40
+	pageStatusSize  int = 40
 	pageContestSize int = 20
 )
 
@@ -24,18 +24,23 @@ func (this *IndexController) Indexs() {
 	this.TplName = "empty.html"
 }
 
-
 // @router /index [get]
 func (this *IndexController) Index() {
 	_, ok := this.GetSession(SESSION_USER_KEY).(models.Users)
 	if !ok {
 		logs.Error("未登陆")
 	}
-	user,_, err := models.QueryAllUser()
+	user, _, err := models.QueryAllUser()
 	if err != nil {
 		this.JsonErr("未知错误", 4000, "/index")
 	}
+	nowTime := time.Now().Format("2006-01-02")
+	totalNum, acNum := models.QueryTotalNumAcNumSolution(nowTime)
+	logs.Info("totalnum : ---- ",totalNum,acNum)
 	this.Data["user"] = user
+	this.Data["totalNum"] = totalNum
+	this.Data["acNum"] = acNum
+	this.Data["nowTime"] = nowTime
 	this.TplName = "index.html"
 }
 
@@ -43,7 +48,6 @@ func (this *IndexController) Index() {
 func (this *IndexController) IndexFaqs() {
 	this.TplName = "faqs.html"
 }
-
 
 // @router /problemset [get]
 func (this *IndexController) IndexProblemset() {
@@ -53,8 +57,8 @@ func (this *IndexController) IndexProblemset() {
 	//	logs.Error(err)
 	//}
 	pageNo := 0
-	start := pageNo*pageSize
-	pros,_,totalNum, err := models.QueryPageProblem(start, pageSize)
+	start := pageNo * pageSize
+	pros, _, totalNum, err := models.QueryPageProblem(start, pageSize)
 	if err != nil {
 		logs.Error(err)
 	}
@@ -64,8 +68,8 @@ func (this *IndexController) IndexProblemset() {
 		isPage = false
 	}
 	temp := int(totalNum) / pageSize
-	var t  []int
-	for i := 0; i <= temp;i ++ {
+	var t []int
+	for i := 0; i <= temp; i++ {
 		t = append(t, i+1)
 	}
 	proData := new(Problems)
@@ -88,8 +92,8 @@ func (this *IndexController) IndexProblemset() {
 // @router /status [get]
 func (this *IndexController) IndexStatus() {
 	pageNo := 0
-	start := int(pageNo)*pageSize
-	data,RESULT,_,totalNum,err := models.QueryPageSolution(start,pageSize)
+	start := int(pageNo) * pageSize
+	data, RESULT, _, totalNum, err := models.QueryPageSolution(start, pageSize)
 	if err != nil {
 		logs.Error(err)
 	}
@@ -110,8 +114,8 @@ func (this *IndexController) IndexStatus() {
 // @router /contest [get]
 func (this *IndexController) IndexContest() {
 	pageNo := 0
-	start := int(pageNo)*pageContestSize
-	con, _, totalNum,_ := models.QueryPageContest(start,pageContestSize)
+	start := int(pageNo) * pageContestSize
+	con, _, totalNum, _ := models.QueryPageContest(start, pageContestSize)
 	isPage := true
 	if int(totalNum) < pageContestSize {
 		isPage = false
@@ -147,11 +151,10 @@ func (this *IndexController) IndexAdmin() {
 		this.Abort401(syserror.UnKnowError{})
 	}
 	v, _ := mem.VirtualMemory()
-	this.Data["memused"] = (v.Total/(1024*1024)) - (v.Free/(1024*1024))
-	this.Data["memfree"] = v.Free/(1024*1024)
+	this.Data["memused"] = (v.Total / (1024 * 1024)) - (v.Free / (1024 * 1024))
+	this.Data["memfree"] = v.Free / (1024 * 1024)
 	this.TplName = "admin/index.html"
 }
-
 
 //
 //// @router /skin-config.html [get]
