@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
+	"github.com/yinrenxin/hgoj/tools"
 )
 
 type BlogController struct {
@@ -10,8 +11,15 @@ type BlogController struct {
 }
 
 
-// @router /article/index [get]
+// @router /article/:artid [get]
 func (this *BlogController) BlogIndex() {
+	artid := this.Ctx.Input.Param(":artid")
+	id, _ := tools.StringToInt32(artid)
+	Art, err := models.QueryArtByArtId(id)
+	if err != nil {
+		this.Abort("500")
+	}
+	this.Data["art"] = Art
 	this.TplName = "blog/index.html"
 }
 

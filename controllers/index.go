@@ -19,7 +19,7 @@ var (
 	pageContestSize int = 20
 )
 
-// @router  [get]
+// @router / [get]
 func (this *IndexController) Indexs() {
 	this.TplName = "empty.html"
 }
@@ -34,12 +34,18 @@ func (this *IndexController) Index() {
 	if err != nil {
 		this.JsonErr("未知错误", 4000, "/index")
 	}
+
+	art,err := models.QueryLimitArt()
+	if err != nil {
+		logs.Error("没有文章")
+	}
 	nowTime := time.Now().Format("2006-01-02")
 	totalNum, acNum := models.QueryTotalNumAcNumSolution(nowTime)
 	this.Data["user"] = user
 	this.Data["totalNum"] = totalNum
 	this.Data["acNum"] = acNum
 	this.Data["nowTime"] = nowTime
+	this.Data["Art"] = art
 	this.TplName = "index.html"
 }
 

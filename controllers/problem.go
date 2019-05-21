@@ -269,6 +269,19 @@ func (this *ProblemController) ProblemAddPost() {
 	this.JsonOK("添加题目成功", "/admin")
 }
 
+
+// @router /problem/fileupload [post]
+func (this *ProblemController) Fileupload() {
+	logs.Info(this.Ctx.Request)
+	f, h, err := this.GetFile("testcase")
+	logs.Info(h.Filename)
+	if err != nil {
+		logs.Error("error:--- ",err)
+	}
+	defer f.Close()
+	this.SaveToFile("testcase", "/Users/joe/go/src/github.com/yinrenxin/hgoj/static/upload/" + h.Filename)
+}
+
 func mkdata(pid int64, filename string, input string, oj_data string) bool {
 	baseDir := oj_data+"/"+strconv.Itoa(int(pid))
 	err := os.MkdirAll(baseDir, 0777)

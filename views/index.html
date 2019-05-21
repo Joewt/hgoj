@@ -90,22 +90,16 @@
                                 <span class="label label-warning pull-right">Data has changed</span>
                                 <h5>公告</h5>
                             </div>
-                            <div class="ibox-content">
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <small class="stats-label">2019/5/1</small>
-                                        <h4><a href="/article/index">关于本OJ的使用</a></h4>
-                                    </div>
-                                </div>
-                            </div>
+                            {{range .Art}}
                             <div class="ibox-content">
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <small class="stats-label">2018/1/1</small>
-                                        <h4><a href="">湖南工学院第x次程序设计大赛</a></h4>
+                                        <h4><a href="/article/{{.NewsId}}">{{.Title}}</a></h4>
                                     </div>
                                 </div>
                             </div>
+                            {{end}}
 {{/*                            <div class="ibox-content">*/}}
 {{/*                                <div class="row">*/}}
 {{/*                                    <div class="col-xs-4">*/}}

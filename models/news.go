@@ -30,16 +30,6 @@ func AddArt(uid int32, title string, content string) (int64, error) {
 	return artId, nil
 }
 
-/**
-var pro []*Problem
-	problem := new(Problem)
-	qs := DB.QueryTable(problem)
-	num, err := qs.OrderBy("-problem_id").All(&pro)
-	if err != nil {
-		return nil,num,err
-	}
-	return pro,num, nil
- */
 
 func QueryAllArt() ([]*News, error) {
 	var art []*News
@@ -50,4 +40,27 @@ func QueryAllArt() ([]*News, error) {
 		return nil, err
 	}
 	return art, nil
+}
+
+func QueryLimitArt() ([]*News, error) {
+	var art []*News
+	news := new(News)
+	qs := DB.QueryTable(news)
+	_, err := qs.OrderBy("-news_id").Limit(2).All(&art)
+	if err != nil {
+		return nil, err
+	}
+	return art, nil
+}
+
+
+
+func QueryArtByArtId(id int32)(News, error) {
+	art := News{NewsId:id}
+	err := DB.Read(&art,"NewsId")
+	if err != nil {
+		return News{}, err
+	}
+	return art, nil
+
 }
