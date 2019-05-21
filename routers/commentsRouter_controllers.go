@@ -37,7 +37,7 @@ func init() {
     beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:BlogController"],
         beego.ControllerComments{
             Method: "BlogIndex",
-            Router: `/article/index`,
+            Router: `/article/:artid`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
@@ -144,6 +144,15 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"],
         beego.ControllerComments{
+            Method: "Indexs",
+            Router: `/`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"],
+        beego.ControllerComments{
             Method: "IndexAdmin",
             Router: `/admin`,
             AllowHTTPMethods: []string{"get"},
@@ -214,15 +223,6 @@ func init() {
             Filters: nil,
             Params: nil})
 
-    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"],
-        beego.ControllerComments{
-            Method: "Indexs",
-            Router: `[get]`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
     beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"],
         beego.ControllerComments{
             Method: "ProblemContest",
@@ -273,6 +273,15 @@ func init() {
             Method: "ProblemEdit",
             Router: `/problem/edit/:id`,
             AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"],
+        beego.ControllerComments{
+            Method: "Fileupload",
+            Router: `/problem/fileupload`,
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
