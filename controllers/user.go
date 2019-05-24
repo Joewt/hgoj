@@ -4,6 +4,8 @@ import (
 	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
+	"reflect"
+
 	//"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
 	"strings"
@@ -12,6 +14,9 @@ import (
 type UserController struct {
 	BaseController
 }
+
+
+var USERROLE = []int{0,1,2}
 
 // @router /profile [get]
 func (this *UserController) Profile() {
@@ -249,4 +254,72 @@ func (this *UserController) UserForgotPwd() {
 // @router /forgotpwd/sendemail [post]
 func (this *UserController) SendEmailForgot() {
 	this.JsonErr("未知错误", 9010, "")
+}
+
+
+// @router /admin/permissions/add [get]
+func (this *UserController) PermissionsAdd() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
+	this.TplName = "admin/peradd.html"
+}
+
+// @router /admin/permissions/add [post]
+func (this *UserController) PermissionsAddPost() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
+	uname := this.GetMushString("uname", "用户名不能为空")
+	perid := this.GetString("perid")
+	role, _ := tools.StringToInt32(perid)
+	if ok := models.FindUserByUname(uname); ok {
+		this.JsonErr("用户不存在",12002,"")
+	}
+
+	if ok := models.UpdateUserRoleByUname(uname,role); !ok {
+		this.JsonErr("更新失败",12003,"")
+	}
+
+	logs.Info(uname,reflect.TypeOf(role))
+	this.JsonOK("更新成功","")
+}
+
+
+// @router /admin/permissions/list [get]
+func (this *UserController) PermissionsList() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
+	user,_, err := models.QueryUserByRole()
+	if err != nil {
+		logs.Error(err)
+	}
+
+	this.Data["user"] = user
+
+	this.TplName = "admin/perlist.html"
+}
+
+// @router /admin/changepwd [get]
+func (this *UserController) ChangePassword() {
+	this.TplName = "admin/changepwd.html"
+}
+
+// @router /admin/changepwd [post]
+func (this *UserController) ChangePwd() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
+	uname := this.GetMushString("uname", "用户名不能为空")
+	pwd := this.GetMushString("pwd","密码不能为空")
+	md5pwd := tools.MD5(pwd)
+	if ok := models.FindUserByUname(uname); ok {
+		this.JsonErr("用户不存在",12002,"")
+	}
+
+	if ok := models.UpdateUserPwdByUname(uname,md5pwd); !ok {
+		this.JsonErr("更新失败",12003,"")
+	}
+	this.JsonOK("更改密码成功","")
 }
