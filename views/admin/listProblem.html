@@ -90,18 +90,27 @@
             var data = {
                 proid: proid
             };
-            $.post("/problem/del", data,function(res){
-                // alert(_form.serialise());
-                if(res.code){
-                    layer.msg(res.msg);
-                }
 
-                if(res.code === 0) {
-                    // layer.msg(res.msg);
-                    alert(res.msg);
-                    window.location.href="/problem/list";
-                }
-            }, 'json');
+                layer.confirm('确定要删除题目？', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    $.post("/problem/del", data, function (res) {
+                        // alert(_form.serialise());
+                        if (res.code) {
+                            layer.msg(res.msg);
+                        }
+
+                        if (res.code === 0) {
+                            layer.msg('删除成功');
+                            setTimeout("location.reload()",1000);
+
+                        }
+                    }, 'json');
+                }, function () {
+
+                });
+
+
         });
 
         //del

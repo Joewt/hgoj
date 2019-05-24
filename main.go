@@ -87,6 +87,20 @@ func initTemplate() {
 		return false
 	})
 
+	_ = beego.AddFuncMap("RoleMap", func(role int32)(string){
+		var temp string
+		if role == 1 {
+			temp = "管理员"
+		}
+		if role == 2 {
+			temp = "教师"
+		}
+		if role == 0 {
+			temp = "普通用户"
+		}
+		return temp
+	})
+
 
 	_ = beego.AddFuncMap("ParseTime", func(temp float64)(string){
 		s := int(temp)

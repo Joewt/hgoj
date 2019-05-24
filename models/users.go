@@ -149,6 +149,18 @@ func QueryAllUser() ([]*Users,int64, error) {
 }
 
 
+func QueryUserByRole() ([]*Users,int64, error){
+	var u []*Users
+	user := new(Users)
+	qs := DB.QueryTable(user)
+	num, err := qs.OrderBy("-user_id").Filter("role__gt",0).All(&u)
+	if err != nil {
+		return nil,num,err
+	}
+	return u,num, nil
+}
+
+
 func QueryPageUser(start , pageSize int) ([]*Users,int64, int64,error) {
 	var u []*Users
 	user := new(Users)
@@ -172,4 +184,35 @@ func UpdateUserInfo(uid int32,nick, pwd string) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func QueryUidByUname(uname string) (int32) {
+	user := Users{UserName: uname}
+	err := DB.Read(&user, "UserName")
+	if err != nil {
+		return 0
+	}
+	return user.UserId
+}
+
+func UpdateUserRoleByUname(uname string, role int32) (bool) {
+
+	user := Users{UserId:QueryUidByUname(uname)}
+	user.Role = role
+	_, err := DB.Update(&user,"role")
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+
+func UpdateUserPwdByUname(uname string, pwd string) (bool) {
+	user := Users{UserId:QueryUidByUname(uname)}
+	user.Password = pwd
+	_, err := DB.Update(&user,"password")
+	if err != nil {
+		return false
+	}
+	return true
 }
