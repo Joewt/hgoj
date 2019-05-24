@@ -165,8 +165,12 @@
                 }
 
                 if(res.code === 0) {
-                    alert("提交代码成功");
-                    window.location.href="/status";
+                    layer.msg('判题中', {
+                        icon: 16
+                        ,shade: 0.01
+                    });
+                    setTimeout('window.location.href="/status"',2000);
+
                 }
             }, 'json');
 

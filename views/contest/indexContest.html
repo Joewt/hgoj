@@ -35,10 +35,10 @@
                         <h2>{{.con.Title}}</h2>
                     </div>
                     <dl class="dl-horizontal">
-                        {{if eq .con.Defunct "Y"}}
-                        <dt>状态:</dt> <dd><span class="label label-primary">进行中</span></dd>
-                        {{else}}
+                        {{if is_finish .con.StartTime .con.EndTime}}
                         <dt>状态:</dt> <dd><span class="label label-default">已结束</span></dd>
+                        {{else}}
+                        <dt>状态:</dt> <dd><span class="label label-primary">进行中</span></dd>
                         {{end}}
                     </dl>
                 </div>

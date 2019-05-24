@@ -152,7 +152,7 @@ func (this *IndexController) IndexReg() {
 
 // @router /admin [get]
 func (this *IndexController) IndexAdmin() {
-	if !this.IsAdmin {
+	if !this.IsAdmin && !this.IsTeacher{
 		this.Abort401(syserror.UnKnowError{})
 	}
 	v, _ := mem.VirtualMemory()
