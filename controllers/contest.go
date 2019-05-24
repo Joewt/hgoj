@@ -52,7 +52,7 @@ type CPProblem struct {
 
 // @router /contest/add [get]
 func (this *ContestController) ContestAddGet() {
-	if !this.IsAdmin {
+	if !this.IsAdmin && !this.IsTeacher{
 		this.Abort("401")
 	}
 	month := map[string]int{
@@ -223,7 +223,7 @@ func (this *ProblemController) ProblemContest() {
 
 // @router /contest/list [get]
 func (this *ContestController) ContestList() {
-	if !this.IsAdmin {
+	if !this.IsAdmin && !this.IsTeacher{
 		this.Abort("401")
 	}
 	pageNo := 0
@@ -249,7 +249,7 @@ func (this *ContestController) ContestList() {
 
 // @router /contest/list/:page [get]
 func (this *ContestController) ContestListPage() {
-	if !this.IsAdmin {
+	if !this.IsAdmin && !this.IsTeacher{
 		this.Abort("401")
 	}
 	page := this.Ctx.Input.Param(":page")

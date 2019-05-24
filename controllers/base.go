@@ -21,6 +21,7 @@ type BaseController struct {
 	User    models.Users
 	IsLogin bool
 	IsAdmin bool
+	IsTeacher bool
 	AvatarURL string
 }
 
@@ -36,11 +37,15 @@ func (this *BaseController) Prepare() {
 	//logs.Info("登录id：",u.UserId, "登录邮箱：",u.Email)
 	this.IsLogin = false
 	this.IsAdmin = false
+	this.IsTeacher = false
 	if ok {
 		this.User = u
 		this.IsLogin = true
 		if u.Role == 1 {
 			this.IsAdmin = true
+		}
+		if u.Role == 2 {
+			this.IsTeacher = true
 		}
 		this.AvatarURL = tools.AvatarLink(u.Email,45)
 		this.Data["AvatarURL"] = this.AvatarURL
@@ -50,6 +55,7 @@ func (this *BaseController) Prepare() {
 	this.Data["Path"] = path
 	this.Data["islogin"] = this.IsLogin
 	this.Data["isadmin"] = this.IsAdmin
+	this.Data["isteacher"] = this.IsTeacher
 	this.Data["menu"] = path
 }
 

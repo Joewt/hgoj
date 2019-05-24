@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/gob"
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/astaxie/beego/logs"
@@ -64,7 +65,10 @@ func initTemplate() {
 		endTime := b
 		totalTime := endTime.Sub(startTime).Minutes()
 		t := time.Now().Sub(startTime).Minutes()
-		percentage := (t/totalTime)*100
+		value := t/totalTime
+		value, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", value), 64)
+		percentage := value*100
+		logs.Info("平均时间",percentage)
 		if t > totalTime {
 			percentage = 100
 		}

@@ -39,7 +39,7 @@
                             <ul role="menu" class="dropdown-menu">
                                 <li><a href="/profile">个人中心</a></li>
                                 <li><a href="/profile/update">修改资料</a></li>
-                                {{if .isadmin}}
+                                {{if or .isadmin  .isteacher}}
                                 <li><a href="/admin">后台管理</a></li>
                                 {{end}}
                                 <li><a href="/logout"><i class="fa fa-sign-out"></i> logout</a></li>
