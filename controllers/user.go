@@ -18,6 +18,50 @@ type UserController struct {
 
 var USERROLE = []int{0,1,2}
 
+type ProUser struct {
+	Pid        int32
+	Title      string
+	Time       int32
+	Memory     int32
+}
+
+
+// @router /profile/:uid [get]
+func (this *UserController) Profile2() {
+	id := this.Ctx.Input.Param(":uid")
+	uid, _ := tools.StringToInt32(id)
+
+
+	user, err := models.QueryUserById(uid)
+	if err != nil {
+		this.Abort("500")
+	}
+
+	pros,_,err := models.QueryUserProblem(uid)
+	if err != nil {
+		logs.Error(err)
+	}
+	var problems []*ProUser
+	for _,v := range pros {
+		t,m := models.QueryTimeAndMemoryByuidpid(uid,v.ProblemId)
+		problems = append(problems,&ProUser{v.ProblemId,v.Title,t,m})
+	}
+
+	ac,sub,err := models.QueryACSubSolution(uid)
+	if err != nil {
+		ac = 0
+		sub = 0
+	}
+
+	this.Data["problems"] = problems
+	this.Data["user"] = user
+	avatarUrl := tools.AvatarLink(user.Email,500)
+	this.Data["avatar"] = avatarUrl
+	this.Data["acnum"] = ac
+	this.Data["subnum"] = sub
+	this.TplName = "profile-pub.html"
+}
+
 // @router /profile [get]
 func (this *UserController) Profile() {
 	//id := this.Ctx.Input.Param(":uid")
@@ -43,6 +87,11 @@ func (this *UserController) Profile() {
 	if err != nil {
 		logs.Error(err)
 	}
+	var problems []*ProUser
+	for _,v := range pros {
+		t,m := models.QueryTimeAndMemoryByuidpid(uid,v.ProblemId)
+		problems = append(problems,&ProUser{v.ProblemId,v.Title,t,m})
+	}
 
 	ac,sub,err := models.QueryACSubSolution(uid)
 	if err != nil {
@@ -55,7 +104,7 @@ func (this *UserController) Profile() {
 		logs.Error(err)
 	}
 	this.Data["resdata"] = ResData
-	this.Data["problems"] = pros
+	this.Data["problems"] = problems
 	this.Data["data"] = data
 	this.Data["RES"] = RESULT
 	avatarUrl := tools.AvatarLink(this.User.Email,500)

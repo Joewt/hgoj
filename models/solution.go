@@ -97,6 +97,19 @@ func UpdateSolutionResultByPid(pid int32) (bool) {
 	return true
 }
 
+
+func QueryTimeAndMemoryByuidpid(uid,pid int32) (int32,int32) {
+	var data Solution
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	_, err := qs.Filter("user_id", uid).Filter("problem_id",pid).Filter("result",4).All(&data)
+	if err != nil {
+		return 0,0
+	}
+	return data.Time,data.Memory
+}
+
+
 func QuerySolutionBySid(sid int32) (Solution, error) {
 	Solu := Solution{SolutionId: sid}
 	err := DB.Read(&Solu)

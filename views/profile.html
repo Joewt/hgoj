@@ -38,7 +38,7 @@
                                     关于我
                                 </h5>
                                 <p>
-                                     这里是简介
+                                     联系邮箱: <a href="{{.User.Email}}">{{.User.Email}}</a>
                                 </p>
                                 <div class="row m-t-lg">
                                     <div class="col-md-6">
@@ -171,10 +171,10 @@
                                                 <tbody>
                                                 {{range .problems}}
                                                     <tr>
-                                                        <td>{{.ProblemId}}</td>
-                                                        <td><a href="problem/{{.ProblemId}}">{{.Title}}</a></td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td>{{.Pid}}</td>
+                                                        <td><a href="problem/{{.Pid}}">{{.Title}}</a></td>
+                                                        <td>{{.Memory}}</td>
+                                                        <td>{{.Time}}</td>
                                                     </tr>
                                                 {{end}}
                                                 </tbody>
