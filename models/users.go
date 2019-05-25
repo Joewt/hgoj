@@ -113,6 +113,7 @@ func QueryUserById(id int32) (Users,error) {
 	err := DB.Read(&user, "UserId")
 	if err != nil {
 		logs.Warn(err)
+		return Users{},err
 	}
 	return user, nil
 }

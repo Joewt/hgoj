@@ -158,6 +158,8 @@ func (this *IndexController) IndexAdmin() {
 	v, _ := mem.VirtualMemory()
 	this.Data["memused"] = (v.Total / (1024 * 1024)) - (v.Free / (1024 * 1024))
 	this.Data["memfree"] = v.Free / (1024 * 1024)
+	//this.Data["memused"] = 33
+	//this.Data["memfree"] = 99
 	this.TplName = "admin/index.html"
 }
 
