@@ -120,6 +120,7 @@ func (this *BaseController) JsonOK(msg, action string) {
 		"action": action,
 	}
 	this.ServeJSON()
+	this.Abort("500")
 }
 
 func (this *BaseController) JsonOKH(msg string, data MAP_H) {

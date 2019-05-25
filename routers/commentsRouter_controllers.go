@@ -225,6 +225,24 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"],
         beego.ControllerComments{
+            Method: "RejudgePost",
+            Router: `/admin/rejudge`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"],
+        beego.ControllerComments{
+            Method: "Rejudge",
+            Router: `/admin/rejudge`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"],
+        beego.ControllerComments{
             Method: "ProblemContest",
             Router: `/contest/problem/:id/:cid`,
             AllowHTTPMethods: []string{"get"},

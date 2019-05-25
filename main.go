@@ -68,7 +68,6 @@ func initTemplate() {
 		value := t/totalTime
 		value, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", value), 64)
 		percentage := value*100
-		logs.Info("平均时间",percentage)
 		if t > totalTime {
 			percentage = 100
 		}
