@@ -5,6 +5,7 @@ import (
 	"github.com/shirou/gopsutil/mem"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
+	"sort"
 	"time"
 )
 
@@ -34,6 +35,8 @@ func (this *IndexController) Index() {
 	if err != nil {
 		this.JsonErr("未知错误", 4000, "/index")
 	}
+
+	sort.Sort(SortUser(user))
 
 	art,err := models.QueryLimitArt()
 	if err != nil {

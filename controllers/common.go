@@ -1,5 +1,9 @@
 package controllers
 
+import "github.com/yinrenxin/hgoj/models"
+
+
+type SortUser []*models.Users
 
 func PageCal(totalNum int64,pageNo int32,pageSize int) (bool,int32,int32) {
 	isPage := true
@@ -39,4 +43,15 @@ func PageRangeCal(totalNum int64,pageNo int32,pageSize int) (bool,[]int,int32,in
 		pagePrev = pageNo + 1
 	}
 	return isPage,pageRange,pagePrev,pageNext
+}
+
+
+func (I SortUser) Len() int {
+	return len(I)
+}
+func (I SortUser) Less(i, j int) bool {
+	return I[i].Solved > I[j].Solved
+}
+func (I SortUser) Swap(i, j int) {
+	I[i], I[j] = I[j], I[i]
 }
