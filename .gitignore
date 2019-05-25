@@ -12,9 +12,8 @@
 *.out
 hgoj
 data/*
-ProjectResource/static_full/*
+ProjectResource/*
 conf/app.conf
 .idea/*
-ProjectResource/ace-master/*
 logs/*
 judge/*
