@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/astaxie/beego/orm"
 	"time"
 
 	"github.com/astaxie/beego/logs"
@@ -59,6 +60,41 @@ type Solution struct {
 	PassRate   float64   `orm:"digits(3);decimals(2);default(0)"`
 	LintError  uint      `orm:"default(0)"`
 	Judger     string    `orm:"type(char);size(16);default(LOCAL)"`
+}
+
+func UpdateSolutionResultBySid(sid int32) (bool) {
+	Solu := Solution{SolutionId:sid}
+	Solu.Result = 1
+	_, err := DB.Update(&Solu,"result")
+	if err != nil {
+		logs.Error(err)
+		return false
+	}
+	return true
+}
+
+
+func UpdateSolutionResultByCid(cid int32) (bool) {
+	_, err := DB.QueryTable("solution").Filter("contest_id", cid).Update(orm.Params{
+		"result": 1,
+	})
+	if err != nil {
+		logs.Error(err)
+		return false
+	}
+	return true
+}
+
+
+func UpdateSolutionResultByPid(pid int32) (bool) {
+	_, err := DB.QueryTable("solution").Filter("problem_id", pid).Update(orm.Params{
+		"result": 1,
+	})
+	if err != nil {
+		logs.Error(err)
+		return false
+	}
+	return true
 }
 
 func QuerySolutionBySid(sid int32) (Solution, error) {
