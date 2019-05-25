@@ -26,6 +26,7 @@ type ProUser struct {
 }
 
 
+
 // @router /profile/:uid [get]
 func (this *UserController) Profile2() {
 	id := this.Ctx.Input.Param(":uid")
