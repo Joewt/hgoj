@@ -253,6 +253,14 @@ func (this *UserController) UserGenPost() {
 
 	flag := 0
 
+
+	//对max进行限制
+
+	if n > 300 {
+		this.JsonErr("数据太多",14004,"")
+	}
+
+
 	for {
 		temp := strconv.Itoa(i)
 		uname := prefix+"_"+temp
