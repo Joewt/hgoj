@@ -103,6 +103,26 @@ func (this *ProblemController) ProblemEdit() {
 		logs.Error(err)
 	}
 
+	//临时处理(读测试数据并展示)
+	baseDir := OJ_DATA+"/"+strconv.Itoa(int(ids))
+
+	testin := baseDir+"/test.in"
+	testout := baseDir+"/test.out"
+
+	in, err := ioutil.ReadFile(testin)
+	if err != nil {
+		this.Abort("401")
+	}
+
+	out, err := ioutil.ReadFile(testout)
+	if err != nil {
+		this.Abort("401")
+	}
+
+	pro.Input = string(in)
+	pro.Output = string(out)
+
+
 	this.Data["PRO"] = pro
 	this.TplName = "admin/editProblem.html"
 }
