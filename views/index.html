@@ -87,8 +87,8 @@
                     <div class="col-lg-4">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <span class="label label-warning pull-right">Data has changed</span>
-                                <h5>公告</h5>
+{{/*                                <span class="label label-warning pull-right">Data has changed</span>*/}}
+                                <h5>最新文章</h5>
                             </div>
                             {{range .Art}}
                             <div class="ibox-content">
@@ -250,7 +250,8 @@
         });
 
         var lineData = {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            // labels: ["January", "February", "March", "April", "May", "June", "July"],
+            labels: {{.times}},
             datasets: [
                 {
                     label: "Example dataset",
@@ -260,7 +261,7 @@
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: [10, 20, 40, 60, 40, 20, 40]
+                    data: {{.totalNums}}
                 },
                 {
                     label: "Example dataset",
@@ -270,7 +271,7 @@
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(26,179,148,1)",
-                    data: [5, 10, 30, 30, 10, 5, 30]
+                    data: {{.acNums}}
                 }
             ]
         };

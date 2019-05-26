@@ -44,11 +44,27 @@ func (this *IndexController) Index() {
 	}
 	nowTime := time.Now().Format("2006-01-02")
 	totalNum, acNum := models.QueryTotalNumAcNumSolution(nowTime)
+
+	var totalNs []int64
+	var acNs []int64
+	var times []string
+	for i := -7; i <= -1; i++ {
+		calTime := time.Now().AddDate(0,0,i).Format("2006-01-02")
+		totalN,acN := models.QueryTotalNumAcNumSolution(calTime)
+		totalNs = append(totalNs,totalN)
+		acNs = append(acNs, acN)
+		times = append(times,calTime)
+	}
+	logs.Info(totalNs,acNs)
+
 	this.Data["user"] = user
 	this.Data["totalNum"] = totalNum
 	this.Data["acNum"] = acNum
 	this.Data["nowTime"] = nowTime
 	this.Data["Art"] = art
+	this.Data["totalNums"] = totalNs
+	this.Data["acNums"] = acNs
+	this.Data["times"] = times
 	this.TplName = "index.html"
 }
 
