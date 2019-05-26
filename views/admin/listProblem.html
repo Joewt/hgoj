@@ -22,6 +22,7 @@
                             <th>状态 </th>
                             <th>删除</th>
                             <th>编辑</th>
+{{/*                            <th>数据</th>*/}}
                         </tr>
                         </thead>
                         <tbody>
@@ -34,9 +35,14 @@
 
                                     <td>{{.InDate}}</td>
 
-                                    <td>{{.Defunct}}</td>
+                                    {{if eq .Defunct "Y"}}
+                                    <td><button type="button" class="btn btn-sm btn-success " data-proid="{{.ProblemId}}">{{.Defunct}}</button></td>
+                                    {{else}}
+                                        <td><button type="button" class="btn btn-sm btn-danger" data-proid="{{.ProblemId}}">{{.Defunct}}</button></td>
+                                    {{end}}
                                     <td><button type="button" class="btn btn-sm btn-danger del" data-proid="{{.ProblemId}}">del</button></td>
                                     <td><button type="button" class="btn btn-sm btn-info edit" data-proid="{{.ProblemId}}">edit</button></td>
+{{/*                                    <td><button type="button" class="btn btn-sm btn-warning edit-data" data-proid="{{.ProblemId}}">data</button></td>*/}}
                                 </tr>
                             {{end}}
                         </tbody>
@@ -119,6 +125,18 @@
             var proid = _this.attr('data-proid');
             window.location.href="/problem/edit/"+proid;
         });
+
+        $('.edit-data').on('click',function(){
+            var _this = $(this);
+            var proid = _this.attr('data-proid');
+            layer.open({
+                type: 2,
+                area: ['850px', '550px'],
+                fixed: false, //不固定
+                maxmin: true,
+                content: '/problem/editdata/'+proid
+            });
+        })
     });
 
 
