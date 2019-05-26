@@ -5,7 +5,7 @@ import (
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"reflect"
-
+	"strconv"
 	//"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
 	"strings"
@@ -226,6 +226,63 @@ func (this *UserController) UserList() {
 	this.TplName = "admin/userList.html"
 }
 
+
+// @router /admin/user/generate [get]
+func (this *UserController) UserGen() {
+	if !this.IsAdmin {
+		this.Abort("500")
+	}
+	this.TplName = "admin/generate.html"
+}
+
+// @router /admin/user/generate [post]
+func (this *UserController) UserGenPost() {
+	if !this.IsAdmin {
+		this.Abort("500")
+	}
+	prefix := this.GetMushString("prefix","用户名前缀不能为空")
+	num := this.GetMushString("num","数量不能为空")
+	ip := this.Ctx.Request.RemoteAddr
+	Ip := tools.SplitIP(ip)
+	var data MAP_H
+	n := tools.StringToInt(num)
+
+	var user []map[string]string
+
+	i := 1
+
+	flag := 0
+
+	for {
+		temp := strconv.Itoa(i)
+		uname := prefix+"_"+temp
+		salt := temp
+		pwd := tools.MD5(num+salt)
+
+		if ok := models.FindUserByUname(uname); ok {
+			uid, err := models.SaveUser(uname,uname,"",pwd,"hnit",Ip)
+
+			if err == nil {
+				user = append(user,map[string]string{
+					"uname":uname,
+					"pwd":pwd,
+				})
+			}
+			flag += 1
+			logs.Warn("generate user ",uid,uname,pwd)
+		}
+		if flag == n {
+			break
+		}
+		i += 1
+	}
+
+	data = MAP_H{
+		"data": user,
+	}
+
+	this.JsonOKH("批量生成成功",data)
+}
 
 // @router /user/list/:page [get]
 func (this *UserController) UserListPage() {

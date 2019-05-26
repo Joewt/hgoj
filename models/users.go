@@ -138,6 +138,17 @@ func QueryUserByUEAndPwd(ue, pwd string) (int32, error) {
 }
 
 
+func QueryLimitUser()([]*Users,int64, error) {
+	var u []*Users
+	user := new(Users)
+	qs := DB.QueryTable(user)
+	num, err := qs.OrderBy("-user_id").Limit(50).All(&u)
+	if err != nil {
+		return nil,num,err
+	}
+	return u,num, nil
+}
+
 func QueryAllUser() ([]*Users,int64, error) {
 	var u []*Users
 	user := new(Users)

@@ -38,6 +38,8 @@ func (this *IndexController) Index() {
 
 	sort.Sort(SortUser(user))
 
+	user = user[0:20]
+
 	art,err := models.QueryLimitArt()
 	if err != nil {
 		logs.Error("没有文章")
