@@ -12,7 +12,6 @@
 *.out
 hgoj
 data/*
-ProjectResource/*
 conf/app.conf
 .idea/*
 logs/*
