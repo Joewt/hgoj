@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/astaxie/beego/logs"
-	"github.com/shirou/gopsutil/mem"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"sort"
@@ -37,8 +36,10 @@ func (this *IndexController) Index() {
 	}
 
 	sort.Sort(SortUser(user))
+	if len(user) > 30 {
+		user = user[0:20]
+	}
 
-	user = user[0:20]
 
 	art,err := models.QueryLimitArt()
 	if err != nil {
@@ -176,11 +177,11 @@ func (this *IndexController) IndexAdmin() {
 	if !this.IsAdmin && !this.IsTeacher{
 		this.Abort401(syserror.UnKnowError{})
 	}
-	v, _ := mem.VirtualMemory()
-	this.Data["memused"] = (v.Total / (1024 * 1024)) - (v.Free / (1024 * 1024))
-	this.Data["memfree"] = v.Free / (1024 * 1024)
-	//this.Data["memused"] = 33
-	//this.Data["memfree"] = 99
+	//v, _ := mem.VirtualMemory()
+	//this.Data["memused"] = (v.Total / (1024 * 1024)) - (v.Free / (1024 * 1024))
+	//this.Data["memfree"] = v.Free / (1024 * 1024)
+	this.Data["memused"] = 0
+	this.Data["memfree"] = 0
 	this.TplName = "admin/index.html"
 }
 
