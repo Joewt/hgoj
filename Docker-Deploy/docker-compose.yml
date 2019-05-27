@@ -1,0 +1,53 @@
+#版本号
+version: "3"
+#服务
+services:
+  #hgoj服务
+  hgoj:
+    #服务器镜像
+    build:
+      context: ./hgoj
+      dockerfile: Dockerfile
+    container_name: hgoj_server
+    depends_on:
+      - mysql
+    restart: always
+    volumes:
+      - ${JUDGE_DATA}:/home/judge/data
+      - ${HGOJ_CONF}/app.conf:/go/src/github.com/yinrenxin/hgoj/conf/app.conf
+    # 端口映射。前者是宿主的。后者是容器里端口
+    ports:
+      - "8086:8086"
+
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    container_name: hgoj_mysql
+    volumes:
+      - ${DATA_PATH_HOST}/mysql${MYSQL_VERSION}:/var/lib/mysql
+      - ${LOG_PATH_HOST}/mysql${MYSQL_VERSION}:/var/log/mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${PMA_ROOT_PASSWORD}
+
+  judge:
+    image: woodenfish42/hustoj-judge:latest
+    container_name: hgoj_judge
+    depends_on:
+      - mysql
+    volumes:
+      - ${JUDGE_DATA}:/home/judge/data
+      - ${JUDGE_CONF}/judge.conf:/home/judge/etc/judge.conf
+    restart: always
+
+  phpmyadmin:
+    image: joewt/idocker_phpmyadmin:v1
+    container_name: hgoj_phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      - PMA_ARBITRARY=1
+      - MYSQL_ROOT_PASSWORD=${PMA_ROOT_PASSWORD}
+    ports:
+      - "8080:80"
