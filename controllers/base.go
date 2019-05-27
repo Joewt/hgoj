@@ -25,7 +25,7 @@ type BaseController struct {
 	AvatarURL string
 }
 
-const OJ_DATA = "./judge/data"
+const OJ_DATA = "/home/judge/data"
 
 type MAP_H = map[string]interface{}
 
