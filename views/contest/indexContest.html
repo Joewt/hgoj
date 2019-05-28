@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>HGOJ | index</title>
+    <title>HGOJ | Contest</title>
 
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -30,7 +30,7 @@
                 <div class="col-lg-12">
                     <div class="m-b-md">
                         {{if .isadmin}}
-                        <a href="#" class="btn btn-white btn-xs pull-right">编辑比赛</a>
+                        <a href="/contest/update/{{.conid}}" class="btn btn-white btn-xs pull-right">编辑比赛</a>
                         {{end}}
                         <h2>{{.con.Title}}</h2>
                     </div>
@@ -57,7 +57,7 @@
 
                         <dt>比赛时间:</dt> <dd> 	{{.con.StartTime}} </dd>
                         <dt>结束时间:</dt> <dd> 	{{.con.EndTime}} </dd>
-                        <dt>当前时间:</dt> <dd id="time_now">  2019.5.1 12.00 </dd>
+                        <dt>当前时间:</dt> <dd id="time_now">  </dd>
                     </dl>
                 </div>
             </div>
@@ -71,6 +71,16 @@
                             </div>
                         </dd>
                     </dl>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <p id="con-desc">
+                        {{.con.Description}}
+                    </p>
+
                 </div>
             </div>
 
@@ -119,7 +129,22 @@
 <!-- Mainly scripts -->
 <script src="/js/jquery-2.1.1.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
+    $(document).ready(function(){
+        marked.setOptions({
+            renderer: new marked.Renderer(),
+            gfm: true,
+            tables: true,
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false
+        });
+        document.getElementById('con-desc').innerHTML =
+            marked({{.con.Description}});
+    });
     function mytime() {
 
         var a = new Date();

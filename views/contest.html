@@ -26,12 +26,12 @@
                                 <h5>竞赛 </h5>
                             </div>
                             <div class="ibox-content">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
-                                    </div>
-                                </div>
+{{/*                                <div class="row">*/}}
+{{/*                                    <div class="col-sm-3">*/}}
+{{/*                                        <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">*/}}
+{{/*                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>*/}}
+{{/*                                    </div>*/}}
+{{/*                                </div>*/}}
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
@@ -49,7 +49,7 @@
                                             <tr>
                                                 <td>{{.ContestId}}</td>
                                                 <td><a href="/contest/cid/{{.ContestId}}">{{.Title}}</a></td>
-                                                <td>{{if eq .Defunct "Y"}}进行中{{else}}已结束{{end}}@{{.EndTime}}</td>
+                                                <td>{{if is_finish .StartTime .EndTime}}已结束{{else}}进行中{{end}}@{{.EndTime}}</td>
                                                 <td>{{if .Private}}私有{{else}}公开{{end}}</td>
                                                 <td>admin</td>
                                             </tr>

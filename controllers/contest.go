@@ -83,6 +83,95 @@ func (this *ContestController) ContestAddGet() {
 
 // @router /contest/add [post]
 func (this *ContestController) ContestAddPost() {
+	if !this.IsAdmin && !this.IsTeacher{
+		this.Abort("401")
+	}
+	title := this.GetMushString("title", "标题不能为空")
+	desc := this.GetMushString("desc", "竞赛描述不能为空")
+	proIds := this.GetMushString("proIds", "题目编号不能为空")
+	role := this.GetMushString("role", "权限不能为空")
+	limituser := this.GetString("limituser")
+	startTimeDate := this.GetMushString("starttime[0]","开始时间不能为空")
+	startTimeH := this.GetMushString("starttime[1]","开始时间不能为空")
+	startTimeM := this.GetMushString("starttime[2]","开始时间不能为空")
+	startTimeSlice := strings.Split(startTimeDate,"-")
+	endTimeDate := this.GetMushString("endtime[0]","结束时间不能为空")
+	endTimeH := this.GetMushString("endtime[1]","结束时间不能为空")
+	endTimeM := this.GetMushString("endtime[2]","结束时间不能为空")
+	endTimeSlice := strings.Split(endTimeDate,"-")
+	now := time.Time{}
+	startTime := time.Date(tools.StringToInt(startTimeSlice[0]),tools.StringToMonth(startTimeSlice[1]),tools.StringToInt(startTimeSlice[2]),tools.StringToInt(startTimeH),tools.StringToInt(startTimeM),0,0,now.Location())
+	endTime := time.Date(tools.StringToInt(endTimeSlice[0]),tools.StringToMonth(endTimeSlice[1]),tools.StringToInt(endTimeSlice[2]),tools.StringToInt(endTimeH),tools.StringToInt(endTimeM),0,0,now.Location())
+	if endTime.Sub(startTime).Seconds() < 0 {
+		this.JsonErr("时间错误",6010,"")
+	}
+	cid, err := models.ContestAdd(title, desc, proIds, role, limituser, startTime,endTime)
+
+	if err != nil {
+		this.JsonErr(err.Error(),6001, "/contest/add")
+	}
+	temp := strconv.Itoa(int(cid))
+	this.JsonOK("添加比赛成功","/contest/cid/"+temp)
+}
+
+
+
+// @router /contest/update/:cid [get]
+func (this *IndexController) ContestUpdate() {
+	if !this.IsAdmin && !this.IsTeacher{
+		this.Abort("401")
+	}
+
+	cid := this.Ctx.Input.Param(":cid")
+	id, _ := tools.StringToInt32(cid)
+
+	con, err := models.QueryContestByConId(id)
+	if err != nil {
+		this.Abort("500")
+	}
+
+
+	pro,err := models.QueryProblemByCid(con.ContestId)
+	if err != nil {
+		this.Abort("500")
+	}
+	var proids string
+	for _, v := range pro{
+		proids += strconv.Itoa(int(v.ProblemId))+","
+	}
+
+
+
+	month := map[string]int{
+		"January": 1,
+		"February": 2,
+		"March": 3,
+		"April": 4,
+		"May": 5,
+		"June": 6,
+		"July": 7,
+		"August": 8,
+		"September": 9,
+		"October": 10,
+		"November": 11,
+		"December": 12,
+	}
+	tnow := time.Now()
+	y := tnow.Year()
+	m := tnow.Month().String()
+	d := tnow.Day()
+	this.Data["year"] = y
+	this.Data["month"] = month[m]
+	this.Data["day"] = d
+	this.Data["con"] = con
+	this.Data["pids"] = proids
+	this.TplName = "admin/editContest.html"
+}
+
+
+
+// @router /contest/update [post]
+func (this *ContestController) ContestUpdatePost() {
 	title := this.GetMushString("title", "标题不能为空")
 	desc := this.GetMushString("desc", "竞赛描述不能为空")
 	proIds := this.GetMushString("proIds", "题目编号不能为空")
@@ -132,9 +221,6 @@ func (this *ContestController) ContestPage() {
 
 // @router /contest/cid/:id [get]
 func (this *ContestController) ContestCid() {
-	if !this.IsLogin {
-		this.Abort401(syserror.UnKnowError{})
-	}
 
 	this.Visible = true
 	req :=  this.Ctx.Request.RequestURI

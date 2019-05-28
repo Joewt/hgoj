@@ -279,11 +279,11 @@ func (this *ProblemController) ProblemAddPost() {
 	}
 	ok := mkdata(pid, "test.in", testinput,OJ_DATA)
 	if !ok {
-		this.JsonErr("syserror", syserror.FILE_WRITE_ERR,"/problem/add")
+		this.JsonErr("写入文件权限不足", syserror.FILE_WRITE_ERR,"/problem/add")
 	}
 	ok = mkdata(pid, "test.out", testoutput, OJ_DATA)
 	if !ok {
-		this.JsonErr("syserror", syserror.FILE_WRITE_ERR,"/problem/add")
+		this.JsonErr("写入文件权限不足", syserror.FILE_WRITE_ERR,"/problem/add")
 	}
 
 	this.JsonOK("添加题目成功", "/admin")

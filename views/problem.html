@@ -30,16 +30,16 @@
                                 <h5>题目 </h5>
                             </div>
                             <div class="ibox-content">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search for...">
-                                            <span class="input-group-btn">
-                                            <button class="btn btn-default" type="button">Go!</button>
-                                          </span>
-                                        </div><!-- /input-group -->
-                                    </div><!-- /.col-lg-6 -->
-                                </div>
+{{/*                                <div class="row">*/}}
+{{/*                                    <div class="col-lg-3">*/}}
+{{/*                                        <div class="input-group">*/}}
+{{/*                                            <input type="text" class="form-control" placeholder="Search for...">*/}}
+{{/*                                            <span class="input-group-btn">*/}}
+{{/*                                            <button class="btn btn-default" type="button">Go!</button>*/}}
+{{/*                                          </span>*/}}
+{{/*                                        </div><!-- /input-group -->*/}}
+{{/*                                    </div><!-- /.col-lg-6 -->*/}}
+{{/*                                </div>*/}}
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
@@ -47,7 +47,7 @@
 
                                             <th>题目编号</th>
                                             <th>标题 </th>
-                                            <th>来源 </th>
+{{/*                                            <th>来源 </th>*/}}
                                             <th>正确 </th>
                                             <th>提交 </th>
                                         </tr>
@@ -57,7 +57,7 @@
                                         <tr>
                                             <td>{{.ProblemId}}</td>
                                             <td><a href="problem/{{.ProblemId}}">{{.Title}}</a></td>
-                                            <td>{{.Source}}</td>
+{{/*                                            <td>{{.Source}}</td>*/}}
                                             <td>{{.Accepted}}</td>
                                             <td>{{.Submit}}</td>
                                         </tr>
