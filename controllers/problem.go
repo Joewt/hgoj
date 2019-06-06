@@ -88,7 +88,7 @@ func (this *ProblemController) Problem() {
 
 // @router /problem/edit/:id [get]
 func (this *ProblemController) ProblemEdit() {
-	if !this.IsAdmin || !this.IsTeacher{
+	if !this.IsAdmin && !this.IsTeacher{
 		this.Abort("401")
 	}
 	id := this.Ctx.Input.Param(":id")
@@ -102,25 +102,6 @@ func (this *ProblemController) ProblemEdit() {
 		this.Abort("401")
 		logs.Error(err)
 	}
-
-	//临时处理(读测试数据并展示)
-	baseDir := OJ_DATA+"/"+strconv.Itoa(int(ids))
-
-	testin := baseDir+"/test.in"
-	testout := baseDir+"/test.out"
-
-	in, err := ioutil.ReadFile(testin)
-	if err != nil {
-		this.Abort("401")
-	}
-
-	out, err := ioutil.ReadFile(testout)
-	if err != nil {
-		this.Abort("401")
-	}
-
-	pro.Input = string(in)
-	pro.Output = string(out)
 
 
 	this.Data["PRO"] = pro
@@ -136,9 +117,7 @@ func (this *ProblemController) ProblemUpdate() {
 	proId := this.GetString("proid")
 	temp ,err := strconv.Atoi(proId)
 	id := int32(temp)
-	//refer := this.Ctx.Request.Referer()
-	//re := regexp.MustCompile("")
-	//logs.Info(re.FindString(refer))
+
 	pro,err := models.QueryProblemById(id)
 	if err != nil {
 		this.JsonErr("问题未找到", syserror.PROBLEM_NOT_FOUND, "/problem/edit/"+proId)
@@ -153,25 +132,16 @@ func (this *ProblemController) ProblemUpdate() {
 	output := this.GetMushString("output", "output不能为空")
 	sampleinput := this.GetMushString("sampleinput", "sampleinput不能为空")
 	sampleoutput := this.GetMushString("sampleoutput", "sampleoutput不能为空")
-	testinput := this.GetMushString("testinput", "testinput不能为空")
-	testoutput := this.GetMushString("testoutput", "testoutput不能为空")
+
 	data := []string{title,memory,time,desc,input,output,sampleinput,sampleoutput}
 	ok, err := models.UpdateProblemById(id,data)
 	if !ok {
 		this.JsonErr("更新失败", syserror.UPDATE_PROBLEM_ERR, "problem/edit/"+proId)
 	}
 
-	pid := int64(id)
 
-	ok = mkdata(pid, "test.in", testinput,OJ_DATA)
-	if !ok {
-		this.JsonErr("syserror", syserror.FILE_WRITE_ERR,"/problem/add")
-	}
-	ok = mkdata(pid, "test.out", testoutput, OJ_DATA)
-	if !ok {
-		this.JsonErr("syserror", syserror.FILE_WRITE_ERR,"/problem/add")
-	}
-	this.JsonOK("更新成功", "/problem/list")
+
+	this.JsonOK("更新成功", "/problem/"+proId)
 }
 
 
