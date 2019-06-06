@@ -88,7 +88,7 @@ func (this *ProblemController) Problem() {
 
 // @router /problem/edit/:id [get]
 func (this *ProblemController) ProblemEdit() {
-	if !this.IsAdmin && !this.IsTeacher{
+	if !this.IsAdmin || !this.IsTeacher{
 		this.Abort("401")
 	}
 	id := this.Ctx.Input.Param(":id")
