@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"time"
+
 	//"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/tools"
@@ -126,15 +128,15 @@ func (this *ProblemController) ProblemUpdate() {
 
 	title := this.GetMushString("title", "标题不能为空")
 	memory := this.GetMushString("memory", "限制内存不能为空")
-	time := this.GetMushString("time", "限制时间不能为空")
+	rtime := this.GetMushString("time", "限制时间不能为空")
 	desc := this.GetMushString("desc", "描述不能为空")
 	input := this.GetMushString("input", "input不能为空")
 	output := this.GetMushString("output", "output不能为空")
 	sampleinput := this.GetMushString("sampleinput", "sampleinput不能为空")
 	sampleoutput := this.GetMushString("sampleoutput", "sampleoutput不能为空")
-
-	data := []string{title,memory,time,desc,input,output,sampleinput,sampleoutput}
-	ok, err := models.UpdateProblemById(id,data)
+	inDate := time.Now()
+	data := []string{title,rtime,memory,desc,input,output,sampleinput,sampleoutput}
+	ok, err := models.UpdateProblemById(id,data,inDate)
 	if !ok {
 		this.JsonErr("更新失败", syserror.UPDATE_PROBLEM_ERR, "problem/edit/"+proId)
 	}
@@ -234,7 +236,7 @@ func (this *ProblemController) ProblemListPage() {
 func (this *ProblemController) ProblemAddPost() {
 	title := this.GetMushString("title", "标题不能为空")
 	memory := this.GetMushString("memory", "限制内存不能为空")
-	time := this.GetMushString("time", "限制时间不能为空")
+	rtime := this.GetMushString("time", "限制时间不能为空")
 	desc := this.GetMushString("desc", "描述不能为空")
 	input := this.GetMushString("input", "input不能为空")
 	output := this.GetMushString("output", "output不能为空")
@@ -242,8 +244,9 @@ func (this *ProblemController) ProblemAddPost() {
 	sampleoutput := this.GetMushString("sampleoutput", "sampleoutput不能为空")
 	testinput := this.GetMushString("testinput", "testinput不能为空")
 	testoutput := this.GetMushString("testoutput", "testoutput不能为空")
-
-	pid, err := models.AddProblem(title,time,memory,desc,input,output,sampleinput,sampleoutput)
+	inDate := time.Now()
+	data := []string{title,rtime,memory,desc,input,output,sampleinput,sampleoutput}
+	pid, err := models.AddProblem(data,inDate)
 	if err != nil {
 		this.JsonErr("更新失败", syserror.ADD_PROBLEM_ERR, "/problem/add")
 	}

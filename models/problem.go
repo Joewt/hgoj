@@ -21,7 +21,7 @@ type Problem struct {
 	Spj				string		`orm:"type(char);size(1);default(0)"`
 	Hint			string		`orm:"type(text);null"`
 	Source			string		`orm:"size(100);null"`
-	InDate			time.Time	`orm:"null"`
+	InDate			time.Time	`orm:"default(null);auto_now_add;type(datetime);null"`
 	TimeLimit		int32		`orm:"default(0)"`
 	MemoryLimit		int32		`orm:"default(0)"`
 	Defunct			string		`orm:"type(char);size(1);default(N)"`
@@ -99,7 +99,7 @@ func QueryProblemById(id int32) (Problem, error) {
 }
 
 
-func AddProblem(data ...string) (int64,error) {
+func AddProblem(data []string,inDate time.Time) (int64,error) {
 	var pro Problem
 	pro.Title = data[0]
 	pro.TimeLimit = stringToint32(data[1])
@@ -109,7 +109,7 @@ func AddProblem(data ...string) (int64,error) {
 	pro.Output = data[5]
 	pro.SampleInput = data[6]
 	pro.SampleOutput = data[7]
-	pro.InDate = time.Now()
+	pro.InDate = inDate
 	pro.Defunct = "Y"
 
 	pid, err := DB.Insert(&pro)
@@ -120,7 +120,7 @@ func AddProblem(data ...string) (int64,error) {
 }
 
 
-func UpdateProblemById(id int32, data []string) (bool,error) {
+func UpdateProblemById(id int32, data []string,inDate time.Time) (bool,error) {
 	pro := Problem{ProblemId:id}
 	if DB.Read(&pro) == nil {
 		pro.Title = data[0]
@@ -131,7 +131,7 @@ func UpdateProblemById(id int32, data []string) (bool,error) {
 		pro.Output = data[5]
 		pro.SampleInput = data[6]
 		pro.SampleOutput = data[7]
-		pro.InDate = time.Now()
+		pro.InDate = inDate
 		if num, err := DB.Update(&pro); err == nil {
 			logs.Info(num)
 			return true, err
