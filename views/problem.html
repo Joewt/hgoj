@@ -54,6 +54,7 @@
                                         </thead>
                                         <tbody>
                                         {{range .problems}}
+                                        {{if eq .Defunct "N"}}
                                         <tr>
                                             <td>{{.ProblemId}}</td>
                                             <td><a href="problem/{{.ProblemId}}">{{.Title}}</a></td>
@@ -61,6 +62,7 @@
                                             <td>{{.Accepted}}</td>
                                             <td>{{.Submit}}</td>
                                         </tr>
+                                        {{end}}
                                         {{end}}
                                         </tbody>
                                     </table>

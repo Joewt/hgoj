@@ -147,6 +147,22 @@ func (this *ProblemController) ProblemUpdate() {
 }
 
 
+// @router /problem/updatestatus [post]
+func (this *ProblemController) ProblemUpdateStatus() {
+	if !this.IsAdmin{
+		this.Abort("401")
+	}
+
+	temp := this.GetString("proid")
+	pid, _ := tools.StringToInt32(temp)
+	if ok := models.UpdateProStatus(pid); !ok {
+		this.JsonErr("失败",16001,"")
+	}
+
+	this.JsonOK("成功","")
+}
+
+
 // @router /problem/add [get]
 func (this *ProblemController) ProblemAdd() {
 	if !this.IsAdmin && !this.IsTeacher{

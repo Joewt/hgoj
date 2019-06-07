@@ -61,6 +61,23 @@ func QueryPageProblem(start ,pageSize int) ([]*Problem, int64,int64, error) {
 }
 
 
+func UpdateProStatus(pid int32) (bool) {
+	pro := Problem{ProblemId:pid}
+	if DB.Read(&pro) == nil {
+		if pro.Defunct == "Y" {
+			pro.Defunct = "N"
+		} else {
+			pro.Defunct = "Y"
+		}
+		if num, err := DB.Update(&pro); err == nil {
+			logs.Info(num)
+			return true
+		}
+	}
+	return false
+}
+
+
 func QueryUserProblem(uid int32) ([]*Problem, int64, error) {
 	var data []*Solution
 	Solutions := new(Solution)
@@ -110,7 +127,7 @@ func AddProblem(data []string,inDate time.Time) (int64,error) {
 	pro.SampleInput = data[6]
 	pro.SampleOutput = data[7]
 	pro.InDate = inDate
-	pro.Defunct = "Y"
+	pro.Defunct = "N"
 
 	pid, err := DB.Insert(&pro)
 	if err != nil {

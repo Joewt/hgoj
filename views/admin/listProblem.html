@@ -35,10 +35,10 @@
 
                                     <td>{{.InDate}}</td>
 
-                                    {{if eq .Defunct "Y"}}
-                                    <td><button type="button" class="btn btn-sm btn-success " data-proid="{{.ProblemId}}">{{.Defunct}}</button></td>
+                                    {{if eq .Defunct "N"}}
+                                    <td><button type="button" class="btn btn-sm btn-success pro-status" data-proid="{{.ProblemId}}">可使用</button></td>
                                     {{else}}
-                                        <td><button type="button" class="btn btn-sm btn-danger" data-proid="{{.ProblemId}}">{{.Defunct}}</button></td>
+                                        <td><button type="button" class="btn btn-sm btn-danger pro-status" data-proid="{{.ProblemId}}">不可使用</button></td>
                                     {{end}}
                                     <td><button type="button" class="btn btn-sm btn-danger del" data-proid="{{.ProblemId}}">del</button></td>
                                     <td><button type="button" class="btn btn-sm btn-info edit" data-proid="{{.ProblemId}}">edit</button></td>
@@ -136,6 +136,26 @@
                 maxmin: true,
                 content: '/problem/editdata/'+proid
             });
+        })
+
+        $('.pro-status').on('click',function(){
+            var _this = $(this);
+            var proid = _this.attr('data-proid');
+            var data = {
+                proid: proid
+            };
+            $.post("/problem/updatestatus", data, function (res) {
+                // alert(_form.serialise());
+                if (res.code) {
+                    layer.msg(res.msg);
+                }
+
+                if (res.code === 0) {
+                    layer.msg('更改状态成功');
+                    setTimeout("location.reload()",1000);
+
+                }
+            }, 'json');
         })
     });
 
