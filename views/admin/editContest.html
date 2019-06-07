@@ -11,15 +11,16 @@
             </div>
             <form class="ibox-content">
                 <div class="form-horizontal" id="form-data">
+                    <input type="text" name="cid" value="{{.con.ContestId}}" hidden>
                     <div class="form-group"><label class="col-sm-2 control-label">标题</label>
                         <div class="col-sm-10"><input type="text" class="form-control data-pro" name="title" value="{{.con.Title}}"></div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group"><label class="col-sm-2 control-label">竞赛开始时间</label>
                         <div class="col-sm-10">
-                            日期:<input class="datepicker" data-date-format="yyyy-mm-dd" value="{{.year}}-{{.month}}-{{.day}}" name="starttime[0]">
-                            时:<input type="number" value="9" name="starttime[1]">
-                            分:<input type="number" value="00" name="starttime[2]">
+                            日期:<input class="datepicker" data-date-format="yyyy-mm-dd" value="{{array_get .starttime 0}}-{{array_get .starttime 1}}-{{array_get .starttime 2}}" name="starttime[0]">
+                            时:<input type="number" value="{{array_get .starttime 3}}" name="starttime[1]">
+                            分:<input type="number" value="{{array_get .starttime 4}}" name="starttime[2]">
                         </div>
                     </div>
 
@@ -28,9 +29,9 @@
                     <div class="form-group"><label class="col-sm-2 control-label">竞赛结束时间</label>
 
                         <div class="col-sm-10">
-                            日期:<input class="datepicker" data-date-format="yyyy-mm-dd"  value="{{.year}}-{{.month}}-{{.day}}" name="endtime[0]">
-                            时:<input type="number" value="14" name="endtime[1]">
-                            分:<input type="number" value="00" name="endtime[2]">
+                            日期:<input class="datepicker" data-date-format="yyyy-mm-dd"  value="{{array_get .endtime 0}}-{{array_get .endtime 1}}-{{array_get .endtime 2}}" name="endtime[0]">
+                            时:<input type="number" value="{{array_get .endtime 3}}" name="endtime[1]">
+                            分:<input type="number" value="{{array_get .endtime 4}}" name="endtime[2]">
                         </div>
                     </div>
 

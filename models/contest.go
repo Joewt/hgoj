@@ -67,6 +67,62 @@ func ContestAdd(title, desc,proIds,role,limituser string,startTime, endTime time
 }
 
 
+
+func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime, endTime time.Time) (int32, error) {
+	err := DB.Begin()
+	var con Contest
+	con.Title = title
+	con.StartTime = startTime
+	con.EndTime = endTime
+	con.Defunct = "Y"
+	con.Description = desc
+	con.Password = role
+	con.Password = ""
+	logs.Info("问题为：", proIds)
+
+	_, err2 := DB.Update(&con,"title","start_time","end_time","defunct","description","password")
+
+	temp := strings.Split(proIds,",")
+
+	conPro := []ContestProblem{}
+	for _,v := range temp {
+		proId,err3 := strconv.Atoi(v)
+		if err3 != nil {
+			_ = DB.Rollback()
+			return 0, err3
+		}
+		pro := Problem{ProblemId:int32(proId)}
+		if DB.Read(&pro) != nil {
+			_ = DB.Rollback()
+			return 0, syserror.NoProError{}
+		}
+		if ok := QueryConProByPidCid(int32(proId),cid); ok {
+			conPro = append(conPro, ContestProblem{ProblemId: int32(proId), ContestId: cid})
+		}
+	}
+
+	_, err1 := DB.InsertMulti(4, conPro)
+
+	if err2 != nil ||  err1 != nil {
+		err = DB.Rollback()
+		return 0, err
+	}
+
+	err = DB.Commit()
+	return cid, nil
+}
+
+
+func QueryConProByPidCid(pid,cid int32) (bool) {
+	pb := ContestProblem{ProblemId: pid,ContestId:cid}
+	err := DB.Read(&pb, "ProblemId","ContestId")
+	if err != nil {
+		return true
+	}
+	return false
+}
+
+
 func QueryAllContest()([]*Contest,int64, error) {
 	var con []*Contest
 	contest := new(Contest)

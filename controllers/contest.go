@@ -136,12 +136,12 @@ func (this *IndexController) ContestUpdate() {
 		this.Abort("500")
 	}
 	var proids string
+	var tempstr []string
 	for _, v := range pro{
-		proids += strconv.Itoa(int(v.ProblemId))+","
+		tempstr = append(tempstr,strconv.Itoa(int(v.ProblemId)))
 	}
 
-
-
+	proids = strings.Join(tempstr,",")
 	month := map[string]int{
 		"January": 1,
 		"February": 2,
@@ -156,13 +156,27 @@ func (this *IndexController) ContestUpdate() {
 		"November": 11,
 		"December": 12,
 	}
-	tnow := time.Now()
-	y := tnow.Year()
-	m := tnow.Month().String()
-	d := tnow.Day()
-	this.Data["year"] = y
-	this.Data["month"] = month[m]
-	this.Data["day"] = d
+	tstart := con.StartTime
+	tend := con.EndTime
+	sy := tstart.Year()
+	sm := month[tstart.Month().String()]
+	sd := tstart.Day()
+	sh := tstart.Hour()
+	smi := tstart.Minute()
+
+	startTimes := []int{sy,sm,sd,sh,smi}
+
+
+	ey := tend.Year()
+	em := month[tend.Month().String()]
+	ed := tend.Day()
+	eh := tend.Hour()
+	emi := tend.Minute()
+
+	endTimes := []int{ey,em,ed,eh,emi}
+
+	this.Data["starttime"] = startTimes
+	this.Data["endtime"] = endTimes
 	this.Data["con"] = con
 	this.Data["pids"] = proids
 	this.TplName = "admin/editContest.html"
@@ -172,6 +186,8 @@ func (this *IndexController) ContestUpdate() {
 
 // @router /contest/update [post]
 func (this *ContestController) ContestUpdatePost() {
+	id := this.GetMushString("cid", "error")
+	cid,_ := tools.StringToInt32(id)
 	title := this.GetMushString("title", "标题不能为空")
 	desc := this.GetMushString("desc", "竞赛描述不能为空")
 	proIds := this.GetMushString("proIds", "题目编号不能为空")
@@ -191,13 +207,13 @@ func (this *ContestController) ContestUpdatePost() {
 	if endTime.Sub(startTime).Seconds() < 0 {
 		this.JsonErr("时间错误",6010,"")
 	}
-	cid, err := models.ContestAdd(title, desc, proIds, role, limituser, startTime,endTime)
+	_, err := models.ContestUpdate(cid,title, desc, proIds, role, limituser, startTime,endTime)
 
 	if err != nil {
 		this.JsonErr(err.Error(),6001, "/contest/add")
 	}
 	temp := strconv.Itoa(int(cid))
-	this.JsonOK("添加比赛成功","/contest/cid/"+temp)
+	this.JsonOK("更新比赛成功","/contest/cid/"+temp)
 }
 
 

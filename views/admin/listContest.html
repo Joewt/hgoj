@@ -50,12 +50,13 @@
                                             <div style="width: {{cal_rate .StartTime .EndTime}}%;" class="progress-bar"></div>
                                         </div>
                                     </td>
-                                    <td class="project-people">
+                                    <td class="project-actions">
 
                                     </td>
                                     <td class="project-actions">
-                                        <a href="/contest/cid/{{.ContestId}}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
-{{/*                                        <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>*/}}
+{{/*                                        <a href="/contest/cid/{{.ContestId}}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>*/}}
+                                        <a href="/contest/update/{{.ContestId}}" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+
                                     </td>
                                 </tr>
                                 {{end}}

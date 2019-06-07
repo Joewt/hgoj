@@ -116,4 +116,9 @@ func initTemplate() {
 		ts := strconv.Itoa(s)
 		return th+":"+tm+":"+ts
 	})
+
+	_ = beego.AddFuncMap("array_get", func(arr []int,i int)(int){
+		return arr[i]
+	})
+
 }
