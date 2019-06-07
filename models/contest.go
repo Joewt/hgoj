@@ -30,7 +30,7 @@ func ContestAdd(title, desc,proIds,role,limituser string,startTime, endTime time
 	con.Title = title
 	con.StartTime = startTime
 	con.EndTime = endTime
-	con.Defunct = "Y"
+	con.Defunct = "N"
 	con.Description = desc
 	con.Password = role
 	con.Password = ""
@@ -74,7 +74,7 @@ func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime,
 	con.Title = title
 	con.StartTime = startTime
 	con.EndTime = endTime
-	con.Defunct = "Y"
+	con.Defunct = "N"
 	con.Description = desc
 	con.Password = role
 	con.Password = ""
@@ -110,6 +110,23 @@ func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime,
 
 	err = DB.Commit()
 	return cid, nil
+}
+
+
+func UpdateContestStatus(cid int32) (bool) {
+	con := Contest{ContestId:cid}
+	if DB.Read(&con) == nil {
+		if con.Defunct == "Y" {
+			con.Defunct = "N"
+		} else {
+			con.Defunct = "Y"
+		}
+		if num, err := DB.Update(&con); err == nil {
+			logs.Info(num)
+			return true
+		}
+	}
+	return false
 }
 
 

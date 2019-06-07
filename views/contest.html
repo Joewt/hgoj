@@ -46,6 +46,7 @@
                                         </thead>
                                         <tbody>
                                         {{range .con}}
+                                        {{if eq .Defunct "N"}}
                                             <tr>
                                                 <td>{{.ContestId}}</td>
                                                 <td><a href="/contest/cid/{{.ContestId}}">{{.Title}}</a></td>
@@ -53,6 +54,7 @@
                                                 <td>{{if .Private}}私有{{else}}公开{{end}}</td>
                                                 <td>admin</td>
                                             </tr>
+                                        {{end}}
                                         {{end}}
                                         </tbody>
                                     </table>

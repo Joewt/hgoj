@@ -323,6 +323,23 @@ func (this *ProblemController) ProblemContest() {
 }
 
 
+
+// @router /contest/updatestatus [post]
+func (this *ContestController) ContestUpdateStatus() {
+	if !this.IsAdmin{
+		this.Abort("401")
+	}
+
+	temp := this.GetString("conid")
+	pid, _ := tools.StringToInt32(temp)
+	if ok := models.UpdateContestStatus(pid); !ok {
+		this.JsonErr("失败",16002,"")
+	}
+
+	this.JsonOK("成功","")
+}
+
+
 // @router /contest/list [get]
 func (this *ContestController) ContestList() {
 	if !this.IsAdmin && !this.IsTeacher{

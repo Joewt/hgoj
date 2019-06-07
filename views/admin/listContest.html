@@ -53,8 +53,14 @@
                                     <td class="project-actions">
 
                                     </td>
+                                    {{if eq .Defunct "N"}}
+                                        <td><button type="button" class="btn btn-sm btn-success pro-status" data-conid="{{.ContestId}}">可使用</button></td>
+                                    {{else}}
+                                        <td><button type="button" class="btn btn-sm btn-danger pro-status" data-conid="{{.ContestId}}">不可使用</button></td>
+                                    {{end}}
                                     <td class="project-actions">
-{{/*                                        <a href="/contest/cid/{{.ContestId}}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>*/}}
+
+
                                         <a href="/contest/update/{{.ContestId}}" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
 
                                     </td>
@@ -132,6 +138,25 @@
             var proid = _this.attr('data-proid');
             window.location.href="/problem/edit/"+proid;
         });
+
+        $('.pro-status').on('click',function(){
+            var _this = $(this);
+            var conid = _this.attr('data-conid');
+            var data = {
+                conid: conid
+            };
+            $.post("/contest/updatestatus", data, function (res) {
+                if (res.code) {
+                    layer.msg(res.msg);
+                }
+
+                if (res.code === 0) {
+                    layer.msg('更改状态成功');
+                    setTimeout("location.reload()",1000);
+
+                }
+            }, 'json');
+        })
     });
 
 
