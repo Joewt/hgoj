@@ -3,6 +3,7 @@ package tools
 import (
 	"fmt"
 	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/toolbox"
 	"io/ioutil"
 	"os"
 	"syscall"
@@ -10,15 +11,15 @@ import (
 )
 
 func StartCron() {
-
-	t1 := time.NewTimer(time.Second * 3600)
-	for {
-		select {
-		case <-t1.C:
-			t1.Reset(time.Second * 3600)
-			clearDownData()
-		}
+	tk := toolbox.NewTask("clearDownData", "0 0 */1 * * *", func() error { clearDownData(); return nil })
+	err := tk.Run()
+	if err != nil {
+		fmt.Println(err)
 	}
+	toolbox.AddTask("clearDownData", tk)
+	toolbox.StartTask()
+	//time.Sleep(6 * time.Second)
+	//toolbox.StopTask()
 }
 
 
