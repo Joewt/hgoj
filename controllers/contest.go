@@ -459,9 +459,13 @@ func (this *ContestController) ContestStatusPage() {
 	pageNo = pageNo - 1
 	start := int(pageNo)*pageStatusSize
 	id, _ := tools.StringToInt32(cid)
+	var ContestSolu []*ContestSolution
 	data,RESULT,_,totalNum,err := models.QueryPageSolutionByCid(id,start,pageStatusSize)
 	if err != nil {
 		logs.Error(err)
+	}
+	for i,v := range data {
+		ContestSolu = append(ContestSolu,&ContestSolution{tools.CONTEST_PRO_KEY[i],*v})
 	}
 
 	isPage, pagePrev,pageNext := PageCal(totalNum,pageNo,pageStatusSize)
@@ -470,7 +474,7 @@ func (this *ContestController) ContestStatusPage() {
 	this.Data["pagePrev"] = pagePrev
 	this.Data["pageNext"] = pageNext
 	this.Data["conid"] = cid
-	this.Data["data"] = data
+	this.Data["data"] = ContestSolu
 	this.Data["RES"] = RESULT
 	this.TplName = "contest/statusContest.html"
 }

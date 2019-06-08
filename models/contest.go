@@ -14,8 +14,8 @@ import (
 type Contest struct {
 	ContestId	int32		`orm:"auto"`
 	Title		string		`orm:"null"`
-	StartTime	time.Time	`orm:"default(null);auto_now_add;type(datetime);null"`
-	EndTime		time.Time	`orm:"default(null);auto_now_add;type(datetime);null"`
+	StartTime	time.Time	`orm:"default(null);auto_now;type(datetime);null"`
+	EndTime		time.Time	`orm:"default(null);auto_now;type(datetime);null"`
 	Defunct		string		`orm:"type(char);size(1);default(N)"`
 	Description string		`orm:"type(text);null"`
 	Private		uint8		`orm:"type(4);default(0)"`
@@ -25,7 +25,7 @@ type Contest struct {
 }
 
 
-func ContestAdd(title, desc,proIds,role,limituser string,startTime, endTime time.Time,uid int32) (int32, error) {
+func ContestAdd(title, desc,proIds,role,limituser string,startTime time.Time, endTime time.Time,uid int32) (int32, error) {
 	err := DB.Begin()
 	var con Contest
 	con.Title = title
@@ -70,9 +70,9 @@ func ContestAdd(title, desc,proIds,role,limituser string,startTime, endTime time
 
 
 
-func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime, endTime time.Time) (int32, error) {
+func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime time.Time, endTime time.Time) (int32, error) {
 	err := DB.Begin()
-	var con Contest
+	con := Contest{ContestId:cid}
 	con.Title = title
 	con.StartTime = startTime
 	con.EndTime = endTime
@@ -80,9 +80,8 @@ func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime,
 	con.Description = desc
 	con.Password = role
 	con.Password = ""
-	logs.Info("问题为：", proIds)
 
-	_, err2 := DB.Update(&con,"title","start_time","end_time","defunct","description","password")
+	_, err2 := DB.Update(&con,"title","start_time","defunct","description","password","end_time")
 
 	temp := strings.Split(proIds,",")
 
@@ -91,13 +90,11 @@ func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime,
 		proId,err3 := strconv.Atoi(v)
 		if err3 != nil {
 			_ = DB.Rollback()
-			logs.Error("strconv转换",err3)
 			return 0, err3
 		}
 		pro := Problem{ProblemId:int32(proId)}
 		if DB.Read(&pro) != nil {
 			_ = DB.Rollback()
-			logs.Error("读取problem",pro)
 			return 0, syserror.NoProError{}
 		}
 		if ok := QueryConProByPidCid(int32(proId),cid); ok {
@@ -107,7 +104,6 @@ func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime,
 
 	_, err1 := DB.InsertMulti(4, conPro)
 
-	logs.Info("插入报错了-",err1,conPro,err2,err)
 
 	if (len(conPro) > 0 && err1 != nil) ||  err2 != nil {
 		err = DB.Rollback()
