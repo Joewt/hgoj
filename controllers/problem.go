@@ -143,7 +143,7 @@ func (this *ProblemController) ProblemUpdate() {
 
 
 
-	this.JsonOK("更新成功", "/problem/"+proId)
+	this.JsonOK("更新成功", "/problem/list")
 }
 
 
@@ -258,37 +258,58 @@ func (this *ProblemController) ProblemAddPost() {
 	output := this.GetMushString("output", "output不能为空")
 	sampleinput := this.GetMushString("sampleinput", "sampleinput不能为空")
 	sampleoutput := this.GetMushString("sampleoutput", "sampleoutput不能为空")
-	testinput := this.GetMushString("testinput", "testinput不能为空")
-	testoutput := this.GetMushString("testoutput", "testoutput不能为空")
+	filename := this.GetMushString("filename","未上传测试数据")
 	inDate := time.Now()
 	data := []string{title,rtime,memory,desc,input,output,sampleinput,sampleoutput}
 	pid, err := models.AddProblem(data,inDate)
 	if err != nil {
 		this.JsonErr("更新失败", syserror.ADD_PROBLEM_ERR, "/problem/add")
 	}
-	ok := mkdata(pid, "test.in", testinput,OJ_DATA)
-	if !ok {
-		this.JsonErr("写入文件权限不足", syserror.FILE_WRITE_ERR,"/problem/add")
+	testDataDir := OJ_DATA+"/"+strconv.Itoa(int(pid))+"/"
+	zipDataDir := OJ_DATA+"/"+filename
+	err1 := tools.DeCompress(zipDataDir, testDataDir)
+	if err1 != nil {
+		logs.Error(err1)
+		if ok := models.DelProblemById(int32(pid)); ok {
+			logs.Error("delete err problem")
+		}
+		this.JsonErr("系统错误",2300,"")
 	}
-	ok = mkdata(pid, "test.out", testoutput, OJ_DATA)
-	if !ok {
-		this.JsonErr("写入文件权限不足", syserror.FILE_WRITE_ERR,"/problem/add")
+	err2 := os.Remove(zipDataDir)
+	if err2 != nil {
+		logs.Error(err2)
+		if ok := models.DelProblemById(int32(pid)); ok {
+			logs.Error("delete err problem")
+		}
+		this.JsonErr("系统错误",2300,"")
 	}
-
-	this.JsonOK("添加题目成功", "/admin")
+	this.JsonOK("添加题目成功", "/problem/list")
 }
 
 
 // @router /problem/fileupload [post]
 func (this *ProblemController) Fileupload() {
-	logs.Info(this.Ctx.Request)
-	f, h, err := this.GetFile("testcase")
-	logs.Info(h.Filename)
+	if !this.IsAdmin && !this.IsTeacher {
+		this.Abort("401")
+	}
+	//key := tools.MD5(time.Now().String())
+	f, h, err := this.GetFile("file")
+	if h.Filename != "data.zip" {
+		this.JsonErr("文件名错误,请上传zip压缩包并命名为data.zip",2400,"")
+	}
+
 	if err != nil {
 		logs.Error("error:--- ",err)
 	}
 	defer f.Close()
-	this.SaveToFile("testcase", "/Users/joe/go/src/github.com/yinrenxin/hgoj/static/upload/" + h.Filename)
+	this.SaveToFile("file", OJ_DATA +"/"+h.Filename)
+
+	data := MAP_H{
+		//"key":key,
+		"filename":h.Filename,
+	}
+	this.JsonOKH("上传成功",data)
+
 }
 
 func mkdata(pid int64, filename string, input string, oj_data string) bool {

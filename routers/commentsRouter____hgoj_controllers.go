@@ -135,6 +135,24 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"],
         beego.ControllerComments{
+            Method: "ContestUpdatePost",
+            Router: `/contest/update`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"],
+        beego.ControllerComments{
+            Method: "ContestUpdateStatus",
+            Router: `/contest/updatestatus`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ContestController"],
+        beego.ControllerComments{
             Method: "ContestRank",
             Router: `/contestrank/cid/:cid`,
             AllowHTTPMethods: []string{"get"},
@@ -164,6 +182,15 @@ func init() {
         beego.ControllerComments{
             Method: "IndexContest",
             Router: `/contest`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:IndexController"],
+        beego.ControllerComments{
+            Method: "ContestUpdate",
+            Router: `/contest/update/:cid`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
@@ -335,6 +362,15 @@ func init() {
         beego.ControllerComments{
             Method: "ProblemUpdate",
             Router: `/problem/update`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"] = append(beego.GlobalControllerRouter["github.com/yinrenxin/hgoj/controllers:ProblemController"],
+        beego.ControllerComments{
+            Method: "ProblemUpdateStatus",
+            Router: `/problem/updatestatus`,
             AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,

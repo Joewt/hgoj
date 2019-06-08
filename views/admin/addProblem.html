@@ -53,13 +53,11 @@
                         <div class="col-sm-10"><textarea class="data-pro" placeholder=""  rows="10" cols="60" name="sampleoutput"></textarea></div>
                     </div>
 
-                    <div class="form-group"><label class="col-sm-2 control-label">Test Input</label>
-                        <div class="col-sm-10"><textarea class="data-pro" placeholder=""  rows="10" cols="60" name="testinput"></textarea></div>
+                    <div class="form-group"><label class="col-sm-2 control-label">上传测试数据</label>
+                        <button type="button" class="layui-btn layui-btn-primary" id="test4"><i class="layui-icon"></i>只允许压缩文件</button>
+                        <input type="text" class="form-control data-pro hidden" id="filename" name="filename" value="">
                     </div>
 
-                    <div class="form-group"><label class="col-sm-2 control-label">Test Output</label>
-                        <div class="col-sm-10"><textarea class="data-pro" placeholder=""  rows="10" cols="60" name="testoutput"></textarea></div>
-                    </div>
 
 
 
@@ -81,7 +79,6 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-white" type="submit">Cancel</button>
                             <button class="btn btn-primary" type="button" id="submitpro">提交</button>
                         </div>
                     </div>
@@ -110,6 +107,7 @@
 <script type="text/javascript" src="/js/plugins/bootstrap-markdown/bootstrap-markdown.js"></script>
 <script type="text/javascript" src="/js/plugins/bootstrap-markdown/markdown.js"></script>
 <script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
+<script type="text/javascript" src="/js/plugins/layui/layui.js"></script>
 
 
 <script>
@@ -125,6 +123,7 @@
         $('#submitpro').on('click', function(){
             var _this = $(this);
             var _form = _this.parents('form');
+            console.log(_form.serialize());
             $.post("/problem/add", _form.serialize(),function(res){
                 // alert(_form.serialise());
                 if(res.code){
@@ -132,55 +131,30 @@
                 }
 
                 if(res.code === 0) {
-                    window.location.href="/admin";
+                    window.location.href=res.action;
                 }
             }, 'json');
 
 
         });
 
-        $("#upload").on('click',function(){
-            var formData = new FormData();
-            console.log($("#file"));
-            formData.append('file', $("#file")[0].files[0]);
-            $.ajax({
-                url: '/problem/fileupload',
-                type: 'POST',
-                cache: false,
-                data: formData,
-                processData: false,
-                contentType: false
-            }).done(function(res) {
-            }).fail(function(res) {});
+
+
+        layui.use('upload', function(){
+            var upload = layui.upload;
+
+            upload.render({ //允许上传的文件后缀
+                elem: '#test4'
+                ,url: '/problem/fileupload'
+                ,accept: 'file' //普通文件
+                ,exts: 'zip' //只允许上传压缩文件
+                ,done: function(res){
+                    layer.msg(res.msg);
+                    $("#filename").attr("value", res.filename);
+                    console.log(res.filename)
+                }
+            });
         });
-
-
-
-
-        // $('#file-upload').on('change',function(){
-        //
-        //    var _this = $(this);
-        //    var fileData = _this[0].files[0];
-        //    //  var fileData = _this.parent();
-        //
-        //    var form = new FormData();
-        //    form.append("file",fileData);
-        //    form.append("name",_this.val());
-        //     $.ajax({
-        //         url:"/problem/fileupload",
-        //         type:"post",
-        //         data:form,
-        //         processData:false,
-        //         contentType:false,
-        //         success:function(data){
-        //             console.log("over..");
-        //         },
-        //         error:function(e){
-        //             alert("错误！！");
-        //             window.clearInterval(timer);
-        //         }
-        //     });
-        // });
 
 
     });
