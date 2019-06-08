@@ -21,10 +21,11 @@ type Contest struct {
 	Private		uint8		`orm:"type(4);default(0)"`
 	Langmask	int			`orm:"default(0);description:(bits for LANG to mask)"`
 	Password	string		`orm:"type(char);size(16);"`
+	UserId      int32       `orm:"null"`
 }
 
 
-func ContestAdd(title, desc,proIds,role,limituser string,startTime, endTime time.Time) (int32, error) {
+func ContestAdd(title, desc,proIds,role,limituser string,startTime, endTime time.Time,uid int32) (int32, error) {
 	err := DB.Begin()
 	var con Contest
 	con.Title = title
@@ -34,6 +35,7 @@ func ContestAdd(title, desc,proIds,role,limituser string,startTime, endTime time
 	con.Description = desc
 	con.Password = role
 	con.Password = ""
+	con.UserId = uid
 	logs.Info("问题为：", proIds)
 
 	cid, err2 := DB.Insert(&con)

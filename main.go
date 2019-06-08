@@ -117,6 +117,16 @@ func initTemplate() {
 		return th+":"+tm+":"+ts
 	})
 
+	_ = beego.AddFuncMap("Correctness_rate",func(i float64)(int){
+		return int(i*100)
+	})
+
+
+	_ = beego.AddFuncMap("uidToUname",func(uid int32)(string){
+		user,_ := models.QueryUserById(uid)
+		return user.Nick
+	})
+
 	_ = beego.AddFuncMap("array_get", func(arr []int,i int)(int){
 		return arr[i]
 	})

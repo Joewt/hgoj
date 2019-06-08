@@ -52,7 +52,7 @@
                                                 <td><a href="/contest/cid/{{.ContestId}}">{{.Title}}</a></td>
                                                 <td>{{if is_finish .StartTime .EndTime}}已结束{{else}}进行中{{end}}@{{.EndTime}}</td>
                                                 <td>{{if .Private}}私有{{else}}公开{{end}}</td>
-                                                <td>admin</td>
+                                                <td>{{uidToUname .UserId}}</td>
                                             </tr>
                                         {{end}}
                                         {{end}}

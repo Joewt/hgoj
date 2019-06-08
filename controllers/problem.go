@@ -90,7 +90,7 @@ func (this *ProblemController) Problem() {
 
 // @router /problem/edit/:id [get]
 func (this *ProblemController) ProblemEdit() {
-	if !this.IsAdmin && !this.IsTeacher{
+	if !this.IsAdmin{
 		this.Abort("401")
 	}
 	id := this.Ctx.Input.Param(":id")
@@ -113,7 +113,7 @@ func (this *ProblemController) ProblemEdit() {
 
 // @router /problem/update [post]
 func (this *ProblemController) ProblemUpdate() {
-	if !this.IsAdmin && !this.IsTeacher{
+	if !this.IsAdmin{
 		this.Abort("401")
 	}
 	proId := this.GetString("proid")
@@ -165,7 +165,7 @@ func (this *ProblemController) ProblemUpdateStatus() {
 
 // @router /problem/add [get]
 func (this *ProblemController) ProblemAdd() {
-	if !this.IsAdmin && !this.IsTeacher{
+	if !this.IsAdmin{
 		this.Abort("401")
 	}
 	this.TplName = "admin/addProblem.html"
@@ -250,6 +250,9 @@ func (this *ProblemController) ProblemListPage() {
 
 // @router /problem/add [post]
 func (this *ProblemController) ProblemAddPost() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
 	title := this.GetMushString("title", "标题不能为空")
 	memory := this.GetMushString("memory", "限制内存不能为空")
 	rtime := this.GetMushString("time", "限制时间不能为空")

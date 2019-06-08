@@ -105,7 +105,7 @@ func (this *ContestController) ContestAddPost() {
 	if endTime.Sub(startTime).Seconds() < 0 {
 		this.JsonErr("时间错误",6010,"")
 	}
-	cid, err := models.ContestAdd(title, desc, proIds, role, limituser, startTime,endTime)
+	cid, err := models.ContestAdd(title, desc, proIds, role, limituser, startTime,endTime,this.User.UserId)
 
 	if err != nil {
 		this.JsonErr(err.Error(),6001, "/contest/add")
@@ -128,6 +128,10 @@ func (this *IndexController) ContestUpdate() {
 	con, err := models.QueryContestByConId(id)
 	if err != nil {
 		this.Abort("500")
+	}
+
+	if this.IsTeacher && con.UserId != this.User.UserId {
+		this.Abort("401")
 	}
 
 
@@ -326,13 +330,28 @@ func (this *ProblemController) ProblemContest() {
 
 // @router /contest/updatestatus [post]
 func (this *ContestController) ContestUpdateStatus() {
-	if !this.IsAdmin{
+	if !this.IsAdmin && !this.IsTeacher{
 		this.Abort("401")
 	}
 
+
+
 	temp := this.GetString("conid")
-	pid, _ := tools.StringToInt32(temp)
-	if ok := models.UpdateContestStatus(pid); !ok {
+	cid, _ := tools.StringToInt32(temp)
+
+
+	con, err := models.QueryContestByConId(cid)
+	if err != nil {
+		this.Abort("500")
+	}
+
+
+	if this.IsTeacher && con.UserId != this.User.UserId {
+		this.JsonErr("没有权限",16005,"")
+	}
+
+
+	if ok := models.UpdateContestStatus(cid); !ok {
 		this.JsonErr("失败",16002,"")
 	}
 
