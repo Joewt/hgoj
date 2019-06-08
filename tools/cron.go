@@ -6,7 +6,6 @@ import (
 	"github.com/astaxie/beego/toolbox"
 	"io/ioutil"
 	"os"
-	"syscall"
 	"time"
 )
 
@@ -24,7 +23,6 @@ func StartCron() {
 
 
 func clearDownData() {
-	logs.Info("执行了")
 	downDir := "./static/down"
 	dir_list, e := ioutil.ReadDir(downDir)
 	if e != nil {
@@ -33,9 +31,10 @@ func clearDownData() {
 	}
 	for _, v := range dir_list {
 		finfo, _ := os.Stat(downDir+"/"+v.Name())
-		stat_t := finfo.Sys().(*syscall.Stat_t)
-		fctime := timespecToTime(stat_t.Ctimespec)
+		var fctime time.Time
+		fctime = finfo.ModTime()
 		t := time.Now().Sub(fctime).Minutes()
+		logs.Info(t)
 		if t > 10 {
 			err := os.Remove(downDir+"/"+v.Name())
 			if err != nil {
@@ -44,9 +43,4 @@ func clearDownData() {
 		}
 		logs.Info("delete file ",downDir+"/"+v.Name())
 	}
-}
-
-
-func timespecToTime(ts syscall.Timespec) time.Time {
-	return time.Unix(int64(ts.Sec), int64(ts.Nsec))
 }
