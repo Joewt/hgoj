@@ -50,7 +50,7 @@
                         <tr>
                             <td>{{.SolutionId}}</td>
                             <td><a href="/profile/{{.UserId}}">{{.UserId}}</a></td>
-                            <td><a href="/contest/problem/{{.ProblemId}}/{{.ContestId}}">{{.ProblemId}}</a></td>
+                            <td><a href="/contest/problem/{{.ProblemId}}/{{.ContestId}}">{{.ProblemKey}}</a></td>
                             {{if eq .Result 0}}
                             <td>
                                 <div class="sk-spinner sk-spinner-circle">
@@ -77,7 +77,7 @@
                             <td>{{.CodeLength}}</td>
                             <td>{{.Judgetime}}</td>
                             <td>{{.Judger}}</td>
-                            <td>{{.PassRate}}</td>
+                            <td>{{Correctness_rate .PassRate}}</td>
                         </tr>
                     {{end}}
                     </tbody>

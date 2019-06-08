@@ -18,6 +18,7 @@ type ContestController struct {
 
 
 type Pro struct {
+	ProblemKey      string
 	ProblemId		int32
 	Title			string
 	Accepted		int32
@@ -36,6 +37,7 @@ type ContestRank struct {
 }
 
 type ContestProblem struct {
+	ProblemKey string
 	ProId int32
 
 }
@@ -48,6 +50,12 @@ type CPProblem struct {
 	Flag bool
 	ACtime float64
 	ErrNum int64
+}
+
+
+type ContestSolution struct {
+	ProblemKey  string
+	models.Solution
 }
 
 // @router /contest/add [get]
@@ -262,9 +270,9 @@ func (this *ContestController) ContestCid() {
 
 	var pro []Pro
 
-	for _, v := range pros{
+	for i, v := range pros{
 		Pac,Psub := models.QueryACSUBFromSolutionBYPidCi(v.ProblemId,cid)
-		pro = append(pro, Pro{ProblemId:v.ProblemId,Title:v.Title,Accepted:Pac,Submit:Psub,Solved:v.Solved,Cid:cid})
+		pro = append(pro, Pro{ProblemKey:tools.CONTEST_PRO_KEY[i],ProblemId:v.ProblemId,Title:v.Title,Accepted:Pac,Submit:Psub,Solved:v.Solved,Cid:cid})
 	}
 
 	//根据cid查找 ac数
@@ -421,6 +429,12 @@ func (this *ContestController) ContestStatus() {
 		logs.Error(err)
 	}
 
+	var ContestSolu []*ContestSolution
+
+	for i,v := range data {
+		ContestSolu = append(ContestSolu,&ContestSolution{tools.CONTEST_PRO_KEY[i],*v})
+	}
+
 	isPage := true
 	if int(totalNum) < pageStatusSize {
 		isPage = false
@@ -431,7 +445,7 @@ func (this *ContestController) ContestStatus() {
 	this.Data["pagePrev"] = pagePrev
 	this.Data["pageNext"] = pageNext
 	this.Data["conid"] = cid
-	this.Data["data"] = data
+	this.Data["data"] = ContestSolu
 	this.Data["RES"] = RESULT
 	this.TplName = "contest/statusContest.html"
 }
@@ -471,9 +485,8 @@ func (this *ContestController) ContestRank() {
 	contestInfo,_ := models.QueryContestByConId(c)
 
 	var proIds []ContestProblem
-	for _, v := range pros {
-		//logs.Info(k,v.ProblemId)
-		proIds = append(proIds, ContestProblem{v.ProblemId})
+	for i, v := range pros {
+		proIds = append(proIds, ContestProblem{tools.CONTEST_PRO_KEY[i],v.ProblemId})
 	}
 	uids, _ := models.QueryAllUserIdByCid(c)
 	var data []*ContestRank

@@ -110,7 +110,7 @@ user3
             var _this = $(this);
             var _form = _this.parents('form');
             console.log(_form.serialize());
-            $.post("/contest/add", _form.serialize(),function(res){
+            $.post("/contest/update", _form.serialize(),function(res){
                 // alert(_form.serialise());
                 if(res.code){
                     layer.msg(res.msg);

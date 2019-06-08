@@ -91,11 +91,13 @@ func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime,
 		proId,err3 := strconv.Atoi(v)
 		if err3 != nil {
 			_ = DB.Rollback()
+			logs.Error("strconv转换",err3)
 			return 0, err3
 		}
 		pro := Problem{ProblemId:int32(proId)}
 		if DB.Read(&pro) != nil {
 			_ = DB.Rollback()
+			logs.Error("读取problem",pro)
 			return 0, syserror.NoProError{}
 		}
 		if ok := QueryConProByPidCid(int32(proId),cid); ok {
@@ -105,7 +107,9 @@ func ContestUpdate(cid int32,title, desc,proIds,role,limituser string,startTime,
 
 	_, err1 := DB.InsertMulti(4, conPro)
 
-	if err2 != nil ||  err1 != nil {
+	logs.Info("插入报错了-",err1,conPro,err2,err)
+
+	if (len(conPro) > 0 && err1 != nil) ||  err2 != nil {
 		err = DB.Rollback()
 		return 0, err
 	}
