@@ -292,6 +292,7 @@ func (this *ProblemController) ProblemAddPost() {
 
 // @router /problem/fileupload [post]
 func (this *ProblemController) Fileupload() {
+	logs.Info(this.Ctx.Input)
 	if !this.IsAdmin && !this.IsTeacher {
 		this.Abort("401")
 	}

@@ -16,3 +16,4 @@ conf/app.conf
 .idea/*
 logs/*
 judge/*
+static/down/*

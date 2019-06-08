@@ -5,9 +5,78 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>编辑数据</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/js/plugins/layui/css/layui.css" rel="stylesheet">
 </head>
 <body>
-    编辑数据
+    请下载数据，更改完毕后，再重新上传
+
+
+    <div class="form-group">下载
+    <button type="button" class="layui-btn layui-btn-primary" id="download">点击下载</button>
+    </div>
+    <div class="form-group">上传
+    <button type="button" class="layui-btn layui-btn-primary" id="upload_file">只允许上传压缩文件</button>
+    </div>
+
+
+
+
+
+
+
+
+    <script src="/js/jquery-2.1.1.js"></script>
+    <script src="/js/jquery-form-3.5.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
+    <script type="text/javascript" src="/js/plugins/layui/layui.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            var index = parent.layer.getFrameIndex(window.name);
+            $('#download').on('click', function(){
+                var data = {
+                    "pid":{{.pid}}
+                };
+                $.post("/download/testdata", data,function(res){
+                    // alert(_form.serialise());
+                    if(res.code){
+                        layer.msg(res.msg);
+                    }
+
+                    if(res.code === 0) {
+                        var val = res.action;
+
+                        parent.location.href=val;
+                        parent.layer.close(index);
+                    }
+                }, 'json');
+
+
+            });
+
+
+
+            layui.use('upload', function(){
+                var upload = layui.upload;
+
+                upload.render({ //允许上传的文件后缀
+                    elem: '#upload_file'
+                    ,url: '/upload/fileupload/'+{{.pid}}
+                    ,accept: 'file' //普通文件
+                    ,exts: 'zip' //只允许上传压缩文件
+                    ,done: function(res){
+                        layer.msg(res.msg);
+                        $("#filename").attr("value", res.filename);
+                        console.log(res.filename)
+                    }
+                });
+            });
+
+
+        });
+    </script>
 </body>
 </html>
