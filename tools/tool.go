@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"crypto/md5"
 	"encoding/hex"
+	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/setting"
 	"io"
 	"os"
@@ -41,6 +42,15 @@ var CONTEST_PRO_KEY = map[int]string{
 	24:"X",
 	26:"Y",
 	27:"Z",
+}
+
+
+func InitTools(){
+	downDir := "./static/down"
+	err := os.Mkdir(downDir,os.ModePerm)
+	if err != nil {
+		logs.Error(err)
+	}
 }
 
 

@@ -24,6 +24,7 @@ func StartCron() {
 
 func clearDownData() {
 	downDir := "./static/down"
+
 	dir_list, e := ioutil.ReadDir(downDir)
 	if e != nil {
 		fmt.Println("read dir error")

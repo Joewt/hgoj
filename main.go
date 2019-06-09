@@ -23,6 +23,7 @@ func main() {
 	initLogs()
 	//启动定时任务
 	go tools.StartCron()
+	go tools.InitTools()
 	beego.Run()
 }
 
