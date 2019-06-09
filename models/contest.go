@@ -12,7 +12,7 @@ import (
 type Contest struct {
 	ContestId   int32     `orm:"auto"`
 	Title       string    `orm:"null"`
-	StartTime   time.Time `orm:"default(null);auto_now;type(datetime);null"`
+	StartTime   time.Time `orm:"default(null);type(datetime);null"`
 	EndTime     time.Time `orm:"default(null);type(datetime);null"`
 	Defunct     string    `orm:"type(char);size(1);default(N)"`
 	Description string    `orm:"type(text);null"`
