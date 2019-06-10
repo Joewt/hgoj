@@ -257,7 +257,6 @@ func QueryJudgeTimeFromSolutionByUidCidPid(uid, pid, cid int32, startTime time.T
 	var ErrNum int64
 	flag = false
 	for _, v := range data {
-		i = 0
 		if v.Result == 4 {
 			i++
 			t = v.Judgetime.Sub(startTime).Seconds()
@@ -278,6 +277,16 @@ func QueryACNickTotalByUid(uid int32, cid int32) (string, int64, int64) {
 	user, _ := QueryUserById(uid)
 	nick := user.Nick
 	total, _ := qs.Filter("user_id", uid).Filter("contest_id", cid).Count()
+	return nick, ac, total
+}
+
+func QueryACNickTotalByUidPid(uid int32,cid int32,pid int32)(string,int64,int64) {
+	Solutions := new(Solution)
+	qs := DB.QueryTable(Solutions)
+	ac, _ := qs.Filter("user_id", uid).Filter("contest_id", cid).Filter("result", 4).Filter("problem_id",pid).Count()
+	user, _ := QueryUserById(uid)
+	nick := user.Nick
+	total, _ := qs.Filter("user_id", uid).Filter("contest_id", cid).Filter("problem_id",pid).Count()
 	return nick, ac, total
 }
 

@@ -39,21 +39,21 @@
                                 题目描述
                             </h3>
 
-                            <p>
-                                {{str2html .problem.Description}}
+                            <p id="pro-desc">
+
                             </p>
                             <br>
                             <h3>
                                 输入
                             </h3>
-                            <p>
-                                {{str2html .problem.Input}}
+                            <p id="pro-input">
+
                             </p>
                             <h3>
                                 输出
                             </h3>
-                            <p>
-                                {{str2html .problem.Output}}
+                            <p id="pro-output">
+
                             </p>
                             <h3>
                                 样例输入
@@ -116,12 +116,13 @@
 <script src="http://cdn.bootcss.com/ace/1.2.4/ext-old_ie.js"></script>
 <script src="http://cdn.bootcss.com/ace/1.2.4/theme-monokai.js"></script>
 <script src="https://cdn.bootcss.com/ace/1.4.3/theme-xcode.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
 
 <script>
     $(document).ready(function(){
         $('.select-language').select2();
-
+        {{if .islogin}}
         $('#compile-editor').height(400);
         require("ace/ext/old_ie");
         ace.require("ace/ext/language_tools");
@@ -136,7 +137,7 @@
             enableLiveAutocompletion: true
         });
         editor.setTheme("ace/theme/xcode");
-
+        {{end}}
 
         $('.relation-ver').on('change', function(){
             var _this = $(this);
@@ -175,6 +176,24 @@
 
 
         });
+
+
+        marked.setOptions({
+            renderer: new marked.Renderer(),
+            gfm: true,
+            tables: true,
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false
+        });
+        document.getElementById('pro-desc').innerHTML =
+            marked({{.problem.Description}});
+        document.getElementById('pro-input').innerHTML =
+            marked({{.problem.Input}});
+        document.getElementById('pro-output').innerHTML =
+            marked({{.problem.Output}});
     });
 
 

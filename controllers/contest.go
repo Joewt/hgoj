@@ -429,10 +429,16 @@ func (this *ContestController) ContestStatus() {
 		logs.Error(err)
 	}
 
+	pros, err := models.QueryProblemByCid(id)
+	PRO_TO_LETTER := make(map[int32]string)
+	for i,v := range pros {
+		PRO_TO_LETTER[v.ProblemId] = tools.CONTEST_PRO_KEY[i]
+	}
+
 	var ContestSolu []*ContestSolution
 
-	for i,v := range data {
-		ContestSolu = append(ContestSolu,&ContestSolution{tools.CONTEST_PRO_KEY[i],*v})
+	for _,v := range data {
+		ContestSolu = append(ContestSolu,&ContestSolution{PRO_TO_LETTER[v.ProblemId],*v})
 	}
 
 	isPage := true
@@ -464,8 +470,14 @@ func (this *ContestController) ContestStatusPage() {
 	if err != nil {
 		logs.Error(err)
 	}
-	for i,v := range data {
-		ContestSolu = append(ContestSolu,&ContestSolution{tools.CONTEST_PRO_KEY[i],*v})
+
+	pros, err := models.QueryProblemByCid(id)
+	PRO_TO_LETTER := make(map[int32]string)
+	for i,v := range pros {
+		PRO_TO_LETTER[v.ProblemId] = tools.CONTEST_PRO_KEY[i]
+	}
+	for _,v := range data {
+		ContestSolu = append(ContestSolu,&ContestSolution{PRO_TO_LETTER[v.ProblemId],*v})
 	}
 
 	isPage, pagePrev,pageNext := PageCal(totalNum,pageNo,pageStatusSize)
@@ -494,13 +506,18 @@ func (this *ContestController) ContestRank() {
 	}
 	uids, _ := models.QueryAllUserIdByCid(c)
 	var data []*ContestRank
+	var proac int64
 
 	for k, v := range uids {
 		nick, ac, total := models.QueryACNickTotalByUid(v, c)
 		var CPData []CPProblem
 		for _, p := range proIds {
 			qpid,flag,actime,ErrNum := models.QueryJudgeTimeFromSolutionByUidCidPid(v,p.ProId,c,contestInfo.StartTime)
-				CPData = append(CPData, CPProblem{qpid, flag, actime, ErrNum})
+			CPData = append(CPData, CPProblem{qpid, flag, actime, ErrNum})
+			_,proac, _ = models.QueryACNickTotalByUidPid(v,c,p.ProId)
+			if proac > 1 {
+				ac = ac-proac + 1
+			}
 		}
 		var TotalTime float64
 		for _, TT := range CPData {
