@@ -123,6 +123,8 @@
     $(document).ready(function(){
         $('.select-language').select2();
 
+        {{if .islogin}}
+
         $('#compile-editor').height(400);
         require("ace/ext/old_ie");
         ace.require("ace/ext/language_tools");
@@ -137,6 +139,7 @@
             enableLiveAutocompletion: true
         });
         editor.setTheme("ace/theme/xcode");
+        {{end}}
 
 
         $('.relation-ver').on('change', function(){

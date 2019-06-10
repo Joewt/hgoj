@@ -90,3 +90,46 @@ func (this *ProblemController) Upload() {
 	this.JsonOKH("上传成功",data)
 
 }
+
+
+// @router /problem/exinport [get]
+func (this *ProblemController) ExInport() {
+
+	this.TplName = "admin/exinport.html"
+}
+
+// @router /problem/export [post]
+func (this *ProblemController) Export() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
+	from,_ := this.GetInt("from")
+	to,_ := this.GetInt("to")
+	if from > to {
+		this.JsonErr("导出错误,from小于to",3100,"")
+	}
+	//
+	//for i := from; i <= to; i++ {
+	//	pro,err := models.QueryProblemById(int32(i))
+	//	if err != nil {
+	//		continue
+	//	}
+	//	jsonPro,_ := json.Marshal(pro)
+	//	filename := OJ_DATA+"/temp/"+strconv.Itoa(i)+"/"+strconv.Itoa(i)+".json"
+	//	os.MkdirAll(OJ_DATA+"/temp/"+strconv.Itoa(i),os.ModePerm)
+	//	err1 := ioutil.WriteFile(filename,jsonPro,os.ModePerm)
+	//	if err1 != nil {
+	//		logs.Error(err1)
+	//	}
+	//}
+	this.JsonErr("未开放",2333,"")
+}
+
+// @router /problem/inport [post]
+func (this *ProblemController) Inport() {
+
+	this.JsonErr("未开放",2333,"")
+	//var prob models.Problem
+	//json.Unmarshal([]byte(jsonPro),&prob)
+	//logs.Info(i,"-----",prob)
+}

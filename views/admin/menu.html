@@ -63,14 +63,14 @@
                     <a href="/contest/list"><i class="fa fa-bars"></i> <span class="nav-label">竞赛&作业列表</span></a>
                 </li>
                 <li>
-                    <a href="/admin/rejudge"><i class="fa fa-bars"></i> <span class="nav-label">重判题目</span></a>
+                    <a href="/admin/rejudge"><i class="fa fa-repeat"></i> <span class="nav-label">重判题目</span></a>
                 </li>
                 {{if .isadmin}}
                 <li>
                     <a href="/admin/user/generate"><i class="fa fa-user"></i> <span class="nav-label">账号生成</span></a>
                 </li>
                 <li>
-                    <a href="/user/list"><i class="fa fa-user"></i> <span class="nav-label">用户列表</span></a>
+                    <a href="/user/list"><i class="fa fa-users"></i> <span class="nav-label">用户列表</span></a>
                 </li>
                 <li>
                     <a href="/admin/art/add"><i class="glyphicon glyphicon-pencil"></i> <span class="nav-label">设置文章</span></a>
@@ -86,6 +86,9 @@
                 </li>
                 <li>
                     <a href="/admin/changepwd"><i class="glyphicon glyphicon-repeat"></i> <span class="nav-label">修改密码</span></a>
+                </li>
+                <li>
+                    <a href="/problem/exinport"><i class="glyphicon glyphicon-upload"></i> <span class="nav-label">导入&导出</span></a>
                 </li>
                 {{end}}
 

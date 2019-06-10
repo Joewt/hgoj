@@ -21,7 +21,7 @@ type Problem struct {
 	Spj				string		`orm:"type(char);size(1);default(0)"`
 	Hint			string		`orm:"type(text);null"`
 	Source			string		`orm:"size(100);null"`
-	InDate			time.Time	`orm:"default(null);auto_now_add;type(datetime);null"`
+	InDate			time.Time	`orm:"default(null);type(datetime);null"`
 	TimeLimit		int32		`orm:"default(0)"`
 	MemoryLimit		int32		`orm:"default(0)"`
 	Defunct			string		`orm:"type(char);size(1);default(N)"`
