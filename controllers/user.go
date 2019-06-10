@@ -6,9 +6,10 @@ import (
 	"github.com/yinrenxin/hgoj/syserror"
 	"reflect"
 	"strconv"
+	"strings"
+
 	//"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
-	"strings"
 )
 
 type UserController struct {
@@ -118,27 +119,34 @@ func (this *UserController) Profile() {
 
 // @router /user/reg [post]
 func (this *UserController) UserReg() {
-	logs.Info("是否登录:",this.IsLogin)
 	if this.IsLogin {
 		this.Abort("500")
 	}
-	username := this.GetMushString("username", "用户名不能为空")
-	nick := this.GetMushString("nick", "昵称不能为空")
-	email := this.GetMushString("email","邮箱不能为空")
-	pwd   := this.GetMushString("pwd", "密码不能为空")
-	pwd1  := this.GetMushString("pwd2", "确认密码不能为空")
-	school := this.GetMushString("school", "学校不能为空")
-	//获取客户端ip
-	ip := this.Ctx.Request.RemoteAddr
-	Ip := tools.SplitIP(ip)
+	username := this.GetRegUserString("username", "用户名不能为空")
+	nick := this.GetRegUserString("nick", "昵称不能为空")
+	email := this.GetRegUserString("email","邮箱不能为空")
 
 	if tools.CheckEmail(email) == false {
 		this.JsonErr("邮箱格式错误", 1102, "/reg")
 	}
 
+	pwd   := this.GetRegUserString("pwd", "密码不能为空")
+	if len(pwd) < 6{
+		this.JsonErr("密码长度不能低于6位", 1105, "/reg")
+	}
+	pwd1  := this.GetRegUserString("pwd2", "确认密码不能为空")
+
 	if strings.Compare(pwd, pwd1) != 0 {
 		this.JsonErr("两次密码不同", 1100, "/reg")
 	}
+
+
+	school := this.GetRegUserString("school", "学校不能为空")
+	//获取客户端ip
+	ip := this.Ctx.Request.RemoteAddr
+	Ip := tools.SplitIP(ip)
+
+
 	//判断是否有同一个用户
 	if models.FindUserByEmail(email) == false || models.FindUserByUname(username) == false {
 		this.JsonErr("已经有该用户了",1101, "/reg")

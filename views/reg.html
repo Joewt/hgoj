@@ -84,8 +84,8 @@
                 }
 
                 if(res.code === 0) {
-                    alert(res.msg);
-                    window.location.href="/index";
+                    layer.msg(res.msg);
+                    setTimeout('window.location.href="/index"',500);
                 }
             }, 'json');
         });

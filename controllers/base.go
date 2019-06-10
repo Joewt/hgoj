@@ -4,6 +4,7 @@ import (
 	//"errors"
 	"github.com/astaxie/beego"
 	"github.com/yinrenxin/hgoj/tools"
+	"strings"
 
 	//"github.com/yinrenxin/joeblog/syserror"
 
@@ -78,7 +79,16 @@ func (this *BaseController) Abort404(err error) {
 func (this *BaseController) GetMushString(key, msg string) string {
 	k := this.GetString(key)
 	if len(k) == 0 {
-		//this.Abort500(errors.New(msg))
+		this.JsonErr(msg, syserror.KEY_NOT_NULL, "")
+	}
+	return k
+}
+
+
+func (this *BaseController) GetRegUserString(key, msg string) string {
+	k := this.GetString(key)
+	k = strings.Replace(k," ","",-1)
+	if len(k) == 0 {
 		this.JsonErr(msg, syserror.KEY_NOT_NULL, "")
 	}
 	return k
