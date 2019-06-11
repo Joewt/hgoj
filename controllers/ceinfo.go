@@ -36,9 +36,13 @@ func (this *CeinfoController) Ceinfo() {
 	}
 
 
+	compileinfo, _ := models.QueryCompileInfoBySid(id)
+
+
 	this.Data["username"] = user.UserName
 	this.Data["solu"] = solution
 	this.Data["source"] = source
+	this.Data["compileinfo"] = compileinfo
 	this.TplName = "ceinfo.html"
 }
 
@@ -67,10 +71,13 @@ func (this *CeinfoController) CeinfoContest() {
 		this.Abort("401")
 	}
 
+	compileinfo, _ := models.QueryCompileInfoBySid(id)
+
 
 	this.Data["username"] = user.UserName
 	this.Data["solu"] = solution
 	this.Data["source"] = source
 	this.Data["conid"] = solution.ContestId
+	this.Data["compileinfo"] = compileinfo
 	this.TplName = "contest/ceinfo.html"
 }

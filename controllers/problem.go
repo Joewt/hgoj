@@ -83,6 +83,10 @@ func (this *ProblemController) Problem() {
 		logs.Error(err)
 	}
 
+	if !this.IsAdmin && pro.Defunct == "Y" {
+		this.Abort("401")
+	}
+
 	this.Data["problem"] = pro
 	this.TplName = "problems.html"
 }
