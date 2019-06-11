@@ -45,6 +45,13 @@ var CONTEST_PRO_KEY = map[int]string{
 }
 
 
+var LANGUAGE_MAP = map[int]string{
+	1:"C/C++",
+	3:"Java",
+	6:"Python",
+	17:"Go",
+}
+
 func InitTools(){
 	downDir := "./static/down"
 	err := os.Mkdir(downDir,os.ModePerm)

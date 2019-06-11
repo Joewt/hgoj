@@ -74,9 +74,11 @@
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
                                 <h5>{{if .islogin}} 选择编程语言
-                                    <select class="select-language" name="language">
-                                        <option value="1">C</option>
-                                        <option value="2">C++</option>
+                                    <select class="select-language" id="language-type" name="language">
+                                        <option value="1">C/C++</option>
+                                        <option value="17">Go</option>
+                                        <option value="3">Java</option>
+                                        <option value="6">Python</option>
                                     </select>
                                 {{else}}(<a href="/login">请先登录</a>){{end}}</h5>
 
@@ -116,6 +118,14 @@
 <script src="http://cdn.bootcss.com/ace/1.2.4/ext-old_ie.js"></script>
 <script src="http://cdn.bootcss.com/ace/1.2.4/theme-monokai.js"></script>
 <script src="https://cdn.bootcss.com/ace/1.4.3/theme-xcode.js"></script>
+
+
+{{/*<script src="/js/plugins/ace/ace.js"></script>*/}}
+{{/*<script src="/js/plugins/ace/ext/language_tools.js"></script>*/}}
+{{/*<script src="http://cdn.bootcss.com/ace/1.2.4/ext-old_ie.js"></script>*/}}
+{{/*<script src="http://cdn.bootcss.com/ace/1.2.4/theme-monokai.js"></script>*/}}
+{{/*<script src="/js/plugins/ace/theme/xcode.js"></script>*/}}
+
 <script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
@@ -152,8 +162,7 @@
             var _this = $(this);
             var _pro = _this.parents('#problem');
             var pro_id = $(_pro.find('#problem-id')[0]).attr('data-pro-id');
-            // var language = $(_pro.find('.select-language')[0])[0];
-            var language = 1;
+            var language = $('#language-type option:selected').val();
             var source = editor.getValue();
             console.log(language);
             var data = {
