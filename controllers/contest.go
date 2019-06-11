@@ -329,6 +329,18 @@ func (this *ProblemController) ProblemContest() {
 		this.Abort404(syserror.UnKnowError{})
 	}
 
+
+	con, err := models.QueryContestByConId(c)
+	if err != nil {
+		this.Abort("500")
+	}
+	startTime := con.StartTime
+	t := time.Now().Sub(startTime).Minutes()
+
+	if !this.IsAdmin &&  t < 0 {
+		this.Abort("401")
+	}
+
 	this.Data["conid"] = cid
 	this.Data["problem"] = pro
 	this.TplName = "contest/proContest.html"
