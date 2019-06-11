@@ -123,7 +123,6 @@
         $('#submitpro').on('click', function(){
             var _this = $(this);
             var _form = _this.parents('form');
-            console.log(_form.serialize());
             $.post("/problem/add", _form.serialize(),function(res){
                 // alert(_form.serialise());
                 if(res.code){
@@ -151,7 +150,6 @@
                 ,done: function(res){
                     layer.msg(res.msg);
                     $("#filename").attr("value", res.key+res.filename);
-                    console.log(res.filename)
                 }
             });
         });

@@ -181,12 +181,16 @@ func (this *ProblemController) ProblemDel() {
 	if !this.IsAdmin {
 		this.Abort("401")
 	}
+	this.JsonErr("暂不开放删除功能",syserror.DEL_PROBLEM_ERR,"/problem/list")
 	proId := this.GetString("proid")
-	logs.Info("要删除的proId：",proId)
 	temp, _ := strconv.Atoi(proId)
 	id := int32(temp)
 	ok := models.DelProblemById(id)
 	if !ok {
+		this.JsonErr("删除失败", syserror.DEL_PROBLEM_ERR, "/problem/list")
+	}
+	err2 := os.RemoveAll(OJ_DATA+"/"+proId)
+	if err2 != nil {
 		this.JsonErr("删除失败", syserror.DEL_PROBLEM_ERR, "/problem/list")
 	}
 	this.JsonOK("删除成功", "/problem/list")

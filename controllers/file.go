@@ -5,6 +5,7 @@ import (
 	"github.com/yinrenxin/hgoj/tools"
 	"os"
 	"strconv"
+	"time"
 )
 
 const DOWN_DIR = "./static/down/"
@@ -48,43 +49,43 @@ func (this *ProblemController) Upload() {
 		this.Abort("401")
 	}
 	id,_ := tools.StringToInt32(pid)
-	//key := tools.MD5(time.Now().String())
+	key := tools.MD5(time.Now().String())
 	f, h, err := this.GetFile("file")
-	if h.Filename != "data.zip" {
-		this.JsonErr("文件名错误,请上传zip压缩包并命名为data.zip",2400,"")
-	}
+	//if h.Filename != "data.zip" {
+	//	this.JsonErr("文件名错误,请上传zip压缩包并命名为data.zip",2400,"")
+	//}
 
 	if err != nil {
 		logs.Error("error:--- ",err)
 	}
 	defer f.Close()
-	this.SaveToFile("file", OJ_DATA +"/"+h.Filename)
+	this.SaveToFile("file", OJ_ZIP_TEMP_DATA +"/"+key+h.Filename)
 
 
 	testDataDir := OJ_DATA+"/"+strconv.Itoa(int(id))+"/"
-	zipDataDir := OJ_DATA+"/"+h.Filename
+	zipDataDir := OJ_ZIP_TEMP_DATA+"/"+key+h.Filename
 
 	err2 := os.RemoveAll(testDataDir)
 
 	if err2 != nil {
 		logs.Error(err)
-		this.JsonErr("err",24002,"")
+		this.JsonErr("系统错误，请查看系统日志",24002,"")
 	}
 
 
 	err1 := tools.DeCompress(zipDataDir, testDataDir)
 	if err1 != nil {
 		logs.Error(err1)
-		this.JsonErr("系统错误",24001,"")
+		this.JsonErr("系统错误，请查看系统日志",24001,"")
 	}
 
 	err3 := os.Remove(zipDataDir)
 	if err3 != nil {
 		logs.Error(err3)
-		this.JsonErr("系统错误",24002,"")
+		this.JsonErr("系统错误，请查看系统日志",24002,"")
 	}
 	data := MAP_H{
-		//"key":key,
+		"key":key,
 		"filename":h.Filename,
 	}
 	this.JsonOKH("上传成功",data)
