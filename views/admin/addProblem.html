@@ -150,7 +150,7 @@
                 ,exts: 'zip' //只允许上传压缩文件
                 ,done: function(res){
                     layer.msg(res.msg);
-                    $("#filename").attr("value", res.filename);
+                    $("#filename").attr("value", res.key+res.filename);
                     console.log(res.filename)
                 }
             });

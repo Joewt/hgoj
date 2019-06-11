@@ -296,20 +296,20 @@ func (this *ProblemController) Fileupload() {
 	if !this.IsAdmin && !this.IsTeacher {
 		this.Abort("401")
 	}
-	//key := tools.MD5(time.Now().String())
+	key := tools.MD5(time.Now().String())
 	f, h, err := this.GetFile("file")
-	if h.Filename != "data.zip" {
-		this.JsonErr("文件名错误,请上传zip压缩包并命名为data.zip",2400,"")
-	}
+	//if h.Filename != "data.zip" {
+	//	this.JsonErr("文件名错误,请上传zip压缩包并命名为data.zip",2400,"")
+	//}
 
 	if err != nil {
 		logs.Error("error:--- ",err)
 	}
 	defer f.Close()
-	this.SaveToFile("file", OJ_DATA +"/"+h.Filename)
+	this.SaveToFile("file", OJ_DATA +"/"+key+h.Filename)
 
 	data := MAP_H{
-		//"key":key,
+		"key":key,
 		"filename":h.Filename,
 	}
 	this.JsonOKH("上传成功",data)
