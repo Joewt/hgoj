@@ -27,6 +27,11 @@ type ProUser struct {
 }
 
 
+type RankUsers struct {
+	Rank int
+	models.Users
+}
+
 
 // @router /profile/:uid [get]
 func (this *UserController) Profile2() {

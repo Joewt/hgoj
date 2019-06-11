@@ -36,8 +36,16 @@ func (this *IndexController) Index() {
 	}
 
 	sort.Sort(SortUser(user))
-	if len(user) > 30 {
-		user = user[0:20]
+
+	var RankUser  []*RankUsers
+
+	for k,v := range user {
+		RankUser = append(RankUser,&RankUsers{k+1,*v})
+	}
+
+
+	if len(RankUser) > 30 {
+		RankUser = RankUser[0:20]
 	}
 
 
@@ -58,9 +66,9 @@ func (this *IndexController) Index() {
 		acNs = append(acNs, acN)
 		times = append(times,calTime)
 	}
-	logs.Info(totalNs,acNs)
+	//logs.Info(totalNs,acNs)
 
-	this.Data["user"] = user
+	this.Data["user"] = RankUser
 	this.Data["totalNum"] = totalNum
 	this.Data["acNum"] = acNum
 	this.Data["nowTime"] = nowTime
