@@ -137,4 +137,9 @@ func initTemplate() {
 		return arr[i]
 	})
 
+	_ = beego.AddFuncMap("Language_map", func(i uint)(string){
+		return tools.LANGUAGE_MAP[int(i)]
+	})
+
+
 }
