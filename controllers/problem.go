@@ -269,7 +269,7 @@ func (this *ProblemController) ProblemAddPost() {
 		this.JsonErr("更新失败", syserror.ADD_PROBLEM_ERR, "/problem/add")
 	}
 	testDataDir := OJ_DATA+"/"+strconv.Itoa(int(pid))+"/"
-	zipDataDir := OJ_DATA+"/"+filename
+	zipDataDir := OJ_ZIP_TEMP_DATA+"/"+filename
 	err1 := tools.DeCompress(zipDataDir, testDataDir)
 	if err1 != nil {
 		logs.Error(err1)
@@ -306,8 +306,17 @@ func (this *ProblemController) Fileupload() {
 		logs.Error("error:--- ",err)
 	}
 	defer f.Close()
-	this.SaveToFile("file", OJ_DATA +"/"+key+h.Filename)
 
+	zipDir := OJ_ZIP_TEMP_DATA
+	err2 := os.Mkdir(zipDir,os.ModePerm)
+	if err2 != nil {
+		//logs.Error(err2)
+	}
+
+	err1 := this.SaveToFile("file", OJ_ZIP_TEMP_DATA +"/"+key+h.Filename)
+	if err1 != nil {
+		this.JsonErr("文件上传错误",24005,"")
+	}
 	data := MAP_H{
 		"key":key,
 		"filename":h.Filename,

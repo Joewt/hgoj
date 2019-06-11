@@ -24,6 +24,7 @@ func StartCron() {
 
 func clearDownData() {
 	downDir := "./static/down"
+	zipDir := "/home/judge/data/tempzip"
 
 	dir_list, e := ioutil.ReadDir(downDir)
 	if e != nil {
@@ -43,5 +44,24 @@ func clearDownData() {
 			}
 		}
 		logs.Info("delete file ",downDir+"/"+v.Name())
+	}
+	zipdir_list, e := ioutil.ReadDir(zipDir)
+	if e != nil {
+		logs.Error("read dir error")
+		return
+	}
+	for _, v := range zipdir_list {
+		finfo, _ := os.Stat(zipDir+"/"+v.Name())
+		var fctime time.Time
+		fctime = finfo.ModTime()
+		t := time.Now().Sub(fctime).Minutes()
+		logs.Info(t)
+		if t > 10 {
+			err := os.Remove(zipDir+"/"+v.Name())
+			if err != nil {
+				logs.Error(err)
+			}
+		}
+		logs.Info("delete file ",zipDir+"/"+v.Name())
 	}
 }

@@ -27,6 +27,7 @@ type BaseController struct {
 }
 
 const OJ_DATA = "/home/judge/data"
+const OJ_ZIP_TEMP_DATA = OJ_DATA+"/tempzip"
 
 type MAP_H = map[string]interface{}
 
