@@ -25,7 +25,7 @@ func init() {
 		new(Solution), new(Sim), new(ShareCode), new(Reply),
 		new(Problem), new(Privilege), new(Printer), new(Online),
 		new(Mail), new(News), new(LoginLog), new(Custominput),
-		new(ContestProblem), new(Contest), new(CompileInfo), new(Balloon))
+		new(ContestProblem), new(Contest), new(Compileinfo), new(Balloon))
 	_ = orm.RunSyncdb("default", false, true)
 
 	DB = orm.NewOrm()
