@@ -4,65 +4,68 @@ import (
 	"archive/zip"
 	"crypto/md5"
 	"encoding/hex"
-	"github.com/astaxie/beego/logs"
-	"github.com/yinrenxin/hgoj/setting"
 	"io"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/astaxie/beego/logs"
+	"github.com/yinrenxin/hgoj/setting"
 )
 
-
 var CONTEST_PRO_KEY = map[int]string{
-	0:"A",
-	1:"B",
-	2:"C",
-	3:"D",
-	4:"E",
-	5:"F",
-	6:"G",
-	7:"H",
-	8:"I",
-	9:"J",
-	10:"K",
-	11:"L",
-	12:"M",
-	13:"N",
-	14:"O",
-	15:"P",
-	16:"Q",
-	17:"R",
-	18:"S",
-	19:"T",
-	20:"U",
-	21:"V",
-	22:"W",
-	23:"X",
-	24:"Y",
-	25:"Z",
+	0:  "A",
+	1:  "B",
+	2:  "C",
+	3:  "D",
+	4:  "E",
+	5:  "F",
+	6:  "G",
+	7:  "H",
+	8:  "I",
+	9:  "J",
+	10: "K",
+	11: "L",
+	12: "M",
+	13: "N",
+	14: "O",
+	15: "P",
+	16: "Q",
+	17: "R",
+	18: "S",
+	19: "T",
+	20: "U",
+	21: "V",
+	22: "W",
+	23: "X",
+	24: "Y",
+	25: "Z",
 }
-
 
 var LANGUAGE_MAP = map[int]string{
-	1:"C/C++",
-	3:"Java",
-	6:"Python",
-	17:"Go",
+	1:  "C/C++",
+	3:  "Java",
+	6:  "Python",
+	17: "Go",
 }
 
-func InitTools(){
+func InitTools() {
 	downDir := "./static/down"
-	err := os.Mkdir(downDir,os.ModePerm)
+	zipDir := "/home/judge/data/tempzip"
+	err := os.Mkdir(downDir, os.ModePerm)
 	if err != nil {
+		logs.Error(err)
+	}
+	err2 := os.Mkdir(zipDir, os.ModePerm)
+	if err2 != nil {
 		logs.Error(err)
 	}
 }
 
-
 func StringToInt32(s string) (int32, error) {
-	id , err := strconv.ParseInt(s,10,32)
+	id, err := strconv.ParseInt(s, 10, 32)
 	id64 := int32(id)
 	if err != nil {
 		return -1, err
@@ -70,9 +73,8 @@ func StringToInt32(s string) (int32, error) {
 	return id64, nil
 }
 
-
-func StringToInt(s string) (int) {
-	id , err := strconv.ParseInt(s,10,32)
+func StringToInt(s string) int {
+	id, err := strconv.ParseInt(s, 10, 32)
 	id64 := int(id)
 	if err != nil {
 		return -1
@@ -80,10 +82,8 @@ func StringToInt(s string) (int) {
 	return id64
 }
 
-
-
-func StringToMonth(s string) (time.Month) {
-	id , err := strconv.ParseInt(s,10,32)
+func StringToMonth(s string) time.Month {
+	id, err := strconv.ParseInt(s, 10, 32)
 	id64 := time.Month(id)
 	if err != nil {
 		return -1
@@ -91,19 +91,15 @@ func StringToMonth(s string) (time.Month) {
 	return id64
 }
 
-
-func IntToString(s int) (string) {
+func IntToString(s int) string {
 	return strconv.Itoa(s)
 }
 
-
-
-func SplitIP(ip string) (string) {
+func SplitIP(ip string) string {
 	temp := strings.Split(ip, ":")
 
 	return temp[0]
 }
-
 
 func CheckEmail(email string) (b bool) {
 	if m, _ := regexp.MatchString("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+", email); !m {
@@ -112,8 +108,7 @@ func CheckEmail(email string) (b bool) {
 	return true
 }
 
-
-func MD5(s string)string {
+func MD5(s string) string {
 	h := md5.New()
 	_, _ = io.WriteString(h, s)
 	var x string
@@ -123,8 +118,6 @@ func MD5(s string)string {
 	return x
 }
 
-
-
 func HashEmail(email string) string {
 	email = strings.ToLower(strings.TrimSpace(email))
 	h := md5.New()
@@ -133,12 +126,10 @@ func HashEmail(email string) string {
 }
 func AvatarLink(email string, size int) (url string) {
 	s := IntToString(size)
-	url = setting.GRAVATARSOURCE + HashEmail(email) + "?d=identicon&s="+s
+	url = setting.GRAVATARSOURCE + HashEmail(email) + "?d=identicon&s=" + s
 
 	return url
 }
-
-
 
 func Compress(files []*os.File, dest string) error {
 	d, _ := os.Create(dest)
