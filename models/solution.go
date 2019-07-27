@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 
 	"github.com/astaxie/beego/logs"
 	_ "github.com/astaxie/beego/orm"
@@ -62,10 +63,10 @@ type Solution struct {
 	Judger     string    `orm:"type(char);size(16);default(LOCAL)"`
 }
 
-func UpdateSolutionResultBySid(sid int32) (bool) {
-	Solu := Solution{SolutionId:sid}
+func UpdateSolutionResultBySid(sid int32) bool {
+	Solu := Solution{SolutionId: sid}
 	Solu.Result = 1
-	_, err := DB.Update(&Solu,"result")
+	_, err := DB.Update(&Solu, "result")
 	if err != nil {
 		logs.Error(err)
 		return false
@@ -73,8 +74,7 @@ func UpdateSolutionResultBySid(sid int32) (bool) {
 	return true
 }
 
-
-func UpdateSolutionResultByCid(cid int32) (bool) {
+func UpdateSolutionResultByCid(cid int32) bool {
 	_, err := DB.QueryTable("solution").Filter("contest_id", cid).Update(orm.Params{
 		"result": 1,
 	})
@@ -85,8 +85,7 @@ func UpdateSolutionResultByCid(cid int32) (bool) {
 	return true
 }
 
-
-func UpdateSolutionResultByPid(pid int32) (bool) {
+func UpdateSolutionResultByPid(pid int32) bool {
 	_, err := DB.QueryTable("solution").Filter("problem_id", pid).Update(orm.Params{
 		"result": 1,
 	})
@@ -97,18 +96,16 @@ func UpdateSolutionResultByPid(pid int32) (bool) {
 	return true
 }
 
-
-func QueryTimeAndMemoryByuidpid(uid,pid int32) (int32,int32) {
+func QueryTimeAndMemoryByuidpid(uid, pid int32) (int32, int32) {
 	var data Solution
 	Solutions := new(Solution)
 	qs := DB.QueryTable(Solutions)
-	_, err := qs.Filter("user_id", uid).Filter("problem_id",pid).Filter("result",4).All(&data)
+	_, err := qs.Filter("user_id", uid).Filter("problem_id", pid).Filter("result", 4).All(&data)
 	if err != nil {
-		return 0,0
+		return 0, 0
 	}
-	return data.Time,data.Memory
+	return data.Time, data.Memory
 }
-
 
 func QuerySolutionBySid(sid int32) (Solution, error) {
 	Solu := Solution{SolutionId: sid}
@@ -135,11 +132,11 @@ func QueryTotalNumAcNumSolution(t string) (int64, int64) {
 	Solutions := new(Solution)
 	qs := DB.QueryTable(Solutions)
 	totalNum, err := qs.Filter("in_date", t).Count()
-	acNum, err := qs.Filter("in_date", t).Filter("result",4).Count()
+	acNum, err := qs.Filter("in_date", t).Filter("result", 4).Count()
 	if err != nil {
 		return 0, 0
 	}
-	return totalNum,acNum
+	return totalNum, acNum
 }
 
 func QueryPageSolution(start, pageSize int) ([]*Solution, map[int]string, int64, int64, error) {
@@ -264,7 +261,7 @@ func QueryJudgeTimeFromSolutionByUidCidPid(uid, pid, cid int32, startTime time.T
 		}
 	}
 
-	total := t + float64(num-i)*20
+	total := t + float64(num-i)*20*60
 	ErrNum = num - i
 	return pid, flag, total, ErrNum
 
@@ -280,13 +277,13 @@ func QueryACNickTotalByUid(uid int32, cid int32) (string, int64, int64) {
 	return nick, ac, total
 }
 
-func QueryACNickTotalByUidPid(uid int32,cid int32,pid int32)(string,int64,int64) {
+func QueryACNickTotalByUidPid(uid int32, cid int32, pid int32) (string, int64, int64) {
 	Solutions := new(Solution)
 	qs := DB.QueryTable(Solutions)
-	ac, _ := qs.Filter("user_id", uid).Filter("contest_id", cid).Filter("result", 4).Filter("problem_id",pid).Count()
+	ac, _ := qs.Filter("user_id", uid).Filter("contest_id", cid).Filter("result", 4).Filter("problem_id", pid).Count()
 	user, _ := QueryUserById(uid)
 	nick := user.Nick
-	total, _ := qs.Filter("user_id", uid).Filter("contest_id", cid).Filter("problem_id",pid).Count()
+	total, _ := qs.Filter("user_id", uid).Filter("contest_id", cid).Filter("problem_id", pid).Count()
 	return nick, ac, total
 }
 
