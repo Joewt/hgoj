@@ -1,12 +1,25 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego/logs"
-	"github.com/yinrenxin/hgoj/models"
-	"github.com/yinrenxin/hgoj/syserror"
+	"html/template"
 	"sort"
 	"time"
+
+	"github.com/astaxie/beego/cache"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/utils/captcha"
+	"github.com/yinrenxin/hgoj/models"
+	"github.com/yinrenxin/hgoj/syserror"
 )
+
+var store = cache.NewMemoryCache()
+var CPT = captcha.NewWithFilter("/captcha/", store)
+
+func init() {
+	CPT.ChallengeNums = 4
+	CPT.StdWidth = 120
+	CPT.StdHeight = 40
+}
 
 type IndexController struct {
 	BaseController
@@ -37,19 +50,17 @@ func (this *IndexController) Index() {
 
 	sort.Sort(SortUser(user))
 
-	var RankUser  []*RankUsers
+	var RankUser []*RankUsers
 
-	for k,v := range user {
-		RankUser = append(RankUser,&RankUsers{k+1,*v})
+	for k, v := range user {
+		RankUser = append(RankUser, &RankUsers{k + 1, *v})
 	}
-
 
 	if len(RankUser) > 30 {
 		RankUser = RankUser[0:20]
 	}
 
-
-	art,err := models.QueryLimitArt()
+	art, err := models.QueryLimitArt()
 	if err != nil {
 		logs.Error("没有文章")
 	}
@@ -60,11 +71,11 @@ func (this *IndexController) Index() {
 	var acNs []int64
 	var times []string
 	for i := -7; i <= -1; i++ {
-		calTime := time.Now().AddDate(0,0,i).Format("2006-01-02")
-		totalN,acN := models.QueryTotalNumAcNumSolution(calTime)
-		totalNs = append(totalNs,totalN)
+		calTime := time.Now().AddDate(0, 0, i).Format("2006-01-02")
+		totalN, acN := models.QueryTotalNumAcNumSolution(calTime)
+		totalNs = append(totalNs, totalN)
 		acNs = append(acNs, acN)
-		times = append(times,calTime)
+		times = append(times, calTime)
 	}
 	//logs.Info(totalNs,acNs)
 
@@ -169,6 +180,8 @@ func (this *IndexController) IndexUser() {
 	if this.IsLogin {
 		this.Abort("401")
 	}
+	this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
+	this.Data["captcha"] = true
 	this.TplName = "login.html"
 }
 
@@ -177,12 +190,14 @@ func (this *IndexController) IndexReg() {
 	if this.IsLogin {
 		this.Redirect("/index", 302)
 	}
+	this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
+	this.Data["captcha"] = true
 	this.TplName = "reg.html"
 }
 
 // @router /admin [get]
 func (this *IndexController) IndexAdmin() {
-	if !this.IsAdmin && !this.IsTeacher{
+	if !this.IsAdmin && !this.IsTeacher {
 		this.Abort401(syserror.UnKnowError{})
 	}
 	//v, _ := mem.VirtualMemory()

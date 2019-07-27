@@ -28,6 +28,7 @@
         <h3>加入到HGOJ</h3>
         <p>创建账号.</p>
         <form class="m-t">
+            {{ .xsrfdata }}
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="用户名(学号)" required="" name="username">
             </div>
@@ -46,6 +47,18 @@
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="学校" required="" name="school">
             </div>
+            {{if .captcha}}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input  class="form-control" name="captcha"  type="text" placeholder="验证码" required>
+                    </div>
+                    <div class="col-md-6">
+                        {{create_captcha}}
+                    </div>
+                </div>
+            </div>
+            {{end}}
 {{/*            <div class="form-group">*/}}
 {{/*                <div class="checkbox i-checks"><label> <input type="checkbox"><i></i> HGOJ协议 </label></div>*/}}
 {{/*            </div>*/}}

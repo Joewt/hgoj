@@ -28,12 +28,25 @@
         <h3>欢迎来到HGOJ</h3>
         <p>登录</p>
         <form class="m-t">
+            {{ .xsrfdata }}
             <div class="form-group">
                 <input type="email" class="form-control" placeholder="用户名/邮箱" required="" name="ue">
             </div>
             <div class="form-group">
                 <input type="password" class="form-control" placeholder="密码" required="" name="pwd">
             </div>
+            {{if .captcha}}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input  class="form-control" name="captcha"  type="text" placeholder="验证码" required>
+                    </div>
+                    <div class="col-md-6">
+                        {{create_captcha}}
+                    </div>
+                </div>
+            </div>
+            {{end}}
             <button type="button" class="btn btn-primary block full-width m-b" id="login">登录</button>
 
 {{/*            <a href="/forgotpwd"><small>忘记密码?</small></a>*/}}
