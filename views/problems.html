@@ -134,6 +134,45 @@
         editor.$blockScrolling = Infinity;
         editor.setFontSize(16);
         var langnames=new Array("c_cpp","c_cpp","pascal","java","ruby","sh","python","php","perl","csharp","objectivec","vbscript","scheme","c_cpp","c_cpp","lua","javascript","golang");
+        $('#language-type').on('change', function(){
+            var _this = $(this);
+            var language = _this[0].value;
+            if (language == 17) {
+                editor.session.setMode("ace/mode/golang");
+                editor.setOptions({
+                    enableBasicAutocompletion: true,
+                    enableSnippets: true,
+                    enableLiveAutocompletion: true
+                });
+            } 
+            if (language == 3) {
+                editor.session.setMode("ace/mode/java");
+                editor.setOptions({
+                    enableBasicAutocompletion: true,
+                    enableSnippets: true,
+                    enableLiveAutocompletion: true
+                });
+            }
+
+            if (language == 6) {
+                editor.session.setMode("ace/mode/python");
+                editor.setOptions({
+                    enableBasicAutocompletion: true,
+                    enableSnippets: true,
+                    enableLiveAutocompletion: true
+                });
+            }
+
+
+            if (language == 1) {
+                editor.session.setMode("ace/mode/c_cpp");
+                editor.setOptions({
+                    enableBasicAutocompletion: true,
+                    enableSnippets: true,
+                    enableLiveAutocompletion: true
+                });
+            }
+        });
         editor.session.setMode("ace/mode/c_cpp");
         editor.setOptions({
             enableBasicAutocompletion: true,
@@ -142,14 +181,6 @@
         });
         editor.setTheme("ace/theme/xcode");
         {{end}}
-
-
-        $('.relation-ver').on('change', function(){
-            var _this = $(this);
-            var ver = _this.find('option:selected').attr('data-ver');
-            _this.parents('tr').find('td').eq(2).find('input').val(ver ? ver : '');
-        });
-
         $('#submitpage').on('click', function(){
             var _this = $(this);
             var _pro = _this.parents('#problem');
