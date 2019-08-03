@@ -376,7 +376,11 @@ func (this *UserController) UserForgotPwd() {
 
 // @router /forgotpwd/sendemail [post]
 func (this *UserController) SendEmailForgot() {
-	this.JsonErr("未知错误", 9010, "")
+	email := this.GetMushString("email", "邮箱不能为空")
+	if ok := models.FindUserByEmail(email); ok {
+		this.JsonErr("用户不存在", 12002, "")
+	}
+	this.JsonErr("未开放:)请联系管理员更改密码", 9010, "")
 }
 
 // @router /admin/permissions/add [get]
