@@ -75,7 +75,7 @@
                             <td>{{.Time}}</td>
                             <td><a href="/contest/ceinfo/{{.SolutionId}}">{{Language_map .Language}}</a></td>
                             <td>{{.CodeLength}}</td>
-                            <td>{{.Judgetime}}</td>
+                            <td>{{Format_time_to_s .Judgetime}}</td>
                             <td>{{.Judger}}</td>
                             <td>{{Correctness_rate .PassRate}}%</td>
                         </tr>

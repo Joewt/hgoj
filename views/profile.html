@@ -122,7 +122,7 @@
 {{/*                                                        <td>{{.Language}}</td>*/}}
                                                         <td><a href="/ceinfo/{{.SolutionId}}">C/C++</a></td>
                                                         <td>{{.CodeLength}}</td>
-                                                        <td>{{.Judgetime}}</td>
+                                                        <td>{{Format_time_to_s .Judgetime}}</td>
                                                         <td>{{.Judger}}</td>
                                                     </tr>
                                                 {{end}}

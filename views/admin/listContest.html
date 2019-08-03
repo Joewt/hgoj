@@ -39,7 +39,7 @@
                                     <td class="project-title">
                                         <a href="/contest/cid/{{.ContestId}}">{{.Title}}</a>
                                         <br/>
-                                        <small>比赛开始时间 {{.StartTime}}</small>
+                                        <small>比赛开始时间 {{Format_time_to_s .StartTime}}</small>
                                     </td>
                                     <td class="project-completion">
                                         <small>比赛进度: {{cal_rate .StartTime .EndTime}}%</small>

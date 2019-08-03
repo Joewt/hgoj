@@ -33,7 +33,7 @@
 
                                     <td>{{.Accepted}}</td>
 
-                                    <td>{{.InDate}}</td>
+                                    <td>{{Format_time_to_s .InDate}}</td>
 
                                     {{if eq .Defunct "N"}}
                                     <td><button type="button" class="btn btn-sm btn-success pro-status" data-proid="{{.ProblemId}}">可使用</button></td>
