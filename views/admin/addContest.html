@@ -10,6 +10,7 @@
                 <h5>添加比赛&作业</h5>
             </div>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <div class="form-group"><label class="col-sm-2 control-label">标题</label>
                         <div class="col-sm-10"><input type="text" class="form-control data-pro" name="title"></div>
@@ -51,7 +52,7 @@
 
                     <div class="form-group"><label class="col-sm-2 control-label">权限</label>
                         <div class="col-sm-10">
-                            <select class="select-language" name="role">
+                            <select class="select-role" name="role">
                                 <option value="0">公开</option>
                                 <option value="1">私有</option>
                             </select>
@@ -119,9 +120,8 @@ user3
                     window.location.href=res.action;
                 }
             }, 'json');
-
-
         });
+
     });
 
 

@@ -10,6 +10,7 @@
                 <h5>导出数据</h5>
             </div>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <div class="form-group"><label class="col-sm-2 control-label">from</label>
                         <div class="col-sm-3"><input type="number" class="form-control data-pro" name="from"></div>
@@ -34,6 +35,7 @@
                 <h5>导入数据</h5>
             </div>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">

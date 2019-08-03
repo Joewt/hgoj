@@ -10,6 +10,7 @@
                 <h5>重判题目</h5>
             </div>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <div class="form-group"><label class="col-sm-2 control-label">题目ID</label>
                         <div class="col-sm-3"><input type="text" class="form-control" name="rjpid"></div>
@@ -23,6 +24,7 @@
                 </div>
             </form>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <div class="form-group"><label class="col-sm-2 control-label">竞赛ID</label>
                         <div class="col-sm-3"><input type="text" class="form-control" name="rjcid"></div>
@@ -36,6 +38,7 @@
                 </div>
             </form>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <div class="form-group"><label class="col-sm-2 control-label">提交ID</label>
                         <div class="col-sm-3"><input type="text" class="form-control" name="rjsid"></div>

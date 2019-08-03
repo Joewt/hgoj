@@ -23,6 +23,7 @@
         <div class="middle-box text-center  animated fadeInDown">
             <div>
             <form class="m-b">
+                {{ .xsrfdata }}
                 <div class="form-group">
                     <input type="text" class="form-control"  required="" name="username" disabled value="{{.User.UserName}}">
                 </div>

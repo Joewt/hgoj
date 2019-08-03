@@ -10,6 +10,7 @@
                 <h5>修改密码</h5>
             </div>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <div class="form-group"><label class="col-sm-2 control-label">用户名</label>
                         <div class="col-sm-3"><input type="text" class="form-control" name="uname"></div>

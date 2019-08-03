@@ -10,6 +10,7 @@
                 <h5>编辑比赛</h5>
             </div>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <input type="text" name="cid" value="{{.con.ContestId}}" hidden>
                     <div class="form-group"><label class="col-sm-2 control-label">标题</label>

@@ -10,6 +10,7 @@
                 <h5>编辑问题</h5>
             </div>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <input type="hidden" name="proid" value="{{.PRO.ProblemId}}">
                     <div class="form-group"><label class="col-sm-2 control-label">Title</label>

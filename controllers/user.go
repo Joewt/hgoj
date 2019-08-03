@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"html/template"
 	"reflect"
 	"strconv"
 	"strings"
@@ -156,17 +157,15 @@ func (this *UserController) UserReg() {
 	if models.FindUserByEmail(email) == false || models.FindUserByUname(username) == false {
 		this.JsonErr("已经有该用户了", 1101, "/reg")
 	}
-	//panic("xx")
-	logs.Info("到这里不会执行了")
+
 	//保存用户信息
 	uid, err := models.SaveUser(username, nick, email, pwd, school, Ip)
 	if err != nil {
 		this.JsonErr("注册失败", 112, "/reg")
 	}
 
-	//
 	user, _ := models.QueryUserById(uid)
-	//
+
 	this.SetSession(SESSION_USER_KEY, user)
 
 	this.JsonOK("注册成功", "/index")
@@ -246,6 +245,7 @@ func (this *UserController) UserGen() {
 	if !this.IsAdmin {
 		this.Abort("500")
 	}
+	this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
 	this.TplName = "admin/generate.html"
 }
 
@@ -332,6 +332,7 @@ func (this *UserController) UserUpdateGet() {
 	if !this.IsLogin {
 		this.Abort("401")
 	}
+	this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
 	this.TplName = "profileUpdate.html"
 }
 
@@ -369,6 +370,7 @@ func (this *UserController) UserUpdatePost() {
 
 // @router /forgotpwd [get]
 func (this *UserController) UserForgotPwd() {
+	this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
 	this.TplName = "forgotPassword.html"
 }
 
@@ -382,6 +384,7 @@ func (this *UserController) PermissionsAdd() {
 	if !this.IsAdmin {
 		this.Abort("401")
 	}
+	this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
 	this.TplName = "admin/peradd.html"
 }
 
@@ -422,6 +425,7 @@ func (this *UserController) PermissionsList() {
 
 // @router /admin/changepwd [get]
 func (this *UserController) ChangePassword() {
+	this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
 	this.TplName = "admin/changepwd.html"
 }
 

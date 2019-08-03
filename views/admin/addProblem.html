@@ -10,6 +10,7 @@
                 <h5>添加问题</h5>
             </div>
             <form class="ibox-content">
+                {{ .xsrfdata }}
                 <div class="form-horizontal" id="form-data">
                     <div class="form-group"><label class="col-sm-2 control-label">Title</label>
                         <div class="col-sm-10"><input type="text" class="form-control data-pro" name="title"></div>
