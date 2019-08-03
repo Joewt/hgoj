@@ -31,6 +31,7 @@ type Pro struct {
 type ContestRank struct {
 	Rank      int
 	Nick      string
+	UserId    int32
 	AC        int64
 	Total     int64
 	TotalTime float64
@@ -511,7 +512,7 @@ func (this *ContestController) ContestRank() {
 		for _, TT := range CPData {
 			TotalTime += TT.ACtime
 		}
-		data = append(data, &ContestRank{k, nick, ac, total, TotalTime, CPData})
+		data = append(data, &ContestRank{k, nick, v, ac, total, TotalTime, CPData})
 	}
 	//对排名进行排序
 	sort.Sort(CR(data))

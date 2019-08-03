@@ -48,7 +48,7 @@
                             {{range .data}}
                                 <tr>
                                     <td>{{.Rank}}</td>
-                                    <td>{{.Nick}}</td>
+                                    <td><a href="/profile/{{.UserId}}">{{.Nick}}</a></td>
                                     <td>{{.AC}}/{{.Total}}</td>
                                     <td>{{ParseTime .TotalTime}}</td>
                                     {{range .CP}}
@@ -75,15 +75,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
     </div>
 
 
