@@ -1,16 +1,20 @@
 package controllers
 
 import (
+	"encoding/json"
 	"html/template"
+	// "reflect"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 
+	// "github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
+	"github.com/go-redis/redis"
 )
 
 type ContestController struct {
@@ -489,6 +493,16 @@ func (this *ContestController) ContestRank() {
 
 	contestInfo, _ := models.QueryContestByConId(c)
 
+	// redisClient, _ := cache.NewCache("memory", `{"key":"hgoj","conn":"127.0.0.1:6379","dbNum":"2","":""}`)
+	client := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	// pong, err := client.Ping().Result()
+	// fmt.Println(pong, err)
+
 	var proIds []ContestProblem
 	for i, v := range pros {
 		proIds = append(proIds, ContestProblem{tools.CONTEST_PRO_KEY[i], v.ProblemId})
@@ -497,30 +511,38 @@ func (this *ContestController) ContestRank() {
 	var data []*ContestRank
 	var proac int64
 
-	for k, v := range uids {
-		nick, ac, total := models.QueryACNickTotalByUid(v, c)
-		var CPData []CPProblem
-		for _, p := range proIds {
-			qpid, flag, actime, ErrNum := models.QueryJudgeTimeFromSolutionByUidCidPid(v, p.ProId, c, contestInfo.StartTime)
-			CPData = append(CPData, CPProblem{qpid, flag, actime, ErrNum})
-			_, proac, _ = models.QueryACNickTotalByUidPid(v, c, p.ProId)
-			if proac > 1 {
-				ac = ac - proac + 1
+	val, _ := client.Get("contestrankdd").Result()
+	if val == "" { 
+		for k, v := range uids {
+			nick, ac, total := models.QueryACNickTotalByUid(v, c)
+			var CPData []CPProblem
+			for _, p := range proIds {
+				qpid, flag, actime, ErrNum := models.QueryJudgeTimeFromSolutionByUidCidPid(v, p.ProId, c, contestInfo.StartTime)
+				CPData = append(CPData, CPProblem{qpid, flag, actime, ErrNum})
+				_, proac, _ = models.QueryACNickTotalByUidPid(v, c, p.ProId)
+				if proac > 1 {
+					ac = ac - proac + 1
+				}
 			}
+			var TotalTime float64
+			for _, TT := range CPData {
+				TotalTime += TT.ACtime
+			}
+			data = append(data, &ContestRank{k, nick, v, ac, total, TotalTime, CPData})
 		}
-		var TotalTime float64
-		for _, TT := range CPData {
-			TotalTime += TT.ACtime
+		//对排名进行排序
+		sort.Sort(CR(data))
+		for k, v := range data {
+			v.Rank = k + 1
 		}
-		data = append(data, &ContestRank{k, nick, v, ac, total, TotalTime, CPData})
+		json_data, _ := json.Marshal(data)
+		_ = client.SetNX("contestrankdd", json_data, 10*time.Second).Err()
 	}
-	//对排名进行排序
-	sort.Sort(CR(data))
-	for k, v := range data {
-		v.Rank = k + 1
-	}
+	res, _ := client.Get("contestrankdd").Result()
+	var conData []*ContestRank
+	_ = json.Unmarshal([]byte(res), &conData)
 	this.Data["proids"] = proIds
-	this.Data["data"] = data
+	this.Data["data"] = conData
 	this.Data["conid"] = cid
 	this.Data["contest"] = contestInfo
 	this.TplName = "contest/contestrank.html"
