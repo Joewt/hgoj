@@ -511,7 +511,7 @@ func (this *ContestController) ContestRank() {
 	var data []*ContestRank
 	var proac int64
 
-	val, _ := client.Get("contestrankdd").Result()
+	val, _ := client.Get("contestrankdd"+cid).Result()
 	if val == "" { 
 		for k, v := range uids {
 			nick, ac, total := models.QueryACNickTotalByUid(v, c)
@@ -536,9 +536,9 @@ func (this *ContestController) ContestRank() {
 			v.Rank = k + 1
 		}
 		json_data, _ := json.Marshal(data)
-		_ = client.SetNX("contestrankdd", json_data, 10*time.Second).Err()
+		_ = client.SetNX("contestrankdd"+cid, json_data, 10*time.Second).Err()
 	}
-	res, _ := client.Get("contestrankdd").Result()
+	res, _ := client.Get("contestrankdd"+cid).Result()
 	var conData []*ContestRank
 	_ = json.Unmarshal([]byte(res), &conData)
 	this.Data["proids"] = proIds
