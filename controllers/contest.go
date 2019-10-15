@@ -536,7 +536,7 @@ func (this *ContestController) ContestRank() {
 			v.Rank = k + 1
 		}
 		json_data, _ := json.Marshal(data)
-		_ = client.SetNX("contestrankdd"+cid, json_data, 10*time.Second).Err()
+		_ = client.SetNX("contestrankdd"+cid, json_data, 30*time.Second).Err()
 	}
 	res, _ := client.Get("contestrankdd"+cid).Result()
 	var conData []*ContestRank
