@@ -260,8 +260,10 @@ func QueryJudgeTimeFromSolutionByUidCidPid(uid, pid, cid int32, startTime time.T
 			flag = true
 		}
 	}
-
-	total := t + float64(num-i)*20*60
+	var total float64
+	if flag {
+		total = t + float64(num-i)*20*60
+	}
 	ErrNum = num - i
 	return pid, flag, total, ErrNum
 
