@@ -11,10 +11,10 @@ import (
 
 	// "github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/logs"
+	"github.com/go-redis/redis"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
-	"github.com/go-redis/redis"
 )
 
 type ContestController struct {
@@ -511,8 +511,8 @@ func (this *ContestController) ContestRank() {
 	var data []*ContestRank
 	var proac int64
 
-	val, _ := client.Get("contestrankdd"+cid).Result()
-	if val == "" { 
+	val, _ := client.Get("contestrankdd" + cid).Result()
+	if val == "" {
 		for k, v := range uids {
 			nick, ac, total := models.QueryACNickTotalByUid(v, c)
 			var CPData []CPProblem
@@ -536,9 +536,9 @@ func (this *ContestController) ContestRank() {
 			v.Rank = k + 1
 		}
 		json_data, _ := json.Marshal(data)
-		_ = client.SetNX("contestrankdd"+cid, json_data, 30*time.Second).Err()
+		_ = client.SetNX("contestrankdd"+cid, json_data, 60*time.Second).Err()
 	}
-	res, _ := client.Get("contestrankdd"+cid).Result()
+	res, _ := client.Get("contestrankdd" + cid).Result()
 	var conData []*ContestRank
 	_ = json.Unmarshal([]byte(res), &conData)
 	this.Data["proids"] = proIds
