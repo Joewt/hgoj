@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -17,8 +18,14 @@ func init() {
 		dbPort = "3306"
 	}
 	dsn := dbUser + ":" + dbPassword + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8"
-	orm.RegisterDriver("mysql", orm.DRMySQL)
-	orm.RegisterDataBase("default", "mysql", dsn)
+	err := orm.RegisterDriver("mysql", orm.DRMySQL)
+	if err != nil {
+		logs.Error(err)
+	}
+	err2 := orm.RegisterDataBase("default", "mysql", dsn)
+	if err2 != nil {
+		logs.Error(err2)
+	}
 
 
 	orm.RegisterModel(new(Users), new(Topic), new(SourceCode),

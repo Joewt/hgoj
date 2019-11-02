@@ -57,7 +57,7 @@ type Solution struct {
 	Valid      int8      `orm:"default(1)"`
 	Num        int8      `orm:"default(-1)"`
 	CodeLength int32     `orm:"default(0)"`
-	Judgetime  time.Time `orm:"default(null);type(datetime)null"`
+	Judgetime  time.Time `orm:"default(null);type(datetime);null"`
 	PassRate   float64   `orm:"digits(3);decimals(2);default(0)"`
 	LintError  uint      `orm:"default(0)"`
 	Judger     string    `orm:"type(char);size(16);default(LOCAL)"`
@@ -241,6 +241,66 @@ func QueryAllUserIdByCid(cid int32) ([]int32, int64) {
 	}
 
 	return uid, num
+}
+
+func QueryAllUserByCid(cid int32) ([]*UserInfos, int64) {
+	var UserData []TempUser
+
+	num1, _ := DB.Raw("SELECT users.user_id,users.nick from solution,users WHERE `contest_id` = ? and solution.user_id = users.user_id group by users.user_id",cid).QueryRows(&UserData)
+
+	var UserAc []*TempUserAc
+	DB.Raw("SELECT `user_id`,count(`solution_id`) as ac from solution WHERE `contest_id` = ? and `result` = 4 group by `user_id`",cid).QueryRows(&UserAc)
+
+
+	var UserSubmitNum []TempUserSubmit
+	DB.Raw("SELECT `user_id`,count(`solution_id`) as total from solution WHERE `contest_id` = ? group by `user_id`",cid).QueryRows(&UserSubmitNum)
+
+
+	var UserInfo []*UserInfos
+	for _, v := range UserData {
+		var ac int32
+		var total int32
+		for _, v2 := range UserAc {
+			if v.UserId == v2.UserId {
+				ac = v2.Ac
+			}
+		}
+		for _, v3 := range UserSubmitNum {
+			if v.UserId == v3.UserId {
+				total = v3.Total
+			}
+		}
+		UserInfo = append(UserInfo,&UserInfos{v.UserId,v.Nick,ac,total})
+	}
+	return UserInfo, num1
+}
+
+type TempUser struct {
+	UserId int32
+	Nick string
+}
+
+type TempUserAc struct {
+	UserId int32
+	Ac int32
+}
+
+type TempUserSubmit struct {
+	UserId int32
+	Total int32
+}
+
+type UserInfos struct {
+	UserId int32
+	Nick string
+	Ac int32
+	Total int32
+}
+
+func QueryAllAcNumByCid(cid int32)([]*TempUserAc, int64) {
+	var UserAc []*TempUserAc
+	num, _ := DB.Raw("SELECT `user_id`,count(solution_id) from solution WHERE `contest_id` = ? group by user_id",cid).QueryRows(&UserAc)
+	return UserAc, num
 }
 
 func QueryJudgeTimeFromSolutionByUidCidPid(uid, pid, cid int32, startTime time.Time) (int32, bool, float64, int64) {

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"encoding/json"
+	//"encoding/json"
 	"html/template"
 	// "reflect"
 	"sort"
@@ -14,7 +14,6 @@ import (
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
-	"github.com/go-redis/redis"
 )
 
 type ContestController struct {
@@ -36,8 +35,8 @@ type ContestRank struct {
 	Rank      int
 	Nick      string
 	UserId    int32
-	AC        int64
-	Total     int64
+	AC        int32
+	Total     int32
 	TotalTime float64
 	CP        []CPProblem
 }
@@ -490,59 +489,75 @@ func (this *ContestController) ContestRank() {
 	cid := this.Ctx.Input.Param(":cid")
 	c, _ := tools.StringToInt32(cid)
 	pros, _ := models.QueryProblemByCid(c)
-
 	contestInfo, _ := models.QueryContestByConId(c)
 
-	// redisClient, _ := cache.NewCache("memory", `{"key":"hgoj","conn":"127.0.0.1:6379","dbNum":"2","":""}`)
-	client := redis.NewClient(&redis.Options{
-		Addr:     "redis:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
-
-	// pong, err := client.Ping().Result()
-	// fmt.Println(pong, err)
-
+	//TODO 如果再因为比赛排名卡死 开启redis缓存
+	//redisClient, _ := cache.NewCache("memory", `{"key":"hgoj","conn":"127.0.0.1:6379","dbNum":"2","":""}`)
+	//client := redis.NewClient(&redis.Options{
+	//	Addr:     "redis:6379",
+	//	Password: "", // no password set
+	//	DB:       0,  // use default DB
+	//})
 	var proIds []ContestProblem
 	for i, v := range pros {
 		proIds = append(proIds, ContestProblem{tools.CONTEST_PRO_KEY[i], v.ProblemId})
 	}
-	uids, _ := models.QueryAllUserIdByCid(c)
 	var data []*ContestRank
-	var proac int64
-
-	val, _ := client.Get("contestrankdd"+cid).Result()
-	if val == "" { 
-		for k, v := range uids {
-			nick, ac, total := models.QueryACNickTotalByUid(v, c)
-			var CPData []CPProblem
-			for _, p := range proIds {
-				qpid, flag, actime, ErrNum := models.QueryJudgeTimeFromSolutionByUidCidPid(v, p.ProId, c, contestInfo.StartTime)
-				CPData = append(CPData, CPProblem{qpid, flag, actime, ErrNum})
-				_, proac, _ = models.QueryACNickTotalByUidPid(v, c, p.ProId)
-				if proac > 1 {
-					ac = ac - proac + 1
+	//val, _ := client.Get("contestrankdd"+cid).Result()
+	//if val == "" {
+	conSolutions,_, _ := models.QueryAllSolutionByCid(c)
+	UserInfos, _ := models.QueryAllUserByCid(c)
+	for k, v := range UserInfos {
+		var ac = v.Ac
+		var total = v.Total
+		nick := v.Nick
+		var CPData []CPProblem
+		for _, p := range proIds {
+			var t float64
+			var i int64
+			var flag bool
+			var ErrNum int64
+			flag = false
+			var num int64
+			var total float64
+			for _, conSolution := range conSolutions {
+				if conSolution.UserId == v.UserId && conSolution.ProblemId == p.ProId {
+					num++
+					if conSolution.Result == 4{
+						i++
+						t = conSolution.Judgetime.Sub(contestInfo.StartTime).Seconds()
+						flag = true
+					}
 				}
 			}
-			var TotalTime float64
-			for _, TT := range CPData {
-				TotalTime += TT.ACtime
+			if flag {
+				total = t + float64(num-i)*20*60
 			}
-			data = append(data, &ContestRank{k, nick, v, ac, total, TotalTime, CPData})
+			ErrNum = num - i
+			CPData = append(CPData, CPProblem{p.ProId, flag, total, ErrNum})
+			if i > 1 {
+				ac = ac - int32(i) + 1
+			}
 		}
-		//对排名进行排序
-		sort.Sort(CR(data))
-		for k, v := range data {
-			v.Rank = k + 1
+		var TotalTime float64
+		for _, TT := range CPData {
+			TotalTime += TT.ACtime
 		}
-		json_data, _ := json.Marshal(data)
-		_ = client.SetNX("contestrankdd"+cid, json_data, 30*time.Second).Err()
+		data = append(data, &ContestRank{k, nick, v.UserId, ac, total, TotalTime, CPData})
 	}
-	res, _ := client.Get("contestrankdd"+cid).Result()
-	var conData []*ContestRank
-	_ = json.Unmarshal([]byte(res), &conData)
+	//对排名进行排序
+	sort.Sort(CR(data))
+	for k, v := range data {
+		v.Rank = k + 1
+	}
+	//json_data, _ := json.Marshal(data)
+	//	//_ = client.SetNX("contestrankdd"+cid, json_data, 30*time.Second).Err()
+	////}
+	//res, _ := client.Get("contestrankdd"+cid).Result()
+	//var conData []*ContestRank
+	//_ = json.Unmarshal([]byte(res), &conData)
 	this.Data["proids"] = proIds
-	this.Data["data"] = conData
+	this.Data["data"] = data
 	this.Data["conid"] = cid
 	this.Data["contest"] = contestInfo
 	this.TplName = "contest/contestrank.html"
