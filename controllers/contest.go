@@ -11,6 +11,7 @@ import (
 
 	// "github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/logs"
+	"github.com/go-redis/redis"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
