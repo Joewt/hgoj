@@ -8,6 +8,7 @@ import (
 	"github.com/astaxie/beego/logs"
 	"github.com/yinrenxin/hgoj/tools"
 	"strconv"
+	"strings"
 	"time"
 
 	//"strconv"
@@ -60,7 +61,7 @@ func initTemplate() {
 	})
 
 	_ = beego.AddFuncMap("menu_eq", func(a,b string)(string){
-		if a == b {
+		if strings.Contains(a, b) {
 			return "active"
 		} else {
 			return ""

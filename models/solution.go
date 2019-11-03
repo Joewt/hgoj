@@ -270,7 +270,7 @@ func QueryAllUserByCid(cid int32) ([]*UserInfos, int64) {
 				total = v3.Total
 			}
 		}
-		UserInfo = append(UserInfo,&UserInfos{v.UserId,v.Nick,ac,total})
+		UserInfo = append(UserInfo,&UserInfos{v,ac,total})
 	}
 	return UserInfo, num1
 }
@@ -291,8 +291,7 @@ type TempUserSubmit struct {
 }
 
 type UserInfos struct {
-	UserId int32
-	Nick string
+	TempUser
 	Ac int32
 	Total int32
 }
