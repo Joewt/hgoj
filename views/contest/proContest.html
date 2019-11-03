@@ -66,6 +66,15 @@
                                 样例输出
                             </h3>
                             <pre>{{.problem.SampleOutput}}</pre>
+
+                            {{if .problem.Hint}}
+                                <h3>
+                                    提示
+                                </h3>
+                                <p id="pro-hint">
+
+                                </p>
+                            {{end}}
                         </div>
                     </div>
                 </div>
@@ -235,6 +244,10 @@
             marked({{.problem.Input}});
         document.getElementById('pro-output').innerHTML =
             marked({{.problem.Output}});
+        {{if .problem.Hint}}
+        document.getElementById('pro-hint').innerHTML =
+            marked({{.problem.Hint}});
+        {{end}}
     });
 
 

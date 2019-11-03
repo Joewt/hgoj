@@ -56,6 +56,22 @@
                     </div>
 
 
+
+                    <div class="form-group"><label class="col-sm-2 control-label">Special Judge</label>
+                        <div class="col-sm-10">
+                            <select class="select-spj" name="spj" style="width:52px;">
+                                <option value="0" {{select_eq .PRO.Spj "0"}}>N</option>
+                                <option value="1" {{select_eq .PRO.Spj "1"}}>Y</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group"><label class="col-sm-2 control-label">Hint</label>
+                        <div class="col-sm-10"><textarea rows="12"  class="editor data-pro" placeholder="" autofocus name="hint">{{.PRO.Hint}}</textarea></div>
+                    </div>
+
+
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
@@ -81,7 +97,7 @@
 <script type="text/javascript" src="/js/plugins/bootstrap-markdown/bootstrap-markdown.js"></script>
 <script type="text/javascript" src="/js/plugins/bootstrap-markdown/markdown.js"></script>
 <script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
-
+<script src="/js/plugins/select2/select2.full.min.js"></script>
 
 <script>
     $(document).ready(function() {
@@ -90,6 +106,7 @@
         //     //optional options
         // });
         $(".editor").markdown({autofocus:false,savable:false});
+        $('.select-spj').select2();
 
         $('#submitpro').on('click', function(){
             var _this = $(this);

@@ -67,6 +67,15 @@ func initTemplate() {
 			return ""
 		}
 	})
+
+	_ = beego.AddFuncMap("select_eq", func(a,b string)(string){
+		if a == b {
+			return "selected"
+		} else {
+			return ""
+		}
+	})
+
 	_ = beego.AddFuncMap("cal_rate", func(a,b time.Time)(float64){
 		startTime := a
 		endTime := b

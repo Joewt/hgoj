@@ -132,8 +132,10 @@ func (this *ProblemController) ProblemUpdate() {
 	output := this.GetMushString("output", "output不能为空")
 	sampleinput := this.GetMushString("sampleinput", "sampleinput不能为空")
 	sampleoutput := this.GetMushString("sampleoutput", "sampleoutput不能为空")
+	spj := this.GetMushString("spj", "spj不能为空")
+	hint := this.GetString("hint")
 	inDate := time.Now()
-	data := []string{title, rtime, memory, desc, input, output, sampleinput, sampleoutput}
+	data := []string{title, rtime, memory, desc, input, output, sampleinput, sampleoutput, hint, spj}
 	ok, err := models.UpdateProblemById(id, data, inDate)
 	if !ok {
 		this.JsonErr("更新失败", syserror.UPDATE_PROBLEM_ERR, "problem/edit/"+proId)
@@ -256,9 +258,11 @@ func (this *ProblemController) ProblemAddPost() {
 	output := this.GetMushString("output", "output不能为空")
 	sampleinput := this.GetMushString("sampleinput", "sampleinput不能为空")
 	sampleoutput := this.GetMushString("sampleoutput", "sampleoutput不能为空")
+	spj := this.GetMushString("spj", "spj不能为空")
+	hint := this.GetString("hint")
 	filename := this.GetMushString("filename", "未上传测试数据")
 	inDate := time.Now()
-	data := []string{title, rtime, memory, desc, input, output, sampleinput, sampleoutput}
+	data := []string{title, rtime, memory, desc, input, output, sampleinput, sampleoutput,hint,spj}
 	pid, err := models.AddProblem(data, inDate)
 	if err != nil {
 		this.JsonErr("更新失败", syserror.ADD_PROBLEM_ERR, "/problem/add")

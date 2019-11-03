@@ -126,6 +126,8 @@ func AddProblem(data []string,inDate time.Time) (int64,error) {
 	pro.Output = data[5]
 	pro.SampleInput = data[6]
 	pro.SampleOutput = data[7]
+	pro.Hint = data[8]
+	pro.Spj = data[9]
 	pro.InDate = inDate
 	pro.Defunct = "N"
 
@@ -148,6 +150,8 @@ func UpdateProblemById(id int32, data []string,inDate time.Time) (bool,error) {
 		pro.Output = data[5]
 		pro.SampleInput = data[6]
 		pro.SampleOutput = data[7]
+		pro.Hint = data[8]
+		pro.Spj = data[9]
 		pro.InDate = inDate
 		if num, err := DB.Update(&pro); err == nil {
 			logs.Info(num)
