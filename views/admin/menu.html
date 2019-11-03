@@ -50,44 +50,44 @@
                         HGOJ
                     </div>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/problem/add"}}">
                     <a href="/problem/add"><i class="fa fa-plus-square"></i> <span class="nav-label">添加问题</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/problem/list"}}">
                     <a href="/problem/list"><i class="fa fa-bars"></i> <span class="nav-label">问题列表</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/contest/add"}}">
                     <a href="/contest/add"><i class="fa fa-plus-square"></i> <span class="nav-label">添加竞赛&作业</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/contest/list"}}">
                     <a href="/contest/list"><i class="fa fa-bars"></i> <span class="nav-label">竞赛&作业列表</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/admin/rejudge"}}">
                     <a href="/admin/rejudge"><i class="fa fa-repeat"></i> <span class="nav-label">重判题目</span></a>
                 </li>
                 {{if .isadmin}}
-                <li>
+                <li class="{{menu_eq .menu "/admin/user/generate"}}">
                     <a href="/admin/user/generate"><i class="fa fa-user"></i> <span class="nav-label">账号生成</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/user/list"}}">
                     <a href="/user/list"><i class="fa fa-users"></i> <span class="nav-label">用户列表</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/admin/art/add"}}">
                     <a href="/admin/art/add"><i class="glyphicon glyphicon-pencil"></i> <span class="nav-label">设置文章</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/admin/art/list"}}">
                     <a href="/admin/art/list"><i class="glyphicon glyphicon-list-alt"></i> <span class="nav-label">文章列表</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/admin/permissions/add"}}">
                     <a href="/admin/permissions/add"><i class="glyphicon glyphicon-warning-sign"></i> <span class="nav-label">权限管理</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/admin/permissions/list"}}">
                     <a href="/admin/permissions/list"><i class="fa fa-bars"></i> <span class="nav-label">权限列表</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/admin/changepwd"}}">
                     <a href="/admin/changepwd"><i class="glyphicon glyphicon-repeat"></i> <span class="nav-label">修改密码</span></a>
                 </li>
-                <li>
+                <li class="{{menu_eq .menu "/problem/exinport"}}">
                     <a href="/problem/exinport"><i class="glyphicon glyphicon-upload"></i> <span class="nav-label">导入&导出</span></a>
                 </li>
                 {{end}}

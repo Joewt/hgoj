@@ -57,7 +57,7 @@ type Solution struct {
 	Valid      int8      `orm:"default(1)"`
 	Num        int8      `orm:"default(-1)"`
 	CodeLength int32     `orm:"default(0)"`
-	Judgetime  time.Time `orm:"default(null);type(datetime);null"`
+	Judgetime  time.Time `orm:"null;type(datetime);default(null)"`
 	PassRate   float64   `orm:"digits(3);decimals(2);default(0)"`
 	LintError  uint      `orm:"default(0)"`
 	Judger     string    `orm:"type(char);size(16);default(LOCAL)"`
