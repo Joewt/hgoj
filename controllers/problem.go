@@ -286,7 +286,6 @@ func (this *ProblemController) ProblemAddPost() {
 
 // @router /problem/fileupload [post]
 func (this *ProblemController) Fileupload() {
-	logs.Info(this.Ctx.Input)
 	if !this.IsAdmin && !this.IsTeacher {
 		this.Abort("401")
 	}
@@ -327,7 +326,6 @@ func mkdata(pid int64, filename string, input string, oj_data string) bool {
 		return false
 	}
 	name := baseDir + "/" + filename
-	logs.Info(name)
 	data := []byte(input)
 	if ioutil.WriteFile(name, data, 0644) != nil {
 		logs.Error("文件写入失败,文件名", name)

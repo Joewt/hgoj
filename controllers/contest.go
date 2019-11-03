@@ -87,7 +87,6 @@ func (this *ContestController) ContestAddGet() {
 	this.Data["year"] = y
 	this.Data["month"] = month[m]
 	this.Data["day"] = d
-	logs.Info(y, m, d)
 	this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
 	this.TplName = "admin/addContest.html"
 }
