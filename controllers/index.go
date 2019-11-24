@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/go-redis/redis"
 	"html/template"
 	"sort"
 	"time"
+
+	"github.com/go-redis/redis"
 
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/logs"
@@ -50,7 +51,6 @@ func (this *IndexController) Index() {
 		this.JsonErr("未知错误", 4000, "/index")
 	}
 
-
 	//cache.NewCache("memory", `{"key":"hgoj","conn":"r-8vb4cmly4tyog47ykepd.redis.zhangbei.rds.aliyuncs.com:6379","dbNum":"2","":""}`)
 	client := redis.NewClient(&redis.Options{
 		Addr:     "redis:7379",
@@ -82,14 +82,14 @@ func (this *IndexController) Index() {
 	var times []string
 	type TAC struct {
 		totalNs []int64
-		acNs []int64
-		times []string
+		acNs    []int64
+		times   []string
 	}
-	var redisKeys = "index"+nowTime
+	var redisKeys = "index" + nowTime
 	logs.Error(redisKeys)
 	val, err := client.Get(redisKeys).Result()
 	if err != nil {
-		logs.Error("redic get errr:",err)
+		logs.Error("redic get errr:", err)
 	}
 	if val == "" {
 		for i := -7; i <= -1; i++ {
@@ -100,11 +100,11 @@ func (this *IndexController) Index() {
 			times = append(times, calTime)
 		}
 		var tac *TAC
-		tac = &TAC{totalNs:totalNs,acNs:acNs,times:times}
+		tac = &TAC{totalNs: totalNs, acNs: acNs, times: times}
 		json_data, _ := json.Marshal(tac)
-		_ = client.SetNX(redisKeys, json_data,10*time.Second).Err()
+		_ = client.SetNX(redisKeys, json_data, 3600*time.Second).Err()
 	}
-	res,err := client.Get(redisKeys).Result()
+	res, err := client.Get(redisKeys).Result()
 	var redisTotalNsA []int64
 	var redisAcNs []int64
 	var redisTimes []string
@@ -112,13 +112,12 @@ func (this *IndexController) Index() {
 		var tacs *TAC
 		err = json.Unmarshal([]byte(res), &tacs)
 		if err == nil {
-			logs.Error("tacs",tacs)
+			logs.Error("tacs", tacs)
 			redisTotalNsA = tacs.totalNs
 			redisAcNs = tacs.acNs
 			redisTimes = tacs.times
 		}
 	}
-
 
 	this.Data["user"] = RankUser
 	this.Data["totalNum"] = totalNum
