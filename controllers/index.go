@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"encoding/json"
+	"github.com/go-redis/redis"
 	"html/template"
 	"sort"
 	"time"
@@ -48,6 +50,14 @@ func (this *IndexController) Index() {
 		this.JsonErr("未知错误", 4000, "/index")
 	}
 
+
+	//cache.NewCache("memory", `{"key":"hgoj","conn":"r-8vb4cmly4tyog47ykepd.redis.zhangbei.rds.aliyuncs.com:6379","dbNum":"2","":""}`)
+	client := redis.NewClient(&redis.Options{
+		Addr:     "redis:7379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
 	sort.Sort(SortUser(user))
 
 	var RankUser []*RankUsers
@@ -70,23 +80,54 @@ func (this *IndexController) Index() {
 	var totalNs []int64
 	var acNs []int64
 	var times []string
-	for i := -7; i <= -1; i++ {
-		calTime := time.Now().AddDate(0, 0, i).Format("2006-01-02")
-		totalN, acN := models.QueryTotalNumAcNumSolution(calTime)
-		totalNs = append(totalNs, totalN)
-		acNs = append(acNs, acN)
-		times = append(times, calTime)
+	type TAC struct {
+		totalNs []int64
+		acNs []int64
+		times []string
 	}
-	//logs.Info(totalNs,acNs)
+	var redisKeys = "index"+nowTime
+	logs.Error(redisKeys)
+	val, err := client.Get(redisKeys).Result()
+	if err != nil {
+		logs.Error("redic get errr:",err)
+	}
+	if val == "" {
+		for i := -7; i <= -1; i++ {
+			calTime := time.Now().AddDate(0, 0, i).Format("2006-01-02")
+			totalN, acN := models.QueryTotalNumAcNumSolution(calTime)
+			totalNs = append(totalNs, totalN)
+			acNs = append(acNs, acN)
+			times = append(times, calTime)
+		}
+		var tac *TAC
+		tac = &TAC{totalNs:totalNs,acNs:acNs,times:times}
+		json_data, _ := json.Marshal(tac)
+		_ = client.SetNX(redisKeys, json_data,10*time.Second).Err()
+	}
+	res,err := client.Get(redisKeys).Result()
+	var redisTotalNsA []int64
+	var redisAcNs []int64
+	var redisTimes []string
+	if err == nil {
+		var tacs *TAC
+		err = json.Unmarshal([]byte(res), &tacs)
+		if err == nil {
+			logs.Error("tacs",tacs)
+			redisTotalNsA = tacs.totalNs
+			redisAcNs = tacs.acNs
+			redisTimes = tacs.times
+		}
+	}
+
 
 	this.Data["user"] = RankUser
 	this.Data["totalNum"] = totalNum
 	this.Data["acNum"] = acNum
 	this.Data["nowTime"] = nowTime
 	this.Data["Art"] = art
-	this.Data["totalNums"] = totalNs
-	this.Data["acNums"] = acNs
-	this.Data["times"] = times
+	this.Data["totalNums"] = redisTotalNsA
+	this.Data["acNums"] = redisAcNs
+	this.Data["times"] = redisTimes
 	this.TplName = "index.html"
 }
 
