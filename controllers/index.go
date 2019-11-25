@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/go-redis/redis"
 	"html/template"
-	"sort"
 	"time"
 
 	"github.com/astaxie/beego/cache"
@@ -45,10 +44,10 @@ func (this *IndexController) Index() {
 	if !ok {
 		logs.Error("未登陆")
 	}
-	user, _, err := models.QueryAllUser()
-	if err != nil {
-		this.JsonErr("未知错误", 4000, "/index")
-	}
+	//user, _, err := models.QueryAllUser()
+	//if err != nil {
+	//	this.JsonErr("未知错误", 4000, "/index")
+	//}
 
 
 	//cache.NewCache("memory", `{"key":"hgoj","conn":"r-8vb4cmly4tyog47ykepd.redis.zhangbei.rds.aliyuncs.com:6379","dbNum":"2","":""}`)
@@ -58,17 +57,17 @@ func (this *IndexController) Index() {
 		DB:       0,  // use default DB
 	})
 
-	sort.Sort(SortUser(user))
+	//sort.Sort(SortUser(user))
 
-	var RankUser []*RankUsers
+	//var RankUser []*RankUsers
+	//
+	//for k, v := range user {
+	//	RankUser = append(RankUser, &RankUsers{k + 1, *v})
+	//}
 
-	for k, v := range user {
-		RankUser = append(RankUser, &RankUsers{k + 1, *v})
-	}
-
-	if len(RankUser) > 30 {
-		RankUser = RankUser[0:20]
-	}
+	//if len(RankUser) > 30 {
+	//	RankUser = RankUser[0:20]
+	//}
 
 	art, err := models.QueryLimitArt()
 	if err != nil {
@@ -120,7 +119,7 @@ func (this *IndexController) Index() {
 	}
 
 
-	this.Data["user"] = RankUser
+	//this.Data["user"] = RankUser
 	this.Data["totalNum"] = totalNum
 	this.Data["acNum"] = acNum
 	this.Data["nowTime"] = nowTime
