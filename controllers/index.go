@@ -52,7 +52,7 @@ func (this *IndexController) Index() {
 
 	//cache.NewCache("memory", `{"key":"hgoj","conn":"r-8vb4cmly4tyog47ykepd.redis.zhangbei.rds.aliyuncs.com:6379","dbNum":"2","":""}`)
 	client := redis.NewClient(&redis.Options{
-		Addr:     "redis:7379",
+		Addr:     "redis:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
