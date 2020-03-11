@@ -8,7 +8,7 @@ import (
 )
 var DB orm.Ormer
 func init() {
-	orm.Debug = true
+	orm.Debug = false
 	dbHost := beego.AppConfig.String("dbhost")
 	dbPort := beego.AppConfig.String("dbport")
 	dbUser := beego.AppConfig.String("dbuser")
@@ -23,6 +23,8 @@ func init() {
 		logs.Error(err)
 	}
 	err2 := orm.RegisterDataBase("default", "mysql", dsn)
+	orm.SetMaxIdleConns("default",1000)
+	orm.SetMaxOpenConns("default",2000)
 	if err2 != nil {
 		logs.Error(err2)
 	}
@@ -36,6 +38,9 @@ func init() {
 	_ = orm.RunSyncdb("default", false, true)
 
 	DB = orm.NewOrm()
-	DB.Using("default") // 默认使用 default，你可以指定为其他数据库
-
+	err = DB.Using("default") // 默认使用 hgoj，你可以指定为其他数据库
+	if err != nil {
+		logs.Error(err)
+	}
 }
+
