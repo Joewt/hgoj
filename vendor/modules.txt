@@ -11,14 +11,9 @@ github.com/astaxie/beego/session
 github.com/astaxie/beego/toolbox
 github.com/astaxie/beego/utils
 github.com/astaxie/beego/utils/captcha
-# github.com/go-redis/redis v6.15.7+incompatible
-github.com/go-redis/redis
-github.com/go-redis/redis/internal
-github.com/go-redis/redis/internal/consistenthash
-github.com/go-redis/redis/internal/hashtag
-github.com/go-redis/redis/internal/pool
-github.com/go-redis/redis/internal/proto
-github.com/go-redis/redis/internal/util
+# github.com/garyburd/redigo v1.6.0
+github.com/garyburd/redigo/internal
+github.com/garyburd/redigo/redis
 # github.com/go-sql-driver/mysql v1.5.0
 github.com/go-sql-driver/mysql
 # github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1
