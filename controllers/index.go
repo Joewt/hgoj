@@ -3,15 +3,18 @@ package controllers
 import (
 	"encoding/json"
 	"html/template"
+	//	"sort"
 	"time"
 
-	"github.com/go-redis/redis"
+	//"github.com/go-redis/redis"
 
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/utils/captcha"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
+	rPool "github.com/yinrenxin/hgoj/cache/redis"
+	"github.com/garyburd/redigo/redis"
 )
 
 var store = cache.NewMemoryCache()
@@ -50,17 +53,12 @@ func (this *IndexController) Index() {
 	//	this.JsonErr("未知错误", 4000, "/index")
 	//}
 
-	//cache.NewCache("memory", `{"key":"hgoj","conn":"r-8vb4cmly4tyog47ykepd.redis.zhangbei.rds.aliyuncs.com:6379","dbNum":"2","":""}`)
-	client := redis.NewClient(&redis.Options{
-		Addr:     "redis:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
+	rConn := rPool.RedisPool().Get()
+	defer rConn.Close()
 
 	//sort.Sort(SortUser(user))
 
 	//var RankUser []*RankUsers
-	//
 	//for k, v := range user {
 	//	RankUser = append(RankUser, &RankUsers{k + 1, *v})
 	//}
@@ -75,22 +73,15 @@ func (this *IndexController) Index() {
 	}
 	nowTime := time.Now().Format("2006-01-02")
 	totalNum, acNum := models.QueryTotalNumAcNumSolution(nowTime)
-
 	var totalNs []int64
 	var acNs []int64
 	var times []string
-	type TAC struct {
-		totalNs []int64
-		acNs    []int64
-		times   []string
-	}
 	var redisKeys = "index" + nowTime
-	logs.Error(redisKeys)
-	val, err := client.Get(redisKeys).Result()
+	val, err := rConn.Do("HGETALL",redisKeys)
 	if err != nil {
 		logs.Error("redic get errr:", err)
 	}
-	if val == "" {
+	if val == nil{
 		for i := -7; i <= -1; i++ {
 			calTime := time.Now().AddDate(0, 0, i).Format("2006-01-02")
 			totalN, acN := models.QueryTotalNumAcNumSolution(calTime)
@@ -98,26 +89,23 @@ func (this *IndexController) Index() {
 			acNs = append(acNs, acN)
 			times = append(times, calTime)
 		}
-		var tac *TAC
-		tac = &TAC{totalNs: totalNs, acNs: acNs, times: times}
-		json_data, _ := json.Marshal(tac)
-		_ = client.SetNX(redisKeys, json_data, 3600*time.Second).Err()
+		timeredisdata, _ := json.Marshal(times)
+		totalNsredisdata, _ := json.Marshal(totalNs)
+		acNsredisdata, _ := json.Marshal(acNs)
+		rConn.Do("HSET", redisKeys, "times", timeredisdata, "EX", 3600*time.Second)
+		rConn.Do("HSET", redisKeys, "totalns", totalNsredisdata, "EX", 3600*time.Second)
+		rConn.Do("HSET", redisKeys, "acns", acNsredisdata, "EX", 3600*time.Second)
 	}
-	res, err := client.Get(redisKeys).Result()
-	var redisTotalNsA []int64
-	var redisAcNs []int64
-	var redisTimes []string
-	if err == nil {
-		var tacs *TAC
-		err = json.Unmarshal([]byte(res), &tacs)
-		if err == nil {
-			logs.Error("tacs", tacs)
-			redisTotalNsA = tacs.totalNs
-			redisAcNs = tacs.acNs
-			redisTimes = tacs.times
-		}
-	}
+	totalNaRedisData, err := redis.Bytes(rConn.Do("HGET",redisKeys, "totalns"))
+	cNsRedisData, err := redis.Bytes(rConn.Do("HGET",redisKeys, "acns"))
+	timesRedisData, err := redis.Bytes(rConn.Do("HGET",redisKeys, "times"))
 
+	redisTotalNsA := []int64{}
+	redisAcNs := []int64{}
+	redisTimes := []string{}
+	json.Unmarshal(totalNaRedisData, &redisTotalNsA)
+	json.Unmarshal(cNsRedisData, &redisAcNs)
+	json.Unmarshal(timesRedisData, &redisTimes)
 
 	//this.Data["user"] = RankUser
 	this.Data["totalNum"] = totalNum
