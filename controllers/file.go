@@ -1,8 +1,12 @@
 package controllers
 
 import (
+	"encoding/json"
+	"github.com/yinrenxin/hgoj/models"
 	"html/template"
+	"io/ioutil"
 	"os"
+	"os/exec"
 	"strconv"
 	"time"
 
@@ -107,21 +111,86 @@ func (this *ProblemController) Export() {
 	if from > to {
 		this.JsonErr("导出错误,from小于to", 3100, "")
 	}
+	type Problem struct {
+		ProblemId		int32		`json:"problem_id"`
+		Title			string		`json:"title"`
+		Description 	string		`json:"description"`
+		Input			string		`json:"input"`
+		Output			string		`json:"output"`
+		SampleInput		string		`json:"sampleinput"`
+		SampleOutput	string		`json:"sampleoutput"`
+		Spj				string		`json:"spj"`
+		Hint			string		`json:"hint"`
+		Source			string		`json:"source"`
+		InDate			time.Time	`json:"in_date"`
+		TimeLimit		int32		`json:"time_limit"`
+		MemoryLimit		int32		`json:"memory_limit"`
+		Defunct			string		`json:"defunct"`
+		Accepted		int32		`json:"accepted"`
+		Submit			int32		`json:"submit"`
+		Solved			int32		`json:"solved"`
+	}
 	//
-	//for i := from; i <= to; i++ {
-	//	pro,err := models.QueryProblemById(int32(i))
-	//	if err != nil {
-	//		continue
-	//	}
-	//	jsonPro,_ := json.Marshal(pro)
-	//	filename := OJ_DATA+"/temp/"+strconv.Itoa(i)+"/"+strconv.Itoa(i)+".json"
-	//	os.MkdirAll(OJ_DATA+"/temp/"+strconv.Itoa(i),os.ModePerm)
-	//	err1 := ioutil.WriteFile(filename,jsonPro,os.ModePerm)
-	//	if err1 != nil {
-	//		logs.Error(err1)
-	//	}
-	//}
-	this.JsonErr("未开放", 2333, "")
+	k := time.Now().Unix()
+	dir_name := OJ_DATA+"/exporttemp/"+strconv.Itoa(int(k))
+	filename := dir_name+"/"+"export.json"
+	os.MkdirAll(dir_name,os.ModePerm)
+	var pros []Problem
+	for i := from; i <= to; i++ {
+		modelpro,err := models.QueryProblemById(int32(i))
+		if err != nil {
+			continue
+		}
+
+		pro := Problem{
+			ProblemId:    modelpro.ProblemId,
+			Title:        modelpro.Title,
+			Description:  modelpro.Description,
+			Input:        modelpro.Input,
+			Output:       modelpro.Output,
+			SampleInput:  modelpro.SampleInput,
+			SampleOutput: modelpro.SampleOutput,
+			Spj:          modelpro.Spj,
+			Hint:         modelpro.Hint,
+			Source:       modelpro.Source,
+			InDate:       modelpro.InDate,
+			TimeLimit:    modelpro.TimeLimit,
+			MemoryLimit:  modelpro.MemoryLimit,
+			Defunct:      modelpro.Defunct,
+			Accepted:     modelpro.Accepted,
+			Submit:       modelpro.Submit,
+			Solved:       modelpro.Solved,
+		}
+		pros = append(pros, pro)
+		pro_dir := OJ_DATA + "/" + strconv.Itoa(int(modelpro.ProblemId))
+		cmd := exec.Command("cp", "-r",pro_dir , dir_name)
+		err2 := cmd.Run()
+		if err2 != nil {
+			logs.Error("Execute Command failed:" + err2.Error())
+			return
+		}
+	}
+	json_data, _ := json.Marshal(pros)
+	err1 := ioutil.WriteFile(filename,json_data,os.ModePerm)
+	if err1 != nil {
+		logs.Error(err1)
+	}
+
+	exportDataDir, _ := os.Open(dir_name)
+	zipdestDir := DOWN_DIR + "export-" + strconv.Itoa(from)+"-"+strconv.Itoa(to)+ ".zip"
+
+	files := []*os.File{exportDataDir}
+	err := tools.Compress(files, zipdestDir)
+	if err != nil {
+		logs.Error(err)
+	}
+	downurl := "/static/down/" + "export-" + strconv.Itoa(from)+"-"+strconv.Itoa(to)+ ".zip"
+	 resData := MAP_H{
+		"data": MAP_H{
+			"downurl": downurl,
+		},
+	}
+	this.JsonOKH("导出成功", resData)
 }
 
 // @router /problem/inport [post]
