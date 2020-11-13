@@ -20,13 +20,13 @@ func init() {
 	dsn := dbUser + ":" + dbPassword + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8"
 	err := orm.RegisterDriver("mysql", orm.DRMySQL)
 	if err != nil {
-		logs.Error(err)
+		logs.Error("orm.RegisterDriver err:",err)
 	}
 	err2 := orm.RegisterDataBase("default", "mysql", dsn)
 	orm.SetMaxIdleConns("default",1000)
 	orm.SetMaxOpenConns("default",2000)
 	if err2 != nil {
-		logs.Error(err2)
+		logs.Error("orm.RegisterDataBase err:",err2)
 	}
 
 
@@ -40,7 +40,8 @@ func init() {
 	DB = orm.NewOrm()
 	err = DB.Using("default") // 默认使用 hgoj，你可以指定为其他数据库
 	if err != nil {
-		logs.Error(err)
+		logs.Error("orm.NewOrm err:",err)
+		//os.Exit(-1)
 	}
 }
 
