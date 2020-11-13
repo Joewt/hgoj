@@ -3,6 +3,8 @@ package controllers
 import (
 	"encoding/json"
 	"html/template"
+	"reflect"
+
 	//	"sort"
 	"time"
 
@@ -42,6 +44,14 @@ func (this *IndexController) Indexs() {
 	this.TplName = "empty.html"
 }
 
+func IsNil(i interface{}) bool {
+	vi := reflect.ValueOf(i)
+	if vi.Kind() == reflect.Ptr {
+		return vi.IsNil()
+	}
+	return false
+}
+
 // @router /index [get]
 func (this *IndexController) Index() {
 	_, ok := this.GetSession(SESSION_USER_KEY).(models.Users)
@@ -57,15 +67,16 @@ func (this *IndexController) Index() {
 	defer rConn.Close()
 
 	//sort.Sort(SortUser(user))
-
+	//
 	//var RankUser []*RankUsers
 	//for k, v := range user {
 	//	RankUser = append(RankUser, &RankUsers{k + 1, *v})
 	//}
-
+	//
 	//if len(RankUser) > 30 {
 	//	RankUser = RankUser[0:20]
 	//}
+
 
 	art, err := models.QueryLimitArt()
 	if err != nil {
@@ -81,7 +92,8 @@ func (this *IndexController) Index() {
 	if err != nil {
 		logs.Error("redic get errr:", err)
 	}
-	if val == nil{
+
+	if !IsNil(val) {
 		for i := -7; i <= -1; i++ {
 			calTime := time.Now().AddDate(0, 0, i).Format("2006-01-02")
 			totalN, acN := models.QueryTotalNumAcNumSolution(calTime)
