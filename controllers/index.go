@@ -88,12 +88,15 @@ func (this *IndexController) Index() {
 	var acNs []int64
 	var times []string
 	var redisKeys = "index" + nowTime
-	val, err := rConn.Do("HGETALL",redisKeys)
+	redisFlag, err := redis.Bytes(rConn.Do("HGET",redisKeys, "flag"))
 	if err != nil {
-		logs.Error("redic get errr:", err)
+		logs.Error("redic get err:", err)
 	}
 
-	if !IsNil(val) {
+	logs.Error(string(redisFlag))
+
+	if string(redisFlag) != "true" {
+		logs.Error("cache")
 		for i := -7; i <= -1; i++ {
 			calTime := time.Now().AddDate(0, 0, i).Format("2006-01-02")
 			totalN, acN := models.QueryTotalNumAcNumSolution(calTime)
@@ -107,6 +110,7 @@ func (this *IndexController) Index() {
 		rConn.Do("HSET", redisKeys, "times", timeredisdata, "EX", 3600*time.Second)
 		rConn.Do("HSET", redisKeys, "totalns", totalNsredisdata, "EX", 3600*time.Second)
 		rConn.Do("HSET", redisKeys, "acns", acNsredisdata, "EX", 3600*time.Second)
+		rConn.Do("HSET", redisKeys, "flag", "true", "EX", 3600*time.Second)
 	}
 	totalNaRedisData, err := redis.Bytes(rConn.Do("HGET",redisKeys, "totalns"))
 	cNsRedisData, err := redis.Bytes(rConn.Do("HGET",redisKeys, "acns"))
