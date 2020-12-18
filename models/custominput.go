@@ -1,7 +1,7 @@
 package models
 
 import (
-	_ "github.com/astaxie/beego/orm"
+	_ "github.com/beego/beego/v2/adapter/orm"
 )
 
 

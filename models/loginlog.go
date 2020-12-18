@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	_ "github.com/astaxie/beego/orm"
+	_ "github.com/beego/beego/v2/adapter/orm"
 )
 
 type LoginLog struct {

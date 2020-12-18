@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	// "github.com/astaxie/beego/cache"
-	"github.com/astaxie/beego/logs"
+	// "github.com/beego/beego/v2/adapter/cache"
+	"github.com/beego/beego/v2/adapter/logs"
 	//"github.com/go-redis/redis"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
