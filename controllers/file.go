@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/yinrenxin/hgoj/models"
 	"html/template"
 	"io/ioutil"
 	"os"
@@ -10,7 +9,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/astaxie/beego/logs"
+	"github.com/yinrenxin/hgoj/models"
+
+	"github.com/beego/beego/v2/adapter/logs"
+	types "github.com/yinrenxin/hgoj/models/types"
 	"github.com/yinrenxin/hgoj/tools"
 )
 
@@ -111,38 +113,18 @@ func (this *ProblemController) Export() {
 	if from > to {
 		this.JsonErr("导出错误,from小于to", 3100, "")
 	}
-	type Problem struct {
-		ProblemId		int32		`json:"problem_id"`
-		Title			string		`json:"title"`
-		Description 	string		`json:"description"`
-		Input			string		`json:"input"`
-		Output			string		`json:"output"`
-		SampleInput		string		`json:"sampleinput"`
-		SampleOutput	string		`json:"sampleoutput"`
-		Spj				string		`json:"spj"`
-		Hint			string		`json:"hint"`
-		Source			string		`json:"source"`
-		InDate			time.Time	`json:"in_date"`
-		TimeLimit		int32		`json:"time_limit"`
-		MemoryLimit		int32		`json:"memory_limit"`
-		Defunct			string		`json:"defunct"`
-		Accepted		int32		`json:"accepted"`
-		Submit			int32		`json:"submit"`
-		Solved			int32		`json:"solved"`
-	}
-	//
 	k := time.Now().Unix()
-	dir_name := OJ_DATA+"/exporttemp/"+strconv.Itoa(int(k))
-	filename := dir_name+"/"+"export.json"
-	os.MkdirAll(dir_name,os.ModePerm)
-	var pros []Problem
+	dir_name := OJ_DATA + "/exporttemp/" + strconv.Itoa(int(k))
+	filename := dir_name + "/" + "export.json"
+	os.MkdirAll(dir_name, os.ModePerm)
+	var pros []types.Problem
 	for i := from; i <= to; i++ {
-		modelpro,err := models.QueryProblemById(int32(i))
+		modelpro, err := models.QueryProblemById(int32(i))
 		if err != nil {
 			continue
 		}
 
-		pro := Problem{
+		pro := types.Problem{
 			ProblemId:    modelpro.ProblemId,
 			Title:        modelpro.Title,
 			Description:  modelpro.Description,
@@ -163,7 +145,7 @@ func (this *ProblemController) Export() {
 		}
 		pros = append(pros, pro)
 		pro_dir := OJ_DATA + "/" + strconv.Itoa(int(modelpro.ProblemId))
-		cmd := exec.Command("cp", "-r",pro_dir , dir_name)
+		cmd := exec.Command("cp", "-r", pro_dir, dir_name)
 		err2 := cmd.Run()
 		if err2 != nil {
 			logs.Error("Execute Command failed:" + err2.Error())
@@ -171,21 +153,21 @@ func (this *ProblemController) Export() {
 		}
 	}
 	json_data, _ := json.Marshal(pros)
-	err1 := ioutil.WriteFile(filename,json_data,os.ModePerm)
+	err1 := ioutil.WriteFile(filename, json_data, os.ModePerm)
 	if err1 != nil {
 		logs.Error(err1)
 	}
 
 	exportDataDir, _ := os.Open(dir_name)
-	zipdestDir := DOWN_DIR + "export-" + strconv.Itoa(from)+"-"+strconv.Itoa(to)+ ".zip"
+	zipdestDir := DOWN_DIR + "export-" + strconv.Itoa(from) + "-" + strconv.Itoa(to) + "-" + strconv.Itoa(int(k)) + ".zip"
 
 	files := []*os.File{exportDataDir}
 	err := tools.Compress(files, zipdestDir)
 	if err != nil {
 		logs.Error(err)
 	}
-	downurl := "/static/down/" + "export-" + strconv.Itoa(from)+"-"+strconv.Itoa(to)+ ".zip"
-	 resData := MAP_H{
+	downurl := "/static/down/" + "export-" + strconv.Itoa(from) + "-" + strconv.Itoa(to) + "-" + strconv.Itoa(int(k)) + ".zip"
+	resData := MAP_H{
 		"data": MAP_H{
 			"downurl": downurl,
 		},
@@ -195,9 +177,89 @@ func (this *ProblemController) Export() {
 
 // @router /problem/inport [post]
 func (this *ProblemController) Inport() {
+	if !this.IsAdmin {
+		this.Abort("401")
+	}
 
-	this.JsonErr("未开放", 2333, "")
-	//var prob models.Problem
-	//json.Unmarshal([]byte(jsonPro),&prob)
-	//logs.Info(i,"-----",prob)
+	//获取上传的数据
+	f, h, err := this.GetFile("file")
+	if err != nil {
+		logs.Error(err)
+	}
+	defer f.Close()
+
+	//临时保存数据
+	this.SaveToFile("file", OJ_ZIP_TEMP_DATA+"/"+h.Filename)
+	uploadZipData := OJ_ZIP_TEMP_DATA + "/" + h.Filename
+	err = tools.DeCompress(uploadZipData, OJ_ZIP_TEMP_DATA)
+	if err != nil {
+		logs.Error(err)
+		this.JsonErr(err.Error(), 24001, "")
+	}
+	err = os.Remove(uploadZipData)
+	if err != nil {
+		logs.Error(err)
+		this.JsonErr(err.Error(), 24002, "")
+	}
+
+	//获取解压后的目录
+	fileHashName := (h.Filename)[len(h.Filename)-14 : len(h.Filename)-4]
+	fileDir := OJ_ZIP_TEMP_DATA + "/" + fileHashName
+	jsonDataDir := fileDir + "/export.json"
+
+	//读取json数据到struct
+	fileData, err := ioutil.ReadFile(jsonDataDir)
+	if err != nil {
+		logs.Error(err)
+		this.JsonErr(err.Error(), 24002, "")
+	}
+	var problems []types.Problem
+	err = json.Unmarshal(fileData, &problems)
+	if err != nil {
+		logs.Error(err)
+		this.JsonErr(err.Error(), 24002, "")
+	}
+
+	//处理读出来的数据(如果title一样跳过)
+	var repeatProblems []types.Problem
+	var insertProblems []types.Problem
+	for _, v := range problems {
+		_, err := models.QueryProblemByTitle(v.Title)
+		if err == nil {
+			repeatProblems = append(repeatProblems, v)
+			continue
+		}
+		insertProblems = append(insertProblems, v)
+	}
+
+	//插入数据
+	pidMap, err := models.BatchAddProblem(insertProblems)
+	if err != nil {
+		logs.Error(err)
+		this.JsonErr(err.Error(), 24002, "")
+	}
+
+	//移动题目数据
+	for k, v := range pidMap {
+		testDataDir := OJ_DATA + "/" + strconv.Itoa(int(v))
+		oldtestDataDir := fileDir + "/" + strconv.Itoa(int(k))
+		logs.Info(testDataDir)
+		logs.Info(oldtestDataDir)
+		os.Rename(oldtestDataDir, testDataDir)
+
+	}
+
+	var d []MAP_H
+	for _, v := range insertProblems {
+		d = append(d, MAP_H{
+			"pid":   pidMap[v.ProblemId],
+			"title": v.Title,
+		})
+	}
+
+	resData := MAP_H{
+		"data": d,
+	}
+
+	this.JsonOKH("上传成功", resData)
 }

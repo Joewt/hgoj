@@ -2,8 +2,8 @@ package tools
 
 import (
 	"fmt"
-	"github.com/astaxie/beego/logs"
-	"github.com/astaxie/beego/toolbox"
+	"github.com/beego/beego/v2/adapter/logs"
+	"github.com/beego/beego/v2/adapter/toolbox"
 	"io/ioutil"
 	"os"
 	"time"

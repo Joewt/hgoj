@@ -3,10 +3,9 @@ package models
 import (
 	"time"
 
-	"github.com/astaxie/beego/orm"
-
-	"github.com/astaxie/beego/logs"
-	_ "github.com/astaxie/beego/orm"
+	"github.com/beego/beego/v2/adapter/logs"
+	_ "github.com/beego/beego/v2/adapter/orm"
+	client "github.com/beego/beego/v2/client/orm"
 )
 
 var JUDGERES = map[int]string{
@@ -75,7 +74,7 @@ func UpdateSolutionResultBySid(sid int32) bool {
 }
 
 func UpdateSolutionResultByCid(cid int32) bool {
-	_, err := DB.QueryTable("solution").Filter("contest_id", cid).Update(orm.Params{
+	_, err := DB.QueryTable("solution").Filter("contest_id", cid).Update(client.Params{
 		"result": 1,
 	})
 	if err != nil {
@@ -86,7 +85,7 @@ func UpdateSolutionResultByCid(cid int32) bool {
 }
 
 func UpdateSolutionResultByPid(pid int32) bool {
-	_, err := DB.QueryTable("solution").Filter("problem_id", pid).Update(orm.Params{
+	_, err := DB.QueryTable("solution").Filter("problem_id", pid).Update(client.Params{
 		"result": 1,
 	})
 	if err != nil {
@@ -246,15 +245,13 @@ func QueryAllUserIdByCid(cid int32) ([]int32, int64) {
 func QueryAllUserByCid(cid int32) ([]*UserInfos, int64) {
 	var UserData []TempUser
 
-	num1, _ := DB.Raw("SELECT users.user_id,users.nick from solution,users WHERE `contest_id` = ? and solution.user_id = users.user_id group by users.user_id",cid).QueryRows(&UserData)
+	num1, _ := DB.Raw("SELECT users.user_id,users.nick from solution,users WHERE `contest_id` = ? and solution.user_id = users.user_id group by users.user_id", cid).QueryRows(&UserData)
 
 	var UserAc []*TempUserAc
-	DB.Raw("SELECT `user_id`,count(`solution_id`) as ac from solution WHERE `contest_id` = ? and `result` = 4 group by `user_id`",cid).QueryRows(&UserAc)
-
+	DB.Raw("SELECT `user_id`,count(`solution_id`) as ac from solution WHERE `contest_id` = ? and `result` = 4 group by `user_id`", cid).QueryRows(&UserAc)
 
 	var UserSubmitNum []TempUserSubmit
-	DB.Raw("SELECT `user_id`,count(`solution_id`) as total from solution WHERE `contest_id` = ? group by `user_id`",cid).QueryRows(&UserSubmitNum)
-
+	DB.Raw("SELECT `user_id`,count(`solution_id`) as total from solution WHERE `contest_id` = ? group by `user_id`", cid).QueryRows(&UserSubmitNum)
 
 	var UserInfo []*UserInfos
 	for _, v := range UserData {
@@ -270,35 +267,35 @@ func QueryAllUserByCid(cid int32) ([]*UserInfos, int64) {
 				total = v3.Total
 			}
 		}
-		UserInfo = append(UserInfo,&UserInfos{v,ac,total})
+		UserInfo = append(UserInfo, &UserInfos{v, ac, total})
 	}
 	return UserInfo, num1
 }
 
 type TempUser struct {
 	UserId int32
-	Nick string
+	Nick   string
 }
 
 type TempUserAc struct {
 	UserId int32
-	Ac int32
+	Ac     int32
 }
 
 type TempUserSubmit struct {
 	UserId int32
-	Total int32
+	Total  int32
 }
 
 type UserInfos struct {
 	TempUser
-	Ac int32
+	Ac    int32
 	Total int32
 }
 
-func QueryAllAcNumByCid(cid int32)([]*TempUserAc, int64) {
+func QueryAllAcNumByCid(cid int32) ([]*TempUserAc, int64) {
 	var UserAc []*TempUserAc
-	num, _ := DB.Raw("SELECT `user_id`,count(solution_id) from solution WHERE `contest_id` = ? group by user_id",cid).QueryRows(&UserAc)
+	num, _ := DB.Raw("SELECT `user_id`,count(solution_id) from solution WHERE `contest_id` = ? group by user_id", cid).QueryRows(&UserAc)
 	return UserAc, num
 }
 

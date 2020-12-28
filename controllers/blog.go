@@ -3,7 +3,7 @@ package controllers
 import (
 	"html/template"
 
-	"github.com/astaxie/beego/logs"
+	"github.com/beego/beego/v2/adapter/logs"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/tools"
 )

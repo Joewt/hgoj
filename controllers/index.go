@@ -10,9 +10,9 @@ import (
 
 	//"github.com/go-redis/redis"
 
-	"github.com/astaxie/beego/cache"
-	"github.com/astaxie/beego/logs"
-	"github.com/astaxie/beego/utils/captcha"
+	"github.com/beego/beego/v2/adapter/cache"
+	"github.com/beego/beego/v2/adapter/logs"
+	"github.com/beego/beego/v2/adapter/utils/captcha"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 	rPool "github.com/yinrenxin/hgoj/cache/redis"

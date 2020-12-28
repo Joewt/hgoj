@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/astaxie/beego/logs"
+	"github.com/beego/beego/v2/adapter/logs"
 	"github.com/yinrenxin/hgoj/setting"
 )
 
