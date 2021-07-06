@@ -65,7 +65,7 @@
         '[positive +George W. Bush+] the winner in Florida.');
 
   MT('subAndSup',
-      'f(x, n) = log [builtin ~4~] x [builtin ^n^]');
+      'f(x, n) = logs [builtin ~4~] x [builtin ^n^]');
 
   MT('spanAndCode',
       'A [quote %span element%] and [atom @code element@]');

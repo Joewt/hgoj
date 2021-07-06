@@ -1,4 +1,3 @@
-
 <body class="top-navigation" scroll="no">
 
 <div id="wrapper">
@@ -6,7 +5,8 @@
         <div class="row border-bottom white-bg">
             <nav class="navbar navbar-static-top" role="navigation">
                 <div class="navbar-header">
-                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse"
+                            class="navbar-toggle collapsed" type="button">
                         <i class="fa fa-reorder"></i>
                     </button>
                     <a href="/index" class="navbar-brand">HGOJ</a>
@@ -17,16 +17,21 @@
                             <a aria-expanded="false" role="button" href="/index">湖南工学院在线判题系统</a>
                         </li>
                         <li class="nav nav-pills {{menu_eq .menu "/faqs" }}">
-                            <a aria-expanded="false" role="button" href="/faqs" class="dropdown-toggle" >常见问题</a>
+                            <a aria-expanded="false" role="button" href="/faqs" class="dropdown-toggle">常见问题</a>
                         </li>
                         <li class="nav nav-pills {{menu_eq .menu "/problemset" }}">
-                            <a aria-expanded="false" role="button" href="/problemset" class="dropdown-toggle" >题目</a>
+                            <a aria-expanded="false" role="button" href="/problemset" class="dropdown-toggle">题目</a>
                         </li>
                         <li class="dropdown {{menu_eq .menu "/status" }}">
-                            <a aria-expanded="false" role="button" href="/status" class="dropdown-toggle" > 状态</a>
+                            <a aria-expanded="false" role="button" href="/status" class="dropdown-toggle"> 状态</a>
                         </li>
                         <li class="dropdown {{menu_eq .menu "/contest" }}">
-                            <a aria-expanded="false" role="button" href="/contest" class="dropdown-toggle" > 竞赛&作业 </a>
+                            <a aria-expanded="false" role="button" href="/contest" class="dropdown-toggle"> 竞赛&作业 </a>
+                        </li>
+                        <li class="dropdown {{menu_eq .menu "/contest" }}">
+                            <a aria-expanded="false" role="button" class="dropdown-toggle" href="/contest">
+                                {{template "common/drawer.html" .}}
+                            </a>
                         </li>
 
                     </ul>
@@ -34,23 +39,24 @@
 
 
                         {{if .islogin}}
-                        <li class="dropdown">
-                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{.User.Nick}} <span class="caret"></span></a>
-                            <ul role="menu" class="dropdown-menu">
-                                <li><a href="/profile">个人中心</a></li>
-                                <li><a href="/profile/update">修改资料</a></li>
-                                {{if or .isadmin  .isteacher}}
-                                <li><a href="/admin">后台管理</a></li>
-                                {{end}}
-                                <li><a href="/logout"><i class="fa fa-sign-out"></i> logout</a></li>
-                            </ul>
-                        </li>
+                            <li class="dropdown">
+                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
+                                   data-toggle="dropdown"> {{.User.Nick}} <span class="caret"></span></a>
+                                <ul role="menu" class="dropdown-menu">
+                                    <li><a href="/profile">个人中心</a></li>
+                                    <li><a href="/profile/update">修改资料</a></li>
+                                    {{if or .isadmin  .isteacher}}
+                                        <li><a href="/admin">后台管理</a></li>
+                                    {{end}}
+                                    <li><a href="/logout"><i class="fa fa-sign-out"></i> logout</a></li>
+                                </ul>
+                            </li>
                         {{else}}
-                        <li>
-                            <a href="/login">
-                                <i class="fa fa-sign-in"></i> login
-                            </a>
-                        </li>
+                            <li>
+                                <a href="/login">
+                                    <i class="fa fa-sign-in"></i> login
+                                </a>
+                            </li>
                         {{end}}
 
                     </ul>

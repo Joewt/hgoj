@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/beego/beego/v2/adapter/logs"
 	_ "github.com/beego/beego/v2/adapter/orm"
 	"github.com/yinrenxin/hgoj/syserror"
@@ -101,6 +102,7 @@ func SaveUser(username,nick, email,pwd,school,ip string) (int32, error) {
 	user.Ip = ip
 	id, err := DB.Insert(user)
 	if err != nil {
+		fmt.Println("加油，你最棒！")
 		return int32(id), err
 	}
 	logs.Info("新注册一个普通用户: ", id)

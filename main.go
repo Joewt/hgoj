@@ -4,8 +4,8 @@ import (
 	"encoding/gob"
 	"fmt"
 	beego "github.com/beego/beego/v2/adapter"
-	"github.com/yinrenxin/hgoj/models"
 	"github.com/beego/beego/v2/adapter/logs"
+	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/tools"
 	"strconv"
 	"strings"
@@ -30,7 +30,7 @@ func main() {
 
 
 func initLogs() {
-	logs.SetLogger(logs.AdapterFile,`{"filename":"logs/app.log","level":7,"maxlines":0,"maxsize":0,"daily":true,"maxdays":10,"color":true}`)
+	logs.SetLogger(logs.AdapterFile,`{"filename":"logs/app.logs","level":7,"maxlines":0,"maxsize":0,"daily":true,"maxdays":10,"color":true}`)
 }
 
 func initSession() {

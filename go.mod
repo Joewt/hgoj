@@ -3,6 +3,7 @@ module github.com/yinrenxin/hgoj
 go 1.13
 
 require (
+	github.com/astaxie/beego v1.12.3
 	github.com/beego/beego/v2 v2.0.1-0.20201218012558-576435f0296e
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3 // indirect
 	github.com/garyburd/redigo v1.6.0

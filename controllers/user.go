@@ -160,6 +160,7 @@ func (this *UserController) UserReg() {
 
 	//保存用户信息
 	uid, err := models.SaveUser(username, nick, email, pwd, school, Ip)
+
 	if err != nil {
 		this.JsonErr("注册失败", 112, "/reg")
 	}

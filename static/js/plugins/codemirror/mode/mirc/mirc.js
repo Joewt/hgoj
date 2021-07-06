@@ -40,7 +40,7 @@ CodeMirror.defineMode("mirc", function() {
                             "$insong $instok $int $inwave $ip $isalias $isbit $isdde $isdir $isfile " +
                             "$isid $islower $istok $isupper $keychar $keyrpt $keyval $knick $lactive " +
                             "$lactivecid $lactivewid $left $len $level $lf $line $lines $link $lock " +
-                            "$lock $locked $log $logstamp $logstampfmt $longfn $longip $lower $ltimer " +
+                            "$lock $locked $logs $logstamp $logstampfmt $longfn $longip $lower $ltimer " +
                             "$maddress $mask $matchkey $matchtok $md5 $me $menu $menubar $menucontext " +
                             "$menutype $mid $middir $mircdir $mircexe $mircini $mklogfn $mnick $mode " +
                             "$modefirst $modelast $modespl $mouse $msfile $network $newnick $nick $nofile " +
@@ -68,7 +68,7 @@ CodeMirror.defineMode("mirc", function() {
                             "gopts goto gplay gpoint gqreq groups gshow gsize gstop gtalk gunload hadd " +
                             "halt haltdef hdec hdel help hfree hinc hload hmake hop hsave ial ialclear " +
                             "ialmark identd if ignore iline inc invite iuser join kick linesep links list " +
-                            "load loadbuf localinfo log mdi me menubar mkdir mnick mode msg nick noop notice " +
+                            "load loadbuf localinfo logs mdi me menubar mkdir mnick mode msg nick noop notice " +
                             "notify omsg onotice part partall pdcc perform play playctrl pop protect pvoice " +
                             "qme qmsg query queryn quit raw reload remini remote remove rename renwin " +
                             "reseterror resetidle return rlevel rline rmdir run ruser save savebuf saveini " +

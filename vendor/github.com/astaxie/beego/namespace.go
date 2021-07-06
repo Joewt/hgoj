@@ -18,7 +18,7 @@ import (
 	"net/http"
 	"strings"
 
-	beecontext "github.com/beego/beego/v2/adapter/context"
+	beecontext "github.com/astaxie/beego/context"
 )
 
 type namespaceCond func(*beecontext.Context) bool
@@ -97,91 +97,91 @@ func (n *Namespace) Filter(action string, filter ...FilterFunc) *Namespace {
 }
 
 // Router same as beego.Rourer
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Router
+// refer: https://godoc.org/github.com/astaxie/beego#Router
 func (n *Namespace) Router(rootpath string, c ControllerInterface, mappingMethods ...string) *Namespace {
 	n.handlers.Add(rootpath, c, mappingMethods...)
 	return n
 }
 
 // AutoRouter same as beego.AutoRouter
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#AutoRouter
+// refer: https://godoc.org/github.com/astaxie/beego#AutoRouter
 func (n *Namespace) AutoRouter(c ControllerInterface) *Namespace {
 	n.handlers.AddAuto(c)
 	return n
 }
 
 // AutoPrefix same as beego.AutoPrefix
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#AutoPrefix
+// refer: https://godoc.org/github.com/astaxie/beego#AutoPrefix
 func (n *Namespace) AutoPrefix(prefix string, c ControllerInterface) *Namespace {
 	n.handlers.AddAutoPrefix(prefix, c)
 	return n
 }
 
 // Get same as beego.Get
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Get
+// refer: https://godoc.org/github.com/astaxie/beego#Get
 func (n *Namespace) Get(rootpath string, f FilterFunc) *Namespace {
 	n.handlers.Get(rootpath, f)
 	return n
 }
 
 // Post same as beego.Post
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Post
+// refer: https://godoc.org/github.com/astaxie/beego#Post
 func (n *Namespace) Post(rootpath string, f FilterFunc) *Namespace {
 	n.handlers.Post(rootpath, f)
 	return n
 }
 
 // Delete same as beego.Delete
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Delete
+// refer: https://godoc.org/github.com/astaxie/beego#Delete
 func (n *Namespace) Delete(rootpath string, f FilterFunc) *Namespace {
 	n.handlers.Delete(rootpath, f)
 	return n
 }
 
 // Put same as beego.Put
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Put
+// refer: https://godoc.org/github.com/astaxie/beego#Put
 func (n *Namespace) Put(rootpath string, f FilterFunc) *Namespace {
 	n.handlers.Put(rootpath, f)
 	return n
 }
 
 // Head same as beego.Head
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Head
+// refer: https://godoc.org/github.com/astaxie/beego#Head
 func (n *Namespace) Head(rootpath string, f FilterFunc) *Namespace {
 	n.handlers.Head(rootpath, f)
 	return n
 }
 
 // Options same as beego.Options
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Options
+// refer: https://godoc.org/github.com/astaxie/beego#Options
 func (n *Namespace) Options(rootpath string, f FilterFunc) *Namespace {
 	n.handlers.Options(rootpath, f)
 	return n
 }
 
 // Patch same as beego.Patch
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Patch
+// refer: https://godoc.org/github.com/astaxie/beego#Patch
 func (n *Namespace) Patch(rootpath string, f FilterFunc) *Namespace {
 	n.handlers.Patch(rootpath, f)
 	return n
 }
 
 // Any same as beego.Any
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Any
+// refer: https://godoc.org/github.com/astaxie/beego#Any
 func (n *Namespace) Any(rootpath string, f FilterFunc) *Namespace {
 	n.handlers.Any(rootpath, f)
 	return n
 }
 
 // Handler same as beego.Handler
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Handler
+// refer: https://godoc.org/github.com/astaxie/beego#Handler
 func (n *Namespace) Handler(rootpath string, h http.Handler) *Namespace {
 	n.handlers.Handler(rootpath, h)
 	return n
 }
 
 // Include add include class
-// refer: https://godoc.org/github.com/beego/beego/v2/adapter#Include
+// refer: https://godoc.org/github.com/astaxie/beego#Include
 func (n *Namespace) Include(cList ...ControllerInterface) *Namespace {
 	n.handlers.Include(cList...)
 	return n

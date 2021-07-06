@@ -23,12 +23,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/beego/beego/v2/adapter/context"
-	"github.com/beego/beego/v2/adapter/utils"
+	"github.com/astaxie/beego/context"
+	"github.com/astaxie/beego/utils"
 )
 
 const (
-	errorTypeHandler    = iota
+	errorTypeHandler = iota
 	errorTypeController
 )
 
@@ -356,6 +356,20 @@ func gatewayTimeout(rw http.ResponseWriter, r *http.Request) {
 			"<br><br>The server, while acting as a gateway or proxy, did not receive a timely response from the upstream server specified by the URI."+
 			"<br>Please try again later."+
 			"</ul>",
+	)
+}
+
+// show 413 Payload Too Large
+func payloadTooLarge(rw http.ResponseWriter, r *http.Request) {
+	responseError(rw, r,
+		413,
+		`<br>The page you have requested is unavailable.
+		 <br>Perhaps you are here because:<br><br>
+		 <ul>
+			<br>The request entity is larger than limits defined by server.
+			<br>Please change the request entity and try again.
+		 </ul>
+		`,
 	)
 }
 

@@ -15,7 +15,7 @@
 // Package context provide the context utils
 // Usage:
 //
-//	import "github.com/beego/beego/v2/adapter/context"
+//	import "github.com/astaxie/beego/context"
 //
 //	ctx := context.Context{Request:req,ResponseWriter:rw}
 //
@@ -35,7 +35,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beego/beego/v2/adapter/utils"
+	"github.com/astaxie/beego/utils"
 )
 
 //commonly used mime-types
@@ -150,7 +150,7 @@ func (ctx *Context) XSRFToken(key string, expire int64) string {
 		token, ok := ctx.GetSecureCookie(key, "_xsrf")
 		if !ok {
 			token = string(utils.RandomCreateBytes(32))
-			ctx.SetSecureCookie(key, "_xsrf", token, expire)
+			ctx.SetSecureCookie(key, "_xsrf", token, expire, "", "", true, true)
 		}
 		ctx._xsrfToken = token
 	}

@@ -30,16 +30,16 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/beego/beego/v2/adapter/context/param"
-	"github.com/beego/beego/v2/adapter/logs"
-	"github.com/beego/beego/v2/adapter/utils"
+	"github.com/astaxie/beego/context/param"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/utils"
 )
 
 var globalRouterTemplate = `package {{.routersDir}}
 
 import (
-	beego "github.com/beego/beego/v2/adapter"
-	"github.com/beego/beego/v2/adapter/context/param"{{.globalimport}}
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context/param"{{.globalimport}}
 )
 
 func init() {
@@ -500,7 +500,7 @@ func genRouterCode(pkgRealpath string) {
     beego.GlobalControllerRouter["` + k + `"] = append(beego.GlobalControllerRouter["` + k + `"],
         beego.ControllerComments{
             Method: "` + strings.TrimSpace(c.Method) + `",
-            ` + "Router: `" + c.Router + "`" + `,
+            ` + `Router: "` + c.Router + `"` + `,
             AllowHTTPMethods: ` + allmethod + `,
             MethodParams: ` + methodParams + `,
             Filters: ` + filters + `,

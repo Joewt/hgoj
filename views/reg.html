@@ -72,34 +72,33 @@
 </div>
 
 <!-- Mainly scripts -->
-<script src="js/jquery-2.1.1.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="../static/js/jquery-2.1.1.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
 <!-- iCheck -->
-<script src="js/plugins/iCheck/icheck.min.js"></script>
-<script type="text/javascript" src="/js/plugins/layer/layer.js"></script>
+<script src="../static/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="../static/js/plugins/layer/layer.js"></script>
 <script>
     $(document).ready(function(){
-        $('.i-checks').iCheck({
-            checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green',
-        });
-
-
+        // $('.i-checks').iCheck({
+        //     checkboxClass: 'icheckbox_square-green',
+        //     radioClass: 'iradio_square-green',
+        // });
 
         $('#register').on('click', function(){
            var _this = $(this);
             var _form = _this.parents('form');
             $.post("/user/reg", _form.serialize(),function(res){
-                // alert(_form.serialise());
                 if(res.code){
                     layer.msg(res.msg);
-                    // alert(res.msg);
+                    alert(res.msg);
                 }
 
-                if(res.code === 0) {
+                if(res.code ===0) {
                     layer.msg(res.msg);
                     setTimeout('window.location.href="/index"',500);
                 }
+                console.log(res.code)
+
             }, 'json');
         });
 

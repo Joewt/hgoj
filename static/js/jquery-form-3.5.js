@@ -666,11 +666,11 @@
                             return;
                         }
                         // let this fall through because server response could be an empty document
-                        //log('Could not access iframe DOM after mutiple tries.');
+                        //logs('Could not access iframe DOM after mutiple tries.');
                         //throw 'DOMException: not available';
                     }
 
-                    //log('response detected');
+                    //logs('response detected');
                     var docRoot = doc.body ? doc.body : doc.documentElement;
                     xhr.responseText = docRoot ? docRoot.innerHTML : null;
                     xhr.responseXML = doc.XMLDocument ? doc.XMLDocument : doc;
