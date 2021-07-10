@@ -14,5 +14,6 @@ func init() {
 	beego.Include(&controllers.SolutionController{})
 	beego.Include(&controllers.ContestController{})
 	beego.Include(&controllers.BlogController{})
+	beego.Router("/friend", &controllers.FriendController{})
 
 }

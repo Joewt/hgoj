@@ -28,12 +28,14 @@
                         <li class="dropdown {{menu_eq .menu "/contest" }}">
                             <a aria-expanded="false" role="button" href="/contest" class="dropdown-toggle"> 竞赛&作业 </a>
                         </li>
-                        <li class="dropdown {{menu_eq .menu "/contest" }}">
-                            <a aria-expanded="false" role="button" class="dropdown-toggle" href="/contest">
-                                {{template "common/drawer.html" .}}
-                            </a>
+{{/*                        <li class="dropdown {{menu_eq .menu "/contest" }}">*/}}
+{{/*                            <a aria-expanded="false" role="button" class="dropdown-toggle" href="/contest">*/}}
+{{/*                                {{template "common/drawer.html" .}}*/}}
+{{/*                            </a>*/}}
+{{/*                        </li>*/}}
+                        <li class="dropdown {{menu_eq .menu "/friend" }}">
+                            <a aria-expanded="false" role="button" href="/friend" class="dropdown-toggle">@友链</a>
                         </li>
-
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
 
