@@ -9,6 +9,7 @@ import (
 	"github.com/beego/beego/v2/adapter/logs"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
+
 	//"github.com/yinrenxin/hgoj/syserror"
 	"github.com/yinrenxin/hgoj/tools"
 )
@@ -356,7 +357,7 @@ func (this *UserController) UserUpdatePost() {
 		this.JsonErr("两次密码不能一样", 9000, "")
 	}
 
-	if tools.MD5(oldpwd) != this.User.Password {
+	if tools.GenPwd(oldpwd) != this.User.Password {
 		this.JsonErr("密码错误", 9001, "")
 	}
 
@@ -440,7 +441,7 @@ func (this *UserController) ChangePwd() {
 	}
 	uname := this.GetMushString("uname", "用户名不能为空")
 	pwd := this.GetMushString("pwd", "密码不能为空")
-	md5pwd := tools.MD5(pwd)
+	md5pwd := tools.GenPwd(pwd)
 	if ok := models.FindUserByUname(uname); ok {
 		this.JsonErr("用户不存在", 12002, "")
 	}
