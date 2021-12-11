@@ -9,3 +9,5 @@ dbname = hgoj
 redishost = 127.0.0.1
 redisport = 6379
 redispwd = 123456
+ojdata = "/home/judge/data"
+salt = "123456"

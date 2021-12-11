@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	beego "github.com/beego/beego/v2/adapter"
 	"github.com/beego/beego/v2/adapter/logs"
 	"github.com/yinrenxin/hgoj/setting"
 )
@@ -106,6 +107,11 @@ func CheckEmail(email string) (b bool) {
 		return false
 	}
 	return true
+}
+
+func GenPwd(pwd string) string {
+	salt := beego.AppConfig.String("salt")
+	return MD5(salt + pwd + salt)
 }
 
 func MD5(s string) string {

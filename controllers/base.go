@@ -2,16 +2,28 @@ package controllers
 
 import (
 	//"errors"
-	beego "github.com/beego/beego/v2/adapter"
-	"github.com/yinrenxin/hgoj/tools"
 	"strings"
 
-	//"github.com/yinrenxin/joeblog/syserror"
+	beego "github.com/beego/beego/v2/adapter"
+	"github.com/yinrenxin/hgoj/tools"
 
 	//uuid "github.com/satori/go.uuid"
 	"github.com/yinrenxin/hgoj/models"
 	"github.com/yinrenxin/hgoj/syserror"
 )
+
+var OJ_DATA = "/home/judge/data"
+var OJ_ZIP_TEMP_DATA = OJ_DATA + "/tempzip"
+
+func init() {
+	// 动态更新oj数据目录
+	// 如果配置文件里指定了oj的数据目录，则使用配置文件里的
+	temp := beego.AppConfig.String("ojdata")
+	if len(temp) > 0 {
+		OJ_DATA = temp
+		OJ_ZIP_TEMP_DATA = OJ_DATA + "/tempzip"
+	}
+}
 
 //const SESSION_USER_KEY = "SESSION_USER_KEY"
 
@@ -19,15 +31,12 @@ import (
 
 type BaseController struct {
 	beego.Controller
-	User    models.Users
-	IsLogin bool
-	IsAdmin bool
+	User      models.Users
+	IsLogin   bool
+	IsAdmin   bool
 	IsTeacher bool
 	AvatarURL string
 }
-
-const OJ_DATA = "/home/judge/data"
-const OJ_ZIP_TEMP_DATA = OJ_DATA+"/tempzip"
 
 type MAP_H = map[string]interface{}
 
@@ -49,7 +58,7 @@ func (this *BaseController) Prepare() {
 		if u.Role == 2 {
 			this.IsTeacher = true
 		}
-		this.AvatarURL = tools.AvatarLink(u.Email,45)
+		this.AvatarURL = tools.AvatarLink(u.Email, 45)
 		this.Data["AvatarURL"] = this.AvatarURL
 		this.Data["User"] = this.User
 	}
@@ -71,7 +80,6 @@ func (this *BaseController) Abort401(err error) {
 	this.Abort("401")
 }
 
-
 func (this *BaseController) Abort404(err error) {
 	this.Data["error"] = err
 	this.Abort("404")
@@ -85,21 +93,18 @@ func (this *BaseController) GetMushString(key, msg string) string {
 	return k
 }
 
-
 func (this *BaseController) GetRegUserString(key, msg string) string {
 	k := this.GetString(key)
-	k = strings.Replace(k," ","",-1)
+	k = strings.Replace(k, " ", "", -1)
 	if len(k) == 0 {
 		this.JsonErr(msg, syserror.KEY_NOT_NULL, "")
 	}
 	return k
 }
 
-
-
 /**
-	过滤代码
- */
+过滤代码
+*/
 func (this *BaseController) FilterSource(key, msg string) (string, int) {
 	k := this.GetString(key)
 	if len(k) == 0 {
@@ -141,9 +146,6 @@ func (this *BaseController) JsonOKH(msg string, data MAP_H) {
 	this.ServeJSON()
 }
 
-
-
-
 //func (this *BaseController) UUID() string {
 //	u, err := uuid.NewV4()
 //	if err != nil {
@@ -151,4 +153,3 @@ func (this *BaseController) JsonOKH(msg string, data MAP_H) {
 //	}
 //	return u.String()
 //}
-
