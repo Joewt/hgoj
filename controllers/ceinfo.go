@@ -10,7 +10,6 @@ type CeinfoController struct {
 	BaseController
 }
 
-
 // @router /ceinfo/:sid [get]
 func (this *CeinfoController) Ceinfo() {
 	//todo 验证session
@@ -22,7 +21,6 @@ func (this *CeinfoController) Ceinfo() {
 	id, _ := tools.StringToInt32(sid)
 	source := models.QuerySourceBySolutionId(id)
 
-
 	solution, _ := models.QuerySolutionBySid(id)
 
 	user, err := models.QueryUserById(solution.UserId)
@@ -30,22 +28,21 @@ func (this *CeinfoController) Ceinfo() {
 		logs.Error(err)
 	}
 
-
 	if solution.UserId != this.User.UserId && !this.IsAdmin {
 		this.Abort("401")
 	}
 
-
 	compileinfo, _ := models.QueryCompileInfoBySid(id)
 
+	runtimeinfo, _ := models.QueryRuntimeInfoBySid(id)
 
 	this.Data["username"] = user.UserName
 	this.Data["solu"] = solution
 	this.Data["source"] = source
 	this.Data["compileinfo"] = compileinfo
+	this.Data["runtimeinfo"] = runtimeinfo
 	this.TplName = "ceinfo.html"
 }
-
 
 // @router /contest/ceinfo/:sid [get]
 func (this *CeinfoController) CeinfoContest() {
@@ -58,7 +55,6 @@ func (this *CeinfoController) CeinfoContest() {
 	id, _ := tools.StringToInt32(sid)
 	source := models.QuerySourceBySolutionId(id)
 
-
 	solution, _ := models.QuerySolutionBySid(id)
 
 	user, err := models.QueryUserById(solution.UserId)
@@ -66,18 +62,19 @@ func (this *CeinfoController) CeinfoContest() {
 		logs.Error(err)
 	}
 
-
 	if solution.UserId != this.User.UserId && !this.IsAdmin {
 		this.Abort("401")
 	}
 
 	compileinfo, _ := models.QueryCompileInfoBySid(id)
 
+	runtimeinfo, _ := models.QueryRuntimeInfoBySid(id)
 
 	this.Data["username"] = user.UserName
 	this.Data["solu"] = solution
 	this.Data["source"] = source
 	this.Data["conid"] = solution.ContestId
 	this.Data["compileinfo"] = compileinfo
+	this.Data["runtimeinfo"] = runtimeinfo
 	this.TplName = "contest/ceinfo.html"
 }
