@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"time"
 
 	"github.com/beego/beego/v2/adapter/logs"
@@ -349,6 +350,9 @@ func AddSolution(pid string, source string, uid int32, codeLen int, lang string,
 	var Solu Solution
 	var SoluCode SourceCode
 	err := DB.Begin()
+	if err != nil {
+		return 0, err
+	}
 	Solu.ProblemId = stringToint32(pid)
 	Solu.UserId = uid
 	Solu.InDate = time.Now()
@@ -362,17 +366,37 @@ func AddSolution(pid string, source string, uid int32, codeLen int, lang string,
 	Solu.Ip = ip
 
 	sid, err := DB.Insert(&Solu)
+	if err != nil {
+		errRollback := DB.Rollback()
+		if errRollback != nil {
+			return 0, errRollback
+		}
+		return 0, err
+	}
 
 	SoluCode.SolutionId = int32(sid)
 	SoluCode.Source = source
 
 	scid, err := DB.Insert(&SoluCode)
+	if err != nil {
+		errRollback := DB.Rollback()
+		if errRollback != nil {
+			return 0, errRollback
+		}
+		return 0, err
+	}
 
 	if sid == 0 || scid != 0 {
-		err = DB.Rollback()
-		return sid, err
+		errRollback := DB.Rollback()
+		if errRollback != nil {
+			return 0, err
+		}
+		return 0, errors.New("err sid == 0 || scid != 0")
 	} else {
 		err = DB.Commit()
-		return sid, err
+		if err != nil {
+			return 0, err
+		}
+		return sid, nil
 	}
 }
