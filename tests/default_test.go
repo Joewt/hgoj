@@ -1,12 +1,12 @@
 package test
 
 import (
+	_ "github.com/yinrenxin/hgoj/routers"
 	"net/http"
 	"net/http/httptest"
-	"testing"
-	"runtime"
 	"path/filepath"
-	_ "github.com/yinrenxin/hgoj/routers"
+	"runtime"
+	"testing"
 
 	"github.com/astaxie/beego"
 	. "github.com/smartystreets/goconvey/convey"
